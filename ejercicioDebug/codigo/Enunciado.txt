@@ -1,0 +1,15 @@
+El presente proyecto cuenta con un Makefile que produce 3 binarios.
+El binario 'main' es el programa principal y hace uso de los otros 2
+binarios.
+
+Desgraciadamente el programador cometio varios errores por lo que el
+programa no funciona como deberia. El bjetivo de este trabajo es
+encontrar y arreglar dichos errores para que el programa funcione
+correctamente.
+
+Consejos:
+  - Lea el codigo detenidamente y entienda que es lo que hace (o pretende hacer)
+  - Repase SEMAFOROS, COLA DE MENSAJES y FORK/EXEC si no los recuerda
+  - Recuerde que 'strace' es su amigo
+  - Los errores se encuentran en 'debugueame.c', 'odd.c' y 'even.c'
+  - No tiene permitido modificar los archivos dentro de 'include'
