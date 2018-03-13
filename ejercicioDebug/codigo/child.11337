@@ -1,7 +1,0 @@
-execve("./procesar_n", ["./procesar_n", 0x5b, "0"], [/* 75 vars */]) = -1 EFAULT (Bad address)
-fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 0), ...}) = 0
-brk(NULL)                               = 0x824000
-brk(0x845000)                           = 0x845000
-write(1, "Error en exec impar\n", 20)   = 20
-exit_group(1)                           = ?
-+++ exited with 1 +++
