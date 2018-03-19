@@ -17,7 +17,6 @@ int buffer[] = {66, 105, 101, 110, 118,
 
 int main(int argc, char** argv){
     int i=0;
-	//habia q agregar sizeof(int)
     int total = sizeof(buffer) / sizeof(int);
 
     int shm = creashm(0, sizeof(int)*2);
@@ -29,28 +28,26 @@ int main(int argc, char** argv){
     inisem(sem, 1);
 
     int wait_sem = creasem(1);
-	// deberia inicializarse en cero.
     inisem(wait_sem, 0);
 
     int cola = creamsg(0);
-	// deberia ser <
     for(i=0;i<total;i++){
         if(fork()==0){
             char number_str[3];
+            char idx_str[3];
 
             int number = buffer[i];
             snprintf(number_str, 2,"%d", number);
+            snprintf(idx_str, 2, "%d", i);
             if(number%2) {
-		// smprintf para convertir i a string
-                execl("./procesar_2n", "./procesar_2n", i, number_str, (char*) NULL);
-		printf("Error en exec par\n");
-		exit(1);
-	}
-            else{
-                execl("./procesar_n", "./procesar_n", smprintf("%d",i), number_str, (char*) NULL);
-		printf("Error en exec impar\n");
-		exit(1);
-		}
+                execl("./procesar_2n", "./procesar_2n", idx_str, number_str, (char*) NULL);
+        		printf("Error en exec par\n");
+        		exit(1);
+        	} else {
+                execl("./procesar_n", "./procesar_n", idx_str, number_str, (char*) NULL);
+        		printf("Error en exec impar\n");
+        		exit(1);
+        	}
         }
     }
 
