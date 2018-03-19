@@ -19,8 +19,7 @@ struct Mensaje {
 int main(int argc, char** argv){
 
     srand(getpid());
-	// tiene q ser de al menos 3. Sino no anda el sprintf (mete cosas mas grandes q el buffer).
-    char buffer[2];
+	char buffer[3];
 
     int orden, n;
 
@@ -44,8 +43,7 @@ int main(int argc, char** argv){
     printf("%s", buffer);
 
     enviarmsg(msg,&m,sizeof(m));
-	// mal nombre. no puede serguir el exec sino se come todos los msj
-    execv("./procsear_2n", argv);
+	execv("./procesar_2n", argv);
     recibirmsg(msg,&m,sizeof(m),0);
     return 0;
 }

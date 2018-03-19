@@ -18,7 +18,7 @@ int buffer[] = {66, 105, 101, 110, 118,
 int main(int argc, char** argv){
     int i=0;
 	//habia q agregar sizeof(int)
-    int total = sizeof(buffer / sizeof(int));
+    int total = sizeof(buffer) / sizeof(int);
 
     int shm = creashm(0, sizeof(int)*2);
     int* memoria = (int*)map(shm);
@@ -30,11 +30,11 @@ int main(int argc, char** argv){
 
     int wait_sem = creasem(1);
 	// deberia inicializarse en cero.
-    inisem(wait_sem, 1);
+    inisem(wait_sem, 0);
 
     int cola = creamsg(0);
 	// deberia ser <
-    for(i=0;i<=total;i++){
+    for(i=0;i<total;i++){
         if(fork()==0){
             char number_str[3];
 
@@ -42,7 +42,7 @@ int main(int argc, char** argv){
             snprintf(number_str, 2,"%d", number);
             if(number%2) {
 		// smprintf para convertir i a string
-                execl("./procesar_2n", "./procesar_2n", smprintf("%d",i), number_str, (char*) NULL);
+                execl("./procesar_2n", "./procesar_2n", i, number_str, (char*) NULL);
 		printf("Error en exec par\n");
 		exit(1);
 	}

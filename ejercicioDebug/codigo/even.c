@@ -44,8 +44,7 @@ int main(int argc, char** argv){
     char buf[5];
     printf("%c", n+m.data[orden]);
 
-	// > 1 (sino se manda el mensaje con cero cuando mtpye = 1. Siempre tiene q ser  mayor a cero el mtpye para mandar.
-    if(m.mtype>0){
+	if(m.mtype>1){
         m.mtype--;
         enviarmsg(msg, &m, sizeof(m));
     }
