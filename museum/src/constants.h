@@ -1,0 +1,2 @@
+#define ENTRANCE_DOORS 3
+#define MAX_CAP 10

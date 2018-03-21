@@ -1,3 +1,3 @@
 all:
-	g++ ipcsGen.c -o ipcsGen
+	g++ entranceDoor.c -o entranceDoor
 	g++ main.c -o main
