@@ -27,6 +27,8 @@ int main(int argc, char* argv[]) {
 		exit(-1);
 	}
 
+	int shm_id = getshm(MUSEUM_CAP_SHM);
+	int* shm = (int*) map(shm_id);
 
 	while (true) {
 		message_t msg;
@@ -34,12 +36,13 @@ int main(int argc, char* argv[]) {
 		safelog("Processing request...");
 		sleep(1);
 
-		int shm_id = getshm(MUSEUM_CAP_SHM);
-		int* shm = (int*) map(shm_id);
 
 		msg.type = ACCEPT;
 		safelog("Finished processing request");
 		sendmsg(resp_queue, &msg, sizeof(message_t));
 	}
+
+
+
 
 }

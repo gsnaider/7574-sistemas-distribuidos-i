@@ -24,6 +24,18 @@ void delete_msg_queue(int id) {
 	}
 }
 
+void delete_shm(int id) {
+	safelog("Deleting shared memory %d", id);
+	int shm= getshm(id);
+	if (shm < 0) {
+		safeperror("ERROR getting shm %d for deletion", id);
+	} else {
+		if (delshm(shm) < 0) {
+			safeperror("Error deleting shm %d.", id);
+		}
+	}
+}
+
 void delete_sem(int id) {
 	safelog("Deleting semaphore %d", id);
 	int sem = getsem(id);
@@ -46,6 +58,7 @@ void destroy_ipcs() {
 	delete_msg_queue(2 * ENTRANCE_DOORS + 1);
 
 	delete_sem(MUSEUM_CAP_SEM);
+	delete_shm(MUSEUM_CAP_SHM);
 
 }
 

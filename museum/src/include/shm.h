@@ -60,7 +60,7 @@ int   unmap(void* addr){
     return res;
 }
 
-int   elishm(int id){
+int   delshm(int id){
     int res = shmctl(id, IPC_RMID, (struct shmid_ds *) 0);
     if (res < 0) {
         safeperror("Error deleting shared memory");
