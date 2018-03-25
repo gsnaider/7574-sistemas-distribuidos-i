@@ -10,7 +10,11 @@
 #include "include/shm.h"
 #include "include/semaphore.h"
 #include "include/logger.h"
-#include "include/signal.h"
+#include "include/signalUtil.h"
+
+
+int childs = 0;
+pid_t childs_arr[ENTRANCE_DOORS + 1];
 
 
 void delete_msg_queue(int id) {
@@ -77,11 +81,28 @@ void safe_exit(const char* exit_msg) {
 	exit(-1);
 }
 
+void wait_childs() {
+	for (int i = 0; i < childs; i++) {
+		wait((int*) NULL);
+	}
+}
+
+void kill_childs() {
+	for (int i = 0; i < childs; i++) {
+		safelog("Killing child %d", childs_arr[i]);
+		if (kill(childs_arr[i], SIGINT) < 0) {
+			safeperror("Error killing child %d", childs_arr[i]);
+		}
+	}
+}
+
 void SIGINT_handler(int signum) {
 	if (signum != SIGINT) {
-		safe_exit("Unkown signal received.");
+		safelog("WARNING: Unkown signal received: %d.", signum);
 	} else {
 		safelog("SIGINT received, aborting.");
+		kill_childs();
+		wait_childs();
 		destroy_ipcs();
 		exit(-1);
 	}
@@ -110,6 +131,8 @@ void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 	if (pid == 0) {
 		execl(exec, exec, req_queue_str, resp_queue_str, (char*)NULL);
 		safe_exit("ERROR executing door");
+	} else {
+		childs_arr[childs++] = pid;
 	}
 }
 
@@ -190,11 +213,7 @@ int main(int argc, char* argv[]) {
 
 	test_msg_queues();
 
-	// Wait for all processes to finish.
-	for (int i = 0; i < ENTRANCE_DOORS + 1; i++) {
-		wait((int*) NULL);
-	}
-
+	wait_childs();
 	destroy_ipcs();
 	exit(0);
 }

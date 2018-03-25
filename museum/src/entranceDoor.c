@@ -6,11 +6,22 @@
 #include "include/shm.h"
 #include "include/semaphore.h"
 #include "include/logger.h"
+#include "include/signalUtil.h"
 
 bool graceful_quit = false;
 
+void SIGINT_handler(int signum) {
+	if (signum != SIGINT) {
+		safelog("WARNING: Unkown signal received: %d.", signum);
+	} else {
+		safelog("SIGINT received, aborting.");
+		graceful_quit = true;
+	}
+}
+
 int main(int argc, char* argv[]) {
 	safelog("Entrance door created.");
+	register_handler(SIGINT_handler);
 
 	int req_queue_id;
 	sscanf(argv[1], "%d", &req_queue_id);
@@ -46,12 +57,18 @@ int main(int argc, char* argv[]) {
 		message_t msg;
 		safelog("Waiting requests");
 		rcvmsg(req_queue, &msg, sizeof(message_t), 0);
+		if (graceful_quit) {
+			break;
+		}
 		if (msg.type != ENTRANCE_REQUEST) {
 			safelog("WARNING: Invalid msg type (%d) received on entrance door. Discarding msg.", msg.type);
 		} else {
 			safelog("Processing request...");
 			sleep(5);
 			p(sem);
+			if (graceful_quit) {
+				break;
+			}
 			if (*shm > 0) {
 				*shm -= 1;
 				msg.type = ACCEPT;
@@ -69,7 +86,11 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
+	if (unmap(shm) < 0) {
+		safeperror("Error unmapping shm");
+	}
 
+	safelog("Entrance door destroyed.");
 
 
 }
