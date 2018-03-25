@@ -36,7 +36,7 @@ char const *colors[] = {"\e[00m","\e[31m", "\e[32m", "\e[33m",
 static char PROCESS_NAME[100];
 int _color=0;
 
-#define FIRST_COLUMN 32
+#define FIRST_COLUMN 16
 
 static void build_log_message(char *buffer){
     char space[50];

@@ -10,6 +10,7 @@
 #include "include/shm.h"
 #include "include/semaphore.h"
 #include "include/logger.h"
+#include "include/signal.h"
 
 
 void delete_msg_queue(int id) {
@@ -75,6 +76,18 @@ void safe_exit(const char* exit_msg) {
 	safe_destroy_ipcs();
 	exit(-1);
 }
+
+void SIGINT_handler(int signum) {
+	if (signum != SIGINT) {
+		safe_exit("Unkown signal received.");
+	} else {
+		safelog("SIGINT received, aborting.");
+		destroy_ipcs();
+		exit(-1);
+	}
+}
+
+
 
 void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 	if (creamsg(req_queue_id) < 0) {
@@ -156,12 +169,13 @@ void test_msg_queues() {
 		safelog("Received message %d with type %d", i, msg.type);
 	}
 
-
 }
 
 int main(int argc, char* argv[]) {
 	safelog("Starting museum simulation.");
-	
+	register_handler(SIGINT_handler);
+
+
 	create_museum();
 
 	safelog("Starting creation of entrance doors.");
