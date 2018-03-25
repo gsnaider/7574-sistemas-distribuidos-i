@@ -110,6 +110,9 @@ void create_museum() {
 	inisem(sem, 1);
 
 	int shm_id = creashm(MUSEUM_CAP_SHM, sizeof(int));
+	if (shm_id < 0) {
+		safe_exit("ERROR creating shared memory");
+	}
 	int* shm = (int*) map(shm_id);
 
 	*shm = MUSEUM_CAP;
@@ -146,7 +149,7 @@ int main(int argc, char* argv[]) {
 	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
 	safelog("Finished creating exit door.");
 
-	//test_msg_queues();
+	test_msg_queues();
 
 	// Wait for all processes to finish.
 	for (int i = 0; i < ENTRANCE_DOORS + 1; i++) {
