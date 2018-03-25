@@ -57,13 +57,13 @@ void safe_destroy_ipcs() {
 	}
 }
 
-void safe_exit(char* exit_msg) {
+void safe_exit(const char* exit_msg) {
 	safeperror("%s", exit_msg);
 	safe_destroy_ipcs();
 	exit(-1);
 }
 
-void create_door(int req_queue_id, int resp_queue_id, char* exec) {
+void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 	if (creamsg(req_queue_id) < 0) {
 		safe_exit("ERROR creating req msg queue.");
 	}
@@ -133,7 +133,7 @@ int main(int argc, char* argv[]) {
 	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
 	safelog("Finished creating exit door.");
 
-	test_msg_queues();
+	//test_msg_queues();
 
 	// Wait for all processes to finish.
 	for (int i = 0; i < ENTRANCE_DOORS + 1; i++) {

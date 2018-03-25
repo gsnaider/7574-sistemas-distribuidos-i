@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "message.h"
+#include "constants.h"
 #include "include/msg.h"
+#include "include/shm.h"
 #include "include/logger.h"
-
 
 
 int main(int argc, char* argv[]) {
@@ -27,14 +28,14 @@ int main(int argc, char* argv[]) {
 	}
 
 
-
 	while (true) {
 		message_t msg;
 		rcvmsg(req_queue, &msg, sizeof(message_t), 0);
 		safelog("Processing request...");
 		sleep(1);
 
-		//TODO: Check shm if theres space.
+		int shm_id = getshm(MUSEUM_CAP_SHM);
+		int* shm = (int*) map(shm_id);
 
 		msg.type = ACCEPT;
 		safelog("Finished processing request");
