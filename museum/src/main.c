@@ -5,7 +5,9 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include "constants.h"
+#include "message.h"
 #include "include/msg.h"
+
 
 
 void destroy_ipcs() {
@@ -46,6 +48,20 @@ void create_door(int req_queue_id, int resp_queue_id, char* exec) {
 	}
 }
 
+void test_msg_queues() {
+	int req_queue = getmsg(0);
+	int resp_queue = getmsg(1);
+
+	for(int i = 1; i < 15; i++){
+		message_t msg = {i, REQUEST};
+		printf("Sending message %d\n", i);
+		sendmsg(req_queue, &msg, sizeof(message_t));
+	
+		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
+		printf("Received message %d with type %d\n", i, msg.type);
+	}
+}
+
 int main(int argc, char* argv[]) {
 	printf("Starting museum simulation.\n");
 
@@ -64,6 +80,7 @@ int main(int argc, char* argv[]) {
 	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
 	printf("Finished creating exit door.\n");
 
+	test_msg_queues();
 
 	// Wait for all processes to finish.
 	for (int i = 0; i < ENTRANCE_DOORS + 1; i++) {
