@@ -7,6 +7,7 @@
 #include "constants.h"
 #include "message.h"
 #include "include/msg.h"
+#include "include/shm.h"
 #include "include/semaphore.h"
 #include "include/logger.h"
 
@@ -95,7 +96,10 @@ void create_museum() {
 	}
 	inisem(sem, 1);
 
-	
+	int shm_id = creashm(MUSEUM_CAP_SHM, sizeof(int));
+	int* shm = (int*) map(shm_id);
+
+	*shm = MUSEUM_CAP;
 
 	safelog("Finished creating museum.");
 }

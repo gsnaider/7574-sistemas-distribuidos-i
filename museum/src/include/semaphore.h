@@ -98,7 +98,11 @@ int v(int semid) {
 /* eliminar el set de semaforos
  */
 int delsem(int semid) {
-	return (semctl(semid, 0, IPC_RMID, (struct semid_ds *) 0));
+	int res = semctl(semid, 0, IPC_RMID, (struct semid_ds *) 0);
+	if (res < 0) {
+        safeperror("Error deleting semaphore");
+    }
+    return res;
 }
 
 #endif /* _SEMAPHORE_H_ */
