@@ -65,7 +65,7 @@ void safelog(const char* format, ...){
 
     vsprintf(buffer+(strlen(buffer)), format, args );
 
-    sprintf(buffer+strlen(buffer), "%s", colors[KNRM]);
+    sprintf(buffer+strlen(buffer), "%s\n", colors[KNRM]);
 
     va_end(args);
     write(fileno(stdout), buffer, strlen(buffer));

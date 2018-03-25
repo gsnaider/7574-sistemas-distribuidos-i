@@ -6,8 +6,7 @@
 
 int main(int argc, char* argv[]) {
 	printf("Entrance door created with pid %d\n", getpid());
-	printf("Hi, I'm an entrance door with queue ids %s and %s!\n", argv[1], argv[2]);
-
+	
 	int req_queue_id;
     sscanf(argv[1], "%d", &req_queue_id);
     int req_queue = getmsg(req_queue_id);
@@ -32,6 +31,9 @@ int main(int argc, char* argv[]) {
 		rcvmsg(req_queue, &msg, sizeof(message_t), 0);
 		printf("Processing request...\n");
 		sleep(1);
+
+		//TODO: Check shm if theres space.
+
 		msg.type = ACCEPT;
 		printf("Finished processing request\n");
 		sendmsg(resp_queue, &msg, sizeof(message_t));

@@ -7,22 +7,23 @@
 #include "constants.h"
 #include "message.h"
 #include "include/msg.h"
+#include "include/logger.h"
 
 void delete_msg_queue(int id) {
-	printf("Deleting message queue %d\n", id);
+	safelog("Deleting message queue %d", id);
 	int queue = getmsg(id);
 	if (queue < 0) {
-		printf("Error getting message %d queue for deletion.\n", id);
+		safeperror("Error getting message %d queue for deletion.", id);
 	} else {
 		if (delmsg(queue) < 0) {
-			printf("Error deleting message queue %d.\n", id);
+			safeperror("Error deleting message queue %d.", id);
 		}
 	}
 
 }
 
 void destroy_ipcs() {
-	printf("Destrying ipcs\n");
+	safelog("Destrying ipcs");
 	for (int i = 0; i < ENTRANCE_DOORS; i++) {
 		delete_msg_queue(2 * i);
 		delete_msg_queue(2 * i + 1);
@@ -32,15 +33,15 @@ void destroy_ipcs() {
 }
 
 void safe_destroy_ipcs() {
-	printf("Destrying ipcs\n");
+	safelog("Destrying ipcs");
 	if (fork() == 0) {
 		execl("./ipcrm.sh", "./ipcrm.sh", (char*)NULL);
-		printf("ERROR destrying ipcs.\n");
+		safeperror("ERROR destrying ipcs.");
 	}
 }
 
 void safe_exit(char* exit_msg) {
-	printf("%s\n", exit_msg);
+	safeperror("%s", exit_msg);
 	safe_destroy_ipcs();
 	exit(-1);
 }
@@ -75,31 +76,31 @@ void test_msg_queues() {
 
 	for (int i = 1; i < 15; i++) {
 		message_t msg = {i, REQUEST};
-		printf("Sending message %d\n", i);
+		safelog("Sending message %d", i);
 		sendmsg(req_queue, &msg, sizeof(message_t));
 
 		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
-		printf("Received message %d with type %d\n", i, msg.type);
+		safelog("Received message %d with type %d", i, msg.type);
 	}
 }
 
 int main(int argc, char* argv[]) {
-	printf("Starting museum simulation.\n");
+	safelog("Starting museum simulation.");
 
-	printf("Creating museum.\n");
+	safelog("Creating museum.");
 	// init shm with museum cap.
-	printf("Finished creating museum.\n");
+	safelog("Finished creating museum.");
 
 
-	printf("Starting creation of entrance doors.\n");
+	safelog("Starting creation of entrance doors.");
 	for (int i = 0; i < ENTRANCE_DOORS; i++) {
 		create_door(2 * i, 2 * i + 1, "./entranceDoor");
 	}
-	printf("Finished creation of entrance doors.\n");
+	safelog("Finished creation of entrance doors.");
 
-	printf("Creating exit door.\n");
+	safelog("Creating exit door.");
 	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
-	printf("Finished creating exit door.\n");
+	safelog("Finished creating exit door.");
 
 	test_msg_queues();
 
