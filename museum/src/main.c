@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <errno.h>
 #include "constants.h"
 #include "include/msg.h"
 
@@ -21,70 +22,46 @@ void safe_exit(char* exit_msg) {
 	exit(-1);
 }
 
+void create_door(int req_queue_id, int resp_queue_id, char* exec) {
+	if (creamsg(req_queue_id) < 0) {
+		safe_exit("ERROR creating req msg queue.");
+	}
+	if (creamsg(resp_queue_id) < 0) {
+		safe_exit("ERROR creating resp msg queue.");
+	}
+
+	char req_queue_str[3];
+	snprintf(req_queue_str, 3, "%d", req_queue_id);
+
+	char resp_queue_str[3];
+	snprintf(resp_queue_str, 3, "%d", resp_queue_id);
+
+	pid_t pid = fork();
+	if (pid < 0) {
+		safe_exit("ERROR forking door");
+	}
+	if (pid == 0) {
+		execl(exec, exec, req_queue_str, resp_queue_str, (char*)NULL);
+		safe_exit("ERROR executing door");
+	}
+}
+
 int main(int argc, char* argv[]) {
 	printf("Starting museum simulation.\n");
 
 	printf("Creating museum.\n");
 	// init shm with museum cap.
 	printf("Finished creating museum.\n");
-	
+
 
 	printf("Starting creation of entrance doors.\n");
 	for (int i = 0; i < ENTRANCE_DOORS; i++) {
-		int entrace_req_msg_queue_id = 2 * i;
-		int entrace_resp_msg_queue_id = 2 * i + 1;
-
-		if (creamsg(entrace_req_msg_queue_id) < 0) {
-			safe_exit("ERROR creating entrance req msg queue.");
-		}
-		if (creamsg(entrace_resp_msg_queue_id) < 0) {
-			safe_exit("ERROR creating entrance resp msg queue.");
-		}
-
-		char req_queue_str[3];
-		snprintf(req_queue_str, 3, "%d", entrace_req_msg_queue_id);
-
-		char resp_queue_str[3];
-		snprintf(resp_queue_str, 3, "%d", entrace_resp_msg_queue_id);
-
-		pid_t pid = fork();
-		if (pid < 0) {
-			safe_exit("ERROR forking entrance door");
-		}
-		if (pid == 0) {
-			execl("./entranceDoor", "./entranceDoor", req_queue_str, resp_queue_str, (char*)NULL);
-			safe_exit("ERROR executing entrance door");
-		}
+		create_door(2 * i, 2 * i + 1, "./entranceDoor");
 	}
 	printf("Finished creation of entrance doors.\n");
-	
+
 	printf("Creating exit door.\n");
-
-	int exit_req_msg_queue_id = 2 * ENTRANCE_DOORS;
-	int exit_resp_msg_queue_id = 2 * ENTRANCE_DOORS + 1;
-
-	if (creamsg(exit_req_msg_queue_id) < 0) {
-		safe_exit("ERROR creating exit req msg queue.");
-	}
-	if (creamsg(exit_resp_msg_queue_id) < 0) {
-		safe_exit("ERROR creating exit resp msg queue.");
-	}
-
-	char req_queue_str[3];
-	snprintf(req_queue_str, 3, "%d", exit_req_msg_queue_id);
-
-	char resp_queue_str[3];
-	snprintf(resp_queue_str, 3, "%d", exit_resp_msg_queue_id);
-
-	pid_t pid = fork();
-	if (pid < 0) {
-		safe_exit("ERROR forking exit door");
-	}
-	if (pid == 0) {
-		execl("./exitDoor", "./exitDoor", req_queue_str, resp_queue_str, (char*)NULL);
-		safe_exit("ERROR executing exit door");
-	}
-
+	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
 	printf("Finished creating exit door.\n");
 
 

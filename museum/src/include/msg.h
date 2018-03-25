@@ -4,6 +4,7 @@
 #include <string.h>
 #include <sys/ipc.h>
 #include <sys/msg.h>
+#include <errno.h>
 
 #include "logger.h"
 #include "resources.h"
@@ -11,32 +12,50 @@
 int creamsg(int id){
     key_t clave;
     clave = ftok(DIRECTORY, id);
-    return (msgget(clave,  IPC_CREAT | IPC_EXCL | 0660));
+    if (clave < 0) {
+        printf("Error on ftok while creating message queue: %s\n", strerror(errno));
+        return -1;
+    }
     /* da error si ya existe */
+    int msg_id = msgget(clave,  IPC_CREAT | IPC_EXCL | 0660);
+    if (msg_id < 0) {
+        printf("Error on msgget while creating message queue: %s\n", strerror(errno));
+    }
+    return msg_id;
 }
 
 int getmsg(int id){
     key_t clave;
     clave = ftok(DIRECTORY, id);
-    return (msgget(clave, 0660));
+    if (clave < 0) {
+        printf("Error on ftok while getting message queue: %s\n", strerror(errno));
+        return -1;
+    }
+    int msg_id = msgget(clave, 0660);
+    if (msg_id < 0) {
+        printf("Error on msgget while getting message queue: %s\n", strerror(errno));
+    }
+    return msg_id;
 }
 
-void enviarmsg(int id, const void *msgp, size_t msgsz){
+void sendmsg(int id, const void *msgp, size_t msgsz){
     if(msgsnd(id,msgp,msgsz-sizeof(long),0)==-1){
-        safeperror("No se puede enviar el mensaje");
-        exit(-1);
+        printf("Error sending message over queue: %s\n", strerror(errno));
     }
 }
 
-void recibirmsg(int id, void *msgp, size_t msgsz, long type){
+void rcvmsg(int id, void *msgp, size_t msgsz, long type){
     if(msgrcv(id,msgp,msgsz-sizeof(long),type,0)==-1){
-        safeperror("No se puede recibir el mensaje");
-        exit(-1);
+        printf("Error receiving message over queue: %s\n", strerror(errno));
     }
 }
 
-int   elimsg(int id){
-    return (msgctl(id, IPC_RMID, NULL));
+int   delmsg(int id){
+    int res = msgctl(id, IPC_RMID, NULL);
+    if (res < 0) {
+        printf("Error deleting message queue: %s\n", strerror(errno));
+    }
+    return res;
 }
 
 #endif /* _MSG_H_ */
