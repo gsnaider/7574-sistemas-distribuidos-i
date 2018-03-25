@@ -1,5 +1,5 @@
-#ifndef _SEMAFORO_H_
-#define _SEMAFORO_H_
+#ifndef _SEMAPHORE_H_
+#define _SEMAPHORE_H_
 
 #include <sys/ipc.h>
 #include <sys/types.h>
@@ -97,8 +97,8 @@ int v(int semid) {
 
 /* eliminar el set de semaforos
  */
-int elisem(int semid) {
+int delsem(int semid) {
 	return (semctl(semid, 0, IPC_RMID, (struct semid_ds *) 0));
 }
 
-#endif /* _SEMAFORO_H_ */
+#endif /* _SEMAPHORE_H_ */

@@ -1,2 +1,4 @@
 #define ENTRANCE_DOORS 3
 #define MAX_CAP 10
+#define MUSEUM_CAP_SEM 1
+#define MUSEUM_CAP_SHM 1

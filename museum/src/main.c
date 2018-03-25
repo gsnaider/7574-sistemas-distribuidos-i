@@ -7,19 +7,32 @@
 #include "constants.h"
 #include "message.h"
 #include "include/msg.h"
+#include "include/semaphore.h"
 #include "include/logger.h"
+
 
 void delete_msg_queue(int id) {
 	safelog("Deleting message queue %d", id);
 	int queue = getmsg(id);
 	if (queue < 0) {
-		safeperror("Error getting message %d queue for deletion.", id);
+		safeperror("Error getting message queue %d for deletion.", id);
 	} else {
 		if (delmsg(queue) < 0) {
 			safeperror("Error deleting message queue %d.", id);
 		}
 	}
+}
 
+void delete_sem(int id) {
+	safelog("Deleting semaphore %d", id);
+	int sem = getsem(id);
+	if (sem < 0) {
+		safeperror("ERROR getting sem %d for deletion", id);
+	} else {
+		if (delsem(sem) < 0) {
+			safeperror("Error deleting sem %d.", id);
+		}
+	}
 }
 
 void destroy_ipcs() {
@@ -30,6 +43,9 @@ void destroy_ipcs() {
 	}
 	delete_msg_queue(2 * ENTRANCE_DOORS);
 	delete_msg_queue(2 * ENTRANCE_DOORS + 1);
+
+	delete_sem(MUSEUM_CAP_SEM);
+
 }
 
 void safe_destroy_ipcs() {
@@ -72,9 +88,15 @@ void create_door(int req_queue_id, int resp_queue_id, char* exec) {
 
 void create_museum() {
 	safelog("Creating museum.");
+
+	int sem = creasem(MUSEUM_CAP_SEM);
+	if (sem < 0) {
+		safe_exit("ERROR creating semaphore");
+	}
+	inisem(sem, 1);
+
 	
-	
-	
+
 	safelog("Finished creating museum.");
 }
 
