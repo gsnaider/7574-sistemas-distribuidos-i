@@ -46,24 +46,27 @@ int main(int argc, char* argv[]) {
 		message_t msg;
 		safelog("Waiting requests");
 		rcvmsg(req_queue, &msg, sizeof(message_t), 0);
-		safelog("Processing request...");
-		sleep(5);
-
-		p(sem);
-		if (*shm > 0) {
-			*shm -= 1;
-			msg.type = ACCEPT;
-			safelog("Visitor %d accepted", msg.mtype);
+		if (msg.type != ENTRANCE_REQUEST) {
+			safelog("WARNING: Invalid msg type (%d) received on entrance door. Discarding msg.", msg.type);
 		} else {
-			msg.type = REJECT;
-			safelog("Visitor %d rejected", msg.mtype);
+			safelog("Processing request...");
+			sleep(5);
+			p(sem);
+			if (*shm > 0) {
+				*shm -= 1;
+				msg.type = ACCEPT;
+				safelog("Visitor %d accepted", msg.mtype);
+			} else {
+				msg.type = REJECT;
+				safelog("Visitor %d rejected", msg.mtype);
+			}
+			safelog("Current museum capacity: %d", *shm);
+			v(sem);
+
+			safelog("Finished processing request");
+			safelog("Sending response");
+			sendmsg(resp_queue, &msg, sizeof(message_t));
 		}
-		safelog("Current museum capacity: %d", *shm);
-		v(sem);
-		
-		safelog("Finished processing request");
-		safelog("Sending response");
-		sendmsg(resp_queue, &msg, sizeof(message_t));
 	}
 
 

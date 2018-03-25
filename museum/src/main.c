@@ -124,14 +124,39 @@ void test_msg_queues() {
 	int req_queue = getmsg(0);
 	int resp_queue = getmsg(1);
 
+
 	for (int i = 1; i < 15; i++) {
-		message_t msg = {i, REQUEST};
+		message_t msg = {i, ENTRANCE_REQUEST};
 		safelog("Sending message %d", i);
 		sendmsg(req_queue, &msg, sizeof(message_t));
 
 		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
 		safelog("Received message %d with type %d", i, msg.type);
 	}
+
+	int exit_req_queue = getmsg(2 * ENTRANCE_DOORS);
+	int exit_resp_queue = getmsg(2 * ENTRANCE_DOORS + 1);
+
+	for (int i = 1; i <= MUSEUM_CAP/2; i++) {
+		message_t msg = {i, EXIT_REQUEST};
+		safelog("Sending exit message %d", i);
+		sendmsg(exit_req_queue, &msg, sizeof(message_t));
+
+		rcvmsg(exit_resp_queue, &msg, sizeof(message_t), 0);
+		safelog("Received message %d with type %d", i, msg.type);
+	}
+	
+
+	for (int i = 1; i < 10; i++) {
+		message_t msg = {i, ENTRANCE_REQUEST};
+		safelog("Sending message %d", i);
+		sendmsg(req_queue, &msg, sizeof(message_t));
+
+		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
+		safelog("Received message %d with type %d", i, msg.type);
+	}
+
+
 }
 
 int main(int argc, char* argv[]) {

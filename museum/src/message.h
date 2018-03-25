@@ -1,6 +1,7 @@
-#define REQUEST 1
-#define ACCEPT 2
-#define REJECT 3
+#define ENTRANCE_REQUEST 1
+#define EXIT_REQUEST 2
+#define ACCEPT 3
+#define REJECT 4
 
 typedef struct message_t {
     long mtype;
