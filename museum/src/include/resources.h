@@ -3,6 +3,6 @@
 
 //REDEFINIR ANTES DE INCLUIR EL RESTO DE LOS ARCHIVOS
 
-#define DIRECTORY                  "/tmp/Dist2017"
+#define DIRECTORY                  "resources/ipc-init-file"
 
 #endif

@@ -8,9 +8,30 @@
 #include "message.h"
 #include "include/msg.h"
 
+void delete_msg_queue(int id) {
+	printf("Deleting message queue %d\n", id);
+	int queue = getmsg(id);
+	if (queue < 0) {
+		printf("Error getting message %d queue for deletion.\n", id);
+	} else {
+		if (delmsg(queue) < 0) {
+			printf("Error deleting message queue %d.\n", id);
+		}
+	}
 
+}
 
 void destroy_ipcs() {
+	printf("Destrying ipcs\n");
+	for (int i = 0; i < ENTRANCE_DOORS; i++) {
+		delete_msg_queue(2 * i);
+		delete_msg_queue(2 * i + 1);
+	}
+	delete_msg_queue(2 * ENTRANCE_DOORS);
+	delete_msg_queue(2 * ENTRANCE_DOORS + 1);
+}
+
+void safe_destroy_ipcs() {
 	printf("Destrying ipcs\n");
 	if (fork() == 0) {
 		execl("./ipcrm.sh", "./ipcrm.sh", (char*)NULL);
@@ -20,7 +41,7 @@ void destroy_ipcs() {
 
 void safe_exit(char* exit_msg) {
 	printf("%s\n", exit_msg);
-	destroy_ipcs();
+	safe_destroy_ipcs();
 	exit(-1);
 }
 
@@ -52,11 +73,11 @@ void test_msg_queues() {
 	int req_queue = getmsg(0);
 	int resp_queue = getmsg(1);
 
-	for(int i = 1; i < 15; i++){
+	for (int i = 1; i < 15; i++) {
 		message_t msg = {i, REQUEST};
 		printf("Sending message %d\n", i);
 		sendmsg(req_queue, &msg, sizeof(message_t));
-	
+
 		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
 		printf("Received message %d with type %d\n", i, msg.type);
 	}

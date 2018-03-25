@@ -4,3 +4,4 @@ all:
 	g++ main.c -o main
 clean:
 	rm main entranceDoor exitDoor
+	ipcrm --all
