@@ -18,8 +18,12 @@ int creasem(int identif) {
 		safeperror("Error on ftok while creating semaphore");
 		return -1;
 	}
-	return (semget(clave, 1, IPC_CREAT | IPC_EXCL | 0660));
 	/* da error si ya existe */
+	int sem_id = semget(clave, 1, IPC_CREAT | IPC_EXCL | 0660);
+	if (sem_id < 0) {
+		safeperror("Error on semget while creating semaphore");
+	}
+	return sem_id;
 }
 
 /* adquirir derecho de acceso al set de semaforos existentes
@@ -27,7 +31,15 @@ int creasem(int identif) {
 int getsem(int identif) {
 	key_t clave;
 	clave = ftok(DIRECTORY, identif);
-	return (semget(clave, 1, 0660));
+	if (clave < 0) {
+		safeperror("Error on ftok while getting semaphore");
+		return -1;
+	}
+	int sem_id = semget(clave, 1, 0660);
+	if (sem_id < 0) {
+		safeperror("Error on semget while getting semaphore");
+	}
+	return sem_id;
 }
 
 /* inicializar al semáforo del set de semaforos
@@ -42,7 +54,11 @@ int inisem(int semid, int val) {
 		struct seminfo *__buf; /* Buffer for IPC_INFO(Linux specific)*/
 	} arg;
 	arg.val = val;
-	return (semctl(semid, 0, SETVAL, arg));
+	int res = semctl(semid, 0, SETVAL, arg);
+	if (res < 0) {
+		safeperror("Error on semctl while initializing semaphore");
+	}
+	return res;
 }
 
 /* ocupar al semáforo (p) WAIT
