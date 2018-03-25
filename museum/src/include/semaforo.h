@@ -8,12 +8,16 @@
 #include "logger.h"
 #include "resources.h"
 
-
+	
 /* Funciones de semaforos crear el set de semaforos (si no existe)
  */
 int creasem(int identif) {
 	key_t clave;
 	clave = ftok(DIRECTORY, identif);
+	if (clave < 0) {
+		safeperror("Error on ftok while creating semaphore");
+		return -1;
+	}
 	return (semget(clave, 1, IPC_CREAT | IPC_EXCL | 0660));
 	/* da error si ya existe */
 }

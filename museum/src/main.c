@@ -70,6 +70,14 @@ void create_door(int req_queue_id, int resp_queue_id, char* exec) {
 	}
 }
 
+void create_museum() {
+	safelog("Creating museum.");
+	
+	
+	
+	safelog("Finished creating museum.");
+}
+
 void test_msg_queues() {
 	int req_queue = getmsg(0);
 	int resp_queue = getmsg(1);
@@ -86,11 +94,8 @@ void test_msg_queues() {
 
 int main(int argc, char* argv[]) {
 	safelog("Starting museum simulation.");
-
-	safelog("Creating museum.");
-	// init shm with museum cap.
-	safelog("Finished creating museum.");
-
+	
+	create_museum();
 
 	safelog("Starting creation of entrance doors.");
 	for (int i = 0; i < ENTRANCE_DOORS; i++) {

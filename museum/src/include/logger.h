@@ -81,7 +81,7 @@ void safeperror(const char* format, ...){
 
     vsprintf(buffer+(strlen(buffer)), format, args );
 
-    sprintf(buffer+strlen(buffer), ":%s %s%s\n", colors[(_color+NUM_COLORS/2)%NUM_COLORS], strerror(error), colors[KNRM]);
+    sprintf(buffer+strlen(buffer), ":%s %s%s\n", colors[KRED], strerror(error), colors[KNRM]);
 
     va_end(args);
 
