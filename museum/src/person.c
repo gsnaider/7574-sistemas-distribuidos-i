@@ -5,6 +5,7 @@
 #include "include/logger.h"
 #include "constants.h"
 #include "message.h"
+#include "museumApi.h"
 
 const int MAX_TIME_IN_MUSEUM = 20;
 
@@ -32,16 +33,20 @@ int main(int argc, char* argv[]) {
 	rcvmsg(entrance_resp_queue, &msg, sizeof(message_t), getpid());
 
 	if (msg.type == ACCEPT) {
-		safelog("PERSON: Entering museum...");
-		sleep(rand() % MAX_TIME_IN_MUSEUM);
-		
-		int exit_req_queue = getmsg(2 * ENTRANCE_DOORS);
+		safelog("PERSON: Entering museum");
+		if (rand() % 2 == 0) {
+			go_on_tour();
+		} else {
+			safelog("PERSON: Exploring museum...");
+			sleep(rand() % MAX_TIME_IN_MUSEUM);
+		}
+		int exit_req_queue = getmsg(EXIT_DOOR_REQ_MSG);
 		if (exit_req_queue < 0) {
 			safeperror("PERSON: ERROR getting exit request msg queue.");
 			exit(-1);
 		}
 
-		int exit_resp_queue = getmsg(2 * ENTRANCE_DOORS + 1);
+		int exit_resp_queue = getmsg(EXIT_DOOR_RESP_MSG);
 		if (exit_resp_queue < 0) {
 			safeperror("PERSON: ERROR getting exit response msg queue.");
 			exit(-1);

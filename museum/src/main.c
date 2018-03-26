@@ -59,13 +59,16 @@ void destroy_ipcs() {
 		delete_msg_queue(2 * i);
 		delete_msg_queue(2 * i + 1);
 	}
-	delete_msg_queue(2 * ENTRANCE_DOORS);
-	delete_msg_queue(2 * ENTRANCE_DOORS + 1);
+	delete_msg_queue(EXIT_DOOR_REQ_MSG);
+	delete_msg_queue(EXIT_DOOR_RESP_MSG);
 
 	delete_sem(MUSEUM_CAP_SEM);
 	delete_shm(MUSEUM_CAP_SHM);
 	delete_sem(MUSEUM_OPEN_SEM);
 	delete_shm(MUSEUM_OPEN_SHM);
+	delete_sem(MUSEUM_TOUR_COUNT_SEM);
+	delete_shm(MUSEUM_TOUR_COUNT_SHM);
+	delete_sem(MUSEUM_TOUR_START_SEM);
 
 }
 
@@ -131,6 +134,40 @@ void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 	}
 }
 
+
+void create_tour() {
+
+	int tour_count_sem = creasem(MUSEUM_TOUR_COUNT_SEM);
+	if (tour_count_sem < 0) {
+		safe_exit("ERROR creating tour count semaphore");
+	}
+	inisem(tour_count_sem, 1);
+
+	int tour_count_shm_id = creashm(MUSEUM_TOUR_COUNT_SHM, sizeof(int));
+	if (tour_count_shm_id < 0) {
+		safe_exit("ERROR creating tour count shared memory");
+	}
+	int* tour_count_shm = (int*) map(tour_count_shm_id);
+
+	*tour_count_shm = 0;
+
+	int tour_start_sem = creasem(MUSEUM_TOUR_START_SEM);
+	if (tour_start_sem < 0) {
+		safe_exit("ERROR creating tour start semaphore");
+	}
+	inisem(tour_start_sem, 0);
+
+
+	if (creamsg(TOUR_REQ_MSG) < 0) {
+		safe_exit("ERROR creating tour req msg queue.");
+	}
+	if (creamsg(TOUR_RESP_MSG) < 0) {
+		safe_exit("ERROR creating tour resp msg queue.");
+	}
+
+
+}
+
 void create_museum() {
 	safelog("Creating museum.");
 	int cap_sem = creasem(MUSEUM_CAP_SEM);
@@ -162,8 +199,10 @@ void create_museum() {
 
 	*open_shm = true;
 
+	create_tour();
 	safelog("Finished creating museum.");
 }
+
 
 int main(int argc, char* argv[]) {
 	safelog("Starting museum simulation.");
@@ -178,7 +217,7 @@ int main(int argc, char* argv[]) {
 	safelog("Finished creation of entrance doors.");
 
 	safelog("Creating exit door.");
-	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
+	create_door(EXIT_DOOR_REQ_MSG, EXIT_DOOR_RESP_MSG, "./exitDoor");
 	safelog("Finished creating exit door.");
 
 	safelog("Starting person generator.");
