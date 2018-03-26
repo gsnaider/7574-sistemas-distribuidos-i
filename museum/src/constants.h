@@ -2,8 +2,9 @@
 #define CONSTANTS_H_
 
 #define ENTRANCE_DOORS 3
-#define MUSEUM_CAP 10
-#define TOUR_CAP 3
+#define MUSEUM_CAP 20
+#define TOUR_CAP 5
+#define TOUR_WAIT_TIME 50
 
 
 #define MUSEUM_CAP_SEM 1
