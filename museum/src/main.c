@@ -12,8 +12,8 @@
 #include "include/logger.h"
 #include "include/signalUtil.h"
 
-// Entrance doors + exit door + person generator.
-const int MAX_CHILDS = ENTRANCE_DOORS + 2;
+// Entrance doors + exit door + person generator + guide.
+const int MAX_CHILDS = ENTRANCE_DOORS + 3;
 pid_t childs_arr[MAX_CHILDS];
 int childs = 0;
 
@@ -61,6 +61,8 @@ void destroy_ipcs() {
 	}
 	delete_msg_queue(EXIT_DOOR_REQ_MSG);
 	delete_msg_queue(EXIT_DOOR_RESP_MSG);
+	delete_msg_queue(TOUR_REQ_MSG);
+	delete_msg_queue(TOUR_RESP_MSG);
 
 	delete_sem(MUSEUM_CAP_SEM);
 	delete_shm(MUSEUM_CAP_SHM);
@@ -219,6 +221,20 @@ int main(int argc, char* argv[]) {
 	safelog("Creating exit door.");
 	create_door(EXIT_DOOR_REQ_MSG, EXIT_DOOR_RESP_MSG, "./exitDoor");
 	safelog("Finished creating exit door.");
+
+	safelog("Creating guide.");
+	pid_t guide_pid = fork();
+	if (guide_pid < 0) {
+		safe_exit("ERROR forking guide");
+	}
+	if (guide_pid == 0) {
+		execl("./guide", "./guide", (char*)NULL);
+		safe_exit("ERROR executing guide");
+	} else {
+		childs_arr[childs++] = guide_pid;
+	}
+	safelog("Finished creating guide.");
+	
 
 	safelog("Starting person generator.");
 	pid_t person_gen_pid = fork();

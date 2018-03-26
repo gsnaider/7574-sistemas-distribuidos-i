@@ -1,5 +1,10 @@
+#ifndef CONSTANTS_H_
+#define CONSTANTS_H_
+
 #define ENTRANCE_DOORS 3
 #define MUSEUM_CAP 10
+#define TOUR_CAP 3
+
 
 #define MUSEUM_CAP_SEM 1
 #define MUSEUM_OPEN_SEM 2
@@ -14,3 +19,5 @@ const int EXIT_DOOR_REQ_MSG = 2 * ENTRANCE_DOORS;
 const int EXIT_DOOR_RESP_MSG = EXIT_DOOR_REQ_MSG + 1;
 const int TOUR_REQ_MSG = EXIT_DOOR_RESP_MSG + 1;
 const int TOUR_RESP_MSG = TOUR_REQ_MSG + 1;
+
+#endif
