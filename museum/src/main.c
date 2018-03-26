@@ -12,10 +12,10 @@
 #include "include/logger.h"
 #include "include/signalUtil.h"
 
-
+// Entrance doors + exit door + person generator.
+const int MAX_CHILDS = ENTRANCE_DOORS + 2;
+pid_t childs_arr[MAX_CHILDS];
 int childs = 0;
-pid_t childs_arr[ENTRANCE_DOORS + 1];
-
 
 void delete_msg_queue(int id) {
 	safelog("Deleting message queue %d", id);
@@ -75,12 +75,6 @@ void safe_destroy_ipcs() {
 	}
 }
 
-void safe_exit(const char* exit_msg) {
-	safeperror("%s", exit_msg);
-	safe_destroy_ipcs();
-	exit(-1);
-}
-
 void wait_childs() {
 	for (int i = 0; i < childs; i++) {
 		wait((int*) NULL);
@@ -96,15 +90,24 @@ void kill_childs() {
 	}
 }
 
+void safe_exit() {
+	kill_childs();
+	wait_childs();
+	destroy_ipcs();
+	exit(-1);
+}
+
+void safe_exit(const char* exit_msg) {
+	safeperror("%s", exit_msg);
+	safe_exit();
+}
+
 void SIGINT_handler(int signum) {
 	if (signum != SIGINT) {
 		safelog("WARNING: Unkown signal received: %d.", signum);
 	} else {
 		safelog("SIGINT received, aborting.");
-		kill_childs();
-		wait_childs();
-		destroy_ipcs();
-		exit(-1);
+		safe_exit();
 	}
 }
 
@@ -211,7 +214,20 @@ int main(int argc, char* argv[]) {
 	create_door(2 * ENTRANCE_DOORS, 2 * ENTRANCE_DOORS + 1, "./exitDoor");
 	safelog("Finished creating exit door.");
 
-	test_msg_queues();
+	safelog("Starting person generator.");
+	pid_t person_gen_pid = fork();
+	if (person_gen_pid < 0) {
+		safe_exit("ERROR forking person generator");
+	}
+	if (person_gen_pid == 0) {
+		execl("./personGen", "./personGen", (char*)NULL);
+		safe_exit("ERROR executing person generator");
+	} else {
+		childs_arr[childs++] = person_gen_pid;
+	}
+
+
+	//test_msg_queues();
 
 	wait_childs();
 	destroy_ipcs();
