@@ -12,15 +12,15 @@ bool graceful_quit = false;
 
 void SIGINT_handler(int signum) {
 	if (signum != SIGINT) {
-		safelog("WARNING: Unkown signal received: %d.", signum);
+		safelog("EXIT DOOR: WARNING: Unkown signal received: %d.", signum);
 	} else {
-		safelog("SIGINT received, aborting.");
+		safelog("EXIT DOOR: SIGINT received, aborting.");
 		graceful_quit = true;
 	}
 }
 
 int main(int argc, char* argv[]) {
-	safelog("Exit door created.");
+	safelog("EXIT DOOR: started.");
 	register_handler(SIGINT_handler);
 
 	int req_queue_id;
@@ -32,56 +32,51 @@ int main(int argc, char* argv[]) {
 	int resp_queue = getmsg(resp_queue_id);
 
 	if (req_queue < 0) {
-		safeperror("Error getting req message queue.");
+		safeperror("EXIT DOOR: Error getting req message queue.");
 		exit(-1);
 	}
 	if (resp_queue < 0) {
-		safeperror("Error getting resp message queue.");
+		safeperror("EXIT DOOR: Error getting resp message queue.");
 		exit(-1);
 	}
 
 	int shm_id = getshm(MUSEUM_CAP_SHM);
 	if (shm_id < 0) {
-		safeperror("ERROR getting shared memory");
+		safeperror("EXIT DOOR: ERROR getting shared memory");
 		exit(-1);
 	}
 	int* shm = (int*) map(shm_id);
 
 	int sem = getsem(MUSEUM_CAP_SEM);
 	if (sem < 0) {
-		safeperror("ERROR getting semaphore");
+		safeperror("EXIT DOOR: ERROR getting semaphore");
 		exit(-1);
 	}
 
 	while (!graceful_quit) {
 		message_t msg;
-		safelog("Waiting requests");
 		rcvmsg(req_queue, &msg, sizeof(message_t), 0);
 		if (graceful_quit) {
 			break;
 		}
 		if (msg.type != EXIT_REQUEST) {
-			safelog("WARNING: Invalid msg type (%d) received on exit door. Discarding msg.", msg.type);
+			safelog("EXIT DOOR: WARNING: Invalid msg type (%d) received. Discarding msg.", msg.type);
 		} else {
-			safelog("Processing request...");
-			sleep(5);
 			p(sem);
 			*shm += 1;
 			msg.type = ACCEPT;
-			safelog("Visitor %d allowed to exit", msg.mtype);
-			safelog("Current museum capacity: %d", *shm);
+			safelog("EXIT DOOR: Visitor %d allowed to exit", msg.mtype);
+			safelog("EXIT DOOR: Current museum capacity: %d", *shm);
 			v(sem);
-			safelog("Finished processing request");
-			safelog("Sending response");
 			sendmsg(resp_queue, &msg, sizeof(message_t));
 		}
 	}
 
 	if (unmap(shm) < 0) {
-		safeperror("Error unmapping shm");
+		safeperror("EXIT DOOR: Error unmapping shm");
 	}
 
-	safelog("Exit door destroyed.");
+	safelog("EXIT DOOR: stopped.");
 
 
 

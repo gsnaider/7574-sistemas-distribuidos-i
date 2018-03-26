@@ -67,14 +67,6 @@ void destroy_ipcs() {
 
 }
 
-void safe_destroy_ipcs() {
-	safelog("Destrying ipcs");
-	if (fork() == 0) {
-		execl("./ipcrm.sh", "./ipcrm.sh", (char*)NULL);
-		safeperror("ERROR destrying ipcs.");
-	}
-}
-
 void wait_childs() {
 	for (int i = 0; i < childs; i++) {
 		wait((int*) NULL);
@@ -111,8 +103,6 @@ void SIGINT_handler(int signum) {
 	}
 }
 
-
-
 void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 	if (creamsg(req_queue_id) < 0) {
 		safe_exit("ERROR creating req msg queue.");
@@ -141,7 +131,6 @@ void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 
 void create_museum() {
 	safelog("Creating museum.");
-
 	int sem = creasem(MUSEUM_CAP_SEM);
 	if (sem < 0) {
 		safe_exit("ERROR creating semaphore");
@@ -159,48 +148,9 @@ void create_museum() {
 	safelog("Finished creating museum.");
 }
 
-void test_msg_queues() {
-	int req_queue = getmsg(0);
-	int resp_queue = getmsg(1);
-
-
-	for (int i = 1; i < 15; i++) {
-		message_t msg = {i, ENTRANCE_REQUEST};
-		safelog("Sending message %d", i);
-		sendmsg(req_queue, &msg, sizeof(message_t));
-
-		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
-		safelog("Received message %d with type %d", i, msg.type);
-	}
-
-	int exit_req_queue = getmsg(2 * ENTRANCE_DOORS);
-	int exit_resp_queue = getmsg(2 * ENTRANCE_DOORS + 1);
-
-	for (int i = 1; i <= MUSEUM_CAP/2; i++) {
-		message_t msg = {i, EXIT_REQUEST};
-		safelog("Sending exit message %d", i);
-		sendmsg(exit_req_queue, &msg, sizeof(message_t));
-
-		rcvmsg(exit_resp_queue, &msg, sizeof(message_t), 0);
-		safelog("Received message %d with type %d", i, msg.type);
-	}
-	
-
-	for (int i = 1; i < 10; i++) {
-		message_t msg = {i, ENTRANCE_REQUEST};
-		safelog("Sending message %d", i);
-		sendmsg(req_queue, &msg, sizeof(message_t));
-
-		rcvmsg(resp_queue, &msg, sizeof(message_t), 0);
-		safelog("Received message %d with type %d", i, msg.type);
-	}
-
-}
-
 int main(int argc, char* argv[]) {
 	safelog("Starting museum simulation.");
 	register_handler(SIGINT_handler);
-
 
 	create_museum();
 
@@ -225,9 +175,6 @@ int main(int argc, char* argv[]) {
 	} else {
 		childs_arr[childs++] = person_gen_pid;
 	}
-
-
-	//test_msg_queues();
 
 	wait_childs();
 	destroy_ipcs();

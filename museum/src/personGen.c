@@ -2,6 +2,7 @@
 #include "include/logger.h"
 #include "include/signalUtil.h"
 
+const int TIME_BETWEEN_PERSONS = 1;
 bool graceful_quit = false;
 
 void SIGINT_handler(int signum) {
@@ -18,8 +19,7 @@ int main(int argc, char* argv[]) {
 	register_handler(SIGINT_handler);
 
 	while (!graceful_quit) {
-		safelog("Creating person");
-		sleep(10);
+		sleep(TIME_BETWEEN_PERSONS);
 		pid_t pid = fork();
 		if (pid < 0) {
 			safeperror("ERROR forking person");
