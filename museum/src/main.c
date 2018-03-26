@@ -64,6 +64,8 @@ void destroy_ipcs() {
 
 	delete_sem(MUSEUM_CAP_SEM);
 	delete_shm(MUSEUM_CAP_SHM);
+	delete_sem(MUSEUM_OPEN_SEM);
+	delete_shm(MUSEUM_OPEN_SHM);
 
 }
 
@@ -131,19 +133,34 @@ void create_door(int req_queue_id, int resp_queue_id, const char* exec) {
 
 void create_museum() {
 	safelog("Creating museum.");
-	int sem = creasem(MUSEUM_CAP_SEM);
-	if (sem < 0) {
-		safe_exit("ERROR creating semaphore");
+	int cap_sem = creasem(MUSEUM_CAP_SEM);
+	if (cap_sem < 0) {
+		safe_exit("ERROR creating cap semaphore");
 	}
-	inisem(sem, 1);
+	inisem(cap_sem, 1);
 
-	int shm_id = creashm(MUSEUM_CAP_SHM, sizeof(int));
-	if (shm_id < 0) {
-		safe_exit("ERROR creating shared memory");
+	int cap_shm_id = creashm(MUSEUM_CAP_SHM, sizeof(int));
+	if (cap_shm_id < 0) {
+		safe_exit("ERROR creating cap shared memory");
 	}
-	int* shm = (int*) map(shm_id);
+	int* cap_shm = (int*) map(cap_shm_id);
 
-	*shm = MUSEUM_CAP;
+	*cap_shm = MUSEUM_CAP;
+
+
+	int open_sem = creasem(MUSEUM_OPEN_SEM);
+	if (open_sem < 0) {
+		safe_exit("ERROR creating open semaphore");
+	}
+	inisem(open_sem, 1);
+
+	int open_shm_id = creashm(MUSEUM_OPEN_SHM, sizeof(bool));
+	if (open_shm_id < 0) {
+		safe_exit("ERROR creating open shared memory");
+	}
+	bool* open_shm = (bool*) map(open_shm_id);
+
+	*cap_shm = true;
 
 	safelog("Finished creating museum.");
 }

@@ -2,3 +2,5 @@
 #define MUSEUM_CAP 10
 #define MUSEUM_CAP_SEM 1
 #define MUSEUM_CAP_SHM 1
+#define MUSEUM_OPEN_SEM 2
+#define MUSEUM_OPEN_SHM 2
