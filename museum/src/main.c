@@ -160,7 +160,7 @@ void create_museum() {
 	}
 	bool* open_shm = (bool*) map(open_shm_id);
 
-	*cap_shm = true;
+	*open_shm = true;
 
 	safelog("Finished creating museum.");
 }

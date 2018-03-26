@@ -42,18 +42,25 @@ int main(int argc, char* argv[]) {
 		exit(-1);
 	}
 
-	int shm_id = getshm(MUSEUM_CAP_SHM);
-	if (shm_id < 0) {
-		safeperror("ENTRANCE DOOR: ERROR getting shared memory");
+	int cap_shm_id = getshm(MUSEUM_CAP_SHM);
+	if (cap_shm_id < 0) {
+		safeperror("ENTRANCE DOOR: ERROR getting cap shared memory");
 		exit(-1);
 	}
-	int* shm = (int*) map(shm_id);
+	int* cap_shm = (int*) map(cap_shm_id);
 
-	int sem = getsem(MUSEUM_CAP_SEM);
-	if (sem < 0) {
-		safeperror("ENTRANCE DOOR: ERROR getting semaphore");
+	int cap_sem = getsem(MUSEUM_CAP_SEM);
+	if (cap_sem < 0) {
+		safeperror("ENTRANCE DOOR: ERROR getting cap semaphore");
 		exit(-1);
 	}
+
+	int open_shm_id = getshm(MUSEUM_OPEN_SHM);
+	if (open_shm_id < 0) {
+		safeperror("ENTRANCE DOOR: ERROR getting open shared memory");
+		exit(-1);
+	}
+	bool* open_shm = (bool*) map(open_shm_id);
 
 	while (!graceful_quit) {
 		message_t msg;
@@ -66,23 +73,27 @@ int main(int argc, char* argv[]) {
 		} else {
 			safelog("ENTRANCE DOOR: Processing entrance request from %d", msg.mtype);
 			sleep(PROCESS_ENTRACE_TIME);
-			p(sem);
-			if (*shm > 0) {
-				*shm -= 1;
-				msg.type = ACCEPT;
-				safelog("ENTRANCE DOOR: Visitor %d accepted", msg.mtype);
-			} else {
-				msg.type = REJECT;
-				safelog("ENTRANCE DOOR: Visitor %d rejected", msg.mtype);
-			}
-			safelog("ENTRANCE DOOR: Current museum capacity: %d", *shm);
-			v(sem);
+				p(cap_sem);
+				if (*cap_shm > 0 && *open_shm) {
+					*cap_shm -= 1;
+					msg.type = ACCEPT;
+					safelog("ENTRANCE DOOR: Visitor %d accepted", msg.mtype);
+				} else {
+					msg.type = REJECT;
+					safelog("ENTRANCE DOOR: Visitor %d rejected", msg.mtype);
+				}
+				safelog("ENTRANCE DOOR: Current museum capacity: %d", *cap_shm);
+				v(cap_sem);
 			sendmsg(resp_queue, &msg, sizeof(message_t));
 		}
 	}
 
-	if (unmap(shm) < 0) {
-		safeperror("ENTRANCE DOOR: Error unmapping shm");
+	if (unmap(cap_shm) < 0) {
+		safeperror("ENTRANCE DOOR: Error unmapping cap_shm");
+	}
+
+	if (unmap(open_shm) < 0) {
+		safeperror("ENTRANCE DOOR: Error unmapping open_shm");
 	}
 
 	safelog("ENTRANCE DOOR: Entrance door stopped.");
