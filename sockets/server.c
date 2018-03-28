@@ -11,17 +11,17 @@ void remove_vowels(char* str) {
 	for (int i = 0; i < 100; i++) {
 		char c = str[i];
 		if (c != 'a' && c != 'A' &&
-			c != 'e' && c != 'E' &&
-			c != 'i' && c != 'I' &&
-			c != 'o' && c != 'O' &&
-			c != 'u' && c != 'U') {
+		        c != 'e' && c != 'E' &&
+		        c != 'i' && c != 'I' &&
+		        c != 'o' && c != 'O' &&
+		        c != 'u' && c != 'U') {
 			str[j] = c;
 			j++;
 		}
 	}
 	if (j < 100) {
 		str[j] = '\0';
-	} 
+	}
 }
 
 
@@ -51,29 +51,29 @@ int main(int argc, char* argv[]) {
 
 	socklen_t client_addr_size = sizeof(client_addr);
 
-
-	printf("Esperando conexiones...\n");
 	while (1) {
 
-	int client_fd = accept(socket_fd, (struct sockaddr*) &client_addr, &client_addr_size);
+		printf("Esperando conexiones...\n");
+		int client_fd = accept(socket_fd, (struct sockaddr*) &client_addr, &client_addr_size);
 
-	if (client_fd < 0) {
-		perror("Error en accept");
-		exit(-1);
-	}
-
-
-	char buffer[100];
-	if (read(client_fd, buffer, sizeof(buffer) / sizeof(char)) >= 0) {
-		printf("Llego %s\n", buffer);
-		remove_vowels(buffer);
-		printf("Respondiendo: %s\n", buffer);
-		if (write(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
-			perror("Error en write");
+		if (client_fd < 0) {
+			perror("Error en accept");
 			exit(-1);
 		}
-		printf("LLEGO!\n");
+
+
+		char buffer[100];
+		if (read(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
+			perror("Error en read.");
+		} else {
+			printf("Llego: %s\n", buffer);
+			remove_vowels(buffer);
+			printf("Respondiendo: %s\n", buffer);
+			if (write(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
+				perror("Error en write");
+				exit(-1);
+			}
+		}
 	}
-}
 	printf("Fin server\n");
 }
