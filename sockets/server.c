@@ -4,7 +4,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 
+bool graceful_quit = false;
+
+
+void register_handler(void (*handler)(int) ) {
+	struct sigaction sa;
+	sigemptyset( &sa.sa_mask);
+	sigaddset(&sa.sa_mask, SIGINT);
+	sa.sa_handler = handler;
+	sigaction(SIGINT, &sa, 0);
+}
+
+
+void SIGINT_handler(int signum) {
+	if (signum != SIGINT) {
+		printf("WARNING: Unkown signal received: %d\n.", signum);
+	} else {
+		printf("SIGINT received, aborting.\n");
+		graceful_quit = true;
+	}
+}
 
 void remove_vowels(char* str) {
 	int j = 0;
@@ -26,6 +47,7 @@ void remove_vowels(char* str) {
 
 
 int main(int argc, char* argv[]) {
+	register_handler(SIGINT_handler);
 
 	int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -51,10 +73,13 @@ int main(int argc, char* argv[]) {
 
 	socklen_t client_addr_size = sizeof(client_addr);
 
-	while (1) {
+	while (!graceful_quit) {
 
 		printf("Esperando conexiones...\n");
 		int client_fd = accept(socket_fd, (struct sockaddr*) &client_addr, &client_addr_size);
+		if (graceful_quit) {
+			break;
+		}
 
 		if (client_fd < 0) {
 			perror("Error en accept");
@@ -75,5 +100,10 @@ int main(int argc, char* argv[]) {
 			}
 		}
 	}
+	printf("Cerrando socket.\n");
+	if (close(socket_fd) < 0) {
+		perror("Error en close");
+	}
+
 	printf("Fin server\n");
 }
