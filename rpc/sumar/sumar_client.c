@@ -46,7 +46,7 @@ main (int argc, char *argv[])
 	int n;
 
 	if (argc < 3) {
-		printf ("usage: %s server_host\n", argv[0]);
+		printf ("usage: %s server_host number\n", argv[0]);
 		exit (1);
 	}
 
