@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 
 	while (!graceful_quit) {
 
-		printf("Esperando conexiones...\n");
+		printf("[%d] Esperando conexiones...\n", getpid());
 		int client_fd = accept(socket_fd, (struct sockaddr*) &client_addr, &client_addr_size);
 		if (graceful_quit) {
 			break;
@@ -86,19 +86,27 @@ int main(int argc, char* argv[]) {
 			exit(-1);
 		}
 
-
-		char buffer[100];
-		if (read(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
-			perror("Error en read.");
-		} else {
-			printf("Llego: %s\n", buffer);
-			remove_vowels(buffer);
-			printf("Respondiendo: %s\n", buffer);
-			if (write(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
-				perror("Error en write");
+		pid_t req_proc = fork();
+		if (req_proc == 0) {	
+			char buffer[100];
+			if (read(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
+				perror("Error en read.");
 				exit(-1);
+			} else {
+				printf("[%d] Llego: %s\n", getpid(), buffer);
+				remove_vowels(buffer);
+				printf("[%d] Respondiendo: %s\n", getpid(), buffer);
+				if (write(client_fd, buffer, sizeof(buffer) / sizeof(char)) < 0) {
+					perror("Error en write");
+					exit(-1);
+				}
 			}
+			exit(0);	
+		} else if (req_proc < 0) {
+			perror("Error en fork.");
+			exit(-1);
 		}
+
 	}
 	printf("Cerrando socket.\n");
 	if (close(socket_fd) < 0) {
