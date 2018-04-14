@@ -9,7 +9,7 @@ import java.rmi.registry.Registry;
 public class Client {
 
     public static void main(String[] args) throws  Exception{
-        Registry registry = LocateRegistry.getRegistry("127.0.0.1",Constants.RMI_PORT);
+        Registry registry = LocateRegistry.getRegistry(Constants.HOST,Constants.RMI_PORT);
         Server server = (Server) registry.lookup(Constants.RMI_ID);
 
         String s = "HOLA";

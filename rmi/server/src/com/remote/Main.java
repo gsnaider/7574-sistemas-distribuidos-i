@@ -12,6 +12,7 @@ import java.util.Locale;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("java.rmi.server.hostname",Constants.HOST);
         RemoteServer server = new RemoteServer();
         Registry registry = LocateRegistry.createRegistry(Constants.RMI_PORT);
         registry.bind(Constants.RMI_ID, server);
