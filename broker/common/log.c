@@ -25,6 +25,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <time.h>
+#include <unistd.h>
 
 #include "log.h"
 
@@ -106,10 +107,10 @@ void log_log(int level, const char *file, int line, const char *fmt, ...) {
         buf[strftime(buf, sizeof(buf), "%H:%M:%S", lt)] = '\0';
 #ifdef LOG_USE_COLOR
         fprintf(
-      stdout, "%s %s%-5s\x1b[0m \x1b[90m%s:%d:\x1b[0m ",
-      buf, level_colors[level], level_names[level], file, line);
+      stdout, "%s [%d] %s%-5s\x1b[0m \x1b[90m%s:%d:\x1b[0m ",
+      buf, getpid(), level_colors[level], level_names[level], file, line);
 #else
-        fprintf(stdout, "%s %-5s %s:%d: ", buf, level_names[level], file, line);
+        fprintf(stdout, "%s [%d] %-5s %s:%d: ", buf, getpid(), level_names[level], file, line);
 #endif
         va_start(args, fmt);
         vfprintf(stdout, fmt, args);
