@@ -17,7 +17,7 @@ typedef struct payload_t {
 } payload_t;
 
 typedef struct msg_t {
-    long id;
+    long mtype;
     int type;
     payload_t payload;
 } msg_t;
