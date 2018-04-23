@@ -10,6 +10,7 @@
 #include "../common/ipc/msg_queue.h"
 #include "broker_handler.h"
 #include "../common/ipc/socket.h"
+#include "../common/message.h"
 
 void create_broker_resp_handler();
 
@@ -23,15 +24,17 @@ int main(int argc, char* argv[]) {
     int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
     log_info("Connected to server");
 
-    char* msg = "hola";
-    log_info("Sending %s to server.", msg);
-    if (write(socket_fd, msg, strlen(msg)) < 0) {
+    msg_t msg;
+    msg.type = CREATE;
+    log_info("Sending create req to server.");
+    if (write(socket_fd, &msg, sizeof(msg)) < 0) {
         log_error("Error writing to socket.");
     }
 
     // TODO dont close here!
     close(socket_fd);
 
+    // TODO send socket to resp handler
     // TODO create shm for incoming msgs and send to resp process.
     create_broker_resp_handler();
 

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "../common/log/log.h"
+#include "../common/message.h"
 
 int main(int argc, char* argv[]) {
     log_info("Starting request handler.");
@@ -15,12 +16,14 @@ int main(int argc, char* argv[]) {
     int client_socket;
     sscanf(argv[1], "%d", &client_socket);
 
-    char buffer[100];
+    // TODO read message_t instead of
+    char buffer[sizeof(msg_t) / sizeof(char)];
     if (read(client_socket, buffer, sizeof(buffer) / sizeof(char)) < 0) {
         log_error("Error reading client socket.");
         exit(-1);
     }
-    log_info("Received: %s", buffer);
+    msg_t* msg = (msg_t*) buffer;
+    log_info("Received type: %d", msg->type);
 
 
     log_info("Stopping request handler.");
