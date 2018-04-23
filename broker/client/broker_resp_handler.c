@@ -12,11 +12,11 @@
 int init_msg_queue();
 
 int main(int argc, char* argv[]) {
-    log_info("Starting local broker.");
+    log_info("Starting local broker Response Handler.");
 
     int resp_queue = init_msg_queue();
 
-    sleep(10);
+    log_debug("Deleting message queue");
     delmsg(resp_queue);
 }
 
@@ -28,7 +28,7 @@ int init_msg_queue() {
     }
     int resp_queue = getmsg(BROKER_RESP_MSG);
     if (resp_queue < 0) {
-        log_error("Error getting resp message queue.");
+        log_error("Error getting resp message queue");
         exit(-1);
     }
     return resp_queue;

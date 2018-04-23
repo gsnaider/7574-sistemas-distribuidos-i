@@ -26,6 +26,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "log.h"
 
@@ -115,6 +116,9 @@ void log_log(int level, const char *file, int line, const char *fmt, ...) {
         va_start(args, fmt);
         vfprintf(stdout, fmt, args);
         va_end(args);
+        if (level == LOG_ERROR) {
+            fprintf(stdout, " Syscall error: %s.", strerror(errno));
+        }
         fprintf(stdout, "\n");
     }
 

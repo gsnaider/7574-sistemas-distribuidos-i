@@ -8,34 +8,37 @@
 #include "../common/log/log.h"
 #include "../common/ipc/msg_queue.h"
 #include "broker_handler.h"
+#include "../common/ipc/socket.h"
 
 void create_broker_resp_handler();
 
 int init_msg_queue();
 
 int main(int argc, char* argv[]) {
-    log_info("Starting local broker.");
+    log_info("Starting local broker Request Handler.");
 
     // TODO open socket and send to resp process.
+
+    int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
+    log_info("Connected to server");
+
     // TODO create shm for incoming msgs and send to resp process.
     create_broker_resp_handler();
 
     int req_queue = init_msg_queue();
 
-    sleep(10);
+    log_debug("Deleting message queue");
     delmsg(req_queue);
 }
 
 int init_msg_queue() {
     if (creamsg(BROKER_REQ_MSG) < 0) {
         log_error("Error creating req msg queue.");
-        perror("Error");
         exit(-1);
     }
     int req_queue = getmsg(BROKER_REQ_MSG);
     if (req_queue < 0) {
         log_error("Error getting req message queue.");
-        perror("Error");
         exit(-1)    ;
     }
     return req_queue;
