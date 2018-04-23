@@ -19,8 +19,8 @@ set(DEPENDENCIES
         common/ipc/semaphore.h
         client/broker_handler.h
         common/ipc/socket.c
-        common/ipc/socket.h)
+        common/ipc/socket.h common/ipc/sig.c common/ipc/sig.h)
 
 add_executable(broker_resp_handler client/broker_resp_handler.c ${DEPENDENCIES})
 add_executable(broker_req_handler client/broker_req_handler.c ${DEPENDENCIES})
-add_executable(server server/server.c ${DEPENDENCIES} server/server.h)
+add_executable(server server/server.c server/server.h ${DEPENDENCIES})

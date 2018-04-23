@@ -3,18 +3,59 @@
 //
 
 #include <unistd.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include "../common/ipc/socket.h"
 #include "server.h"
 #include "../common/log/log.h"
+#include "../common/ipc/sig.h"
+
+bool graceful_quit = false;
+
+void SIGINT_handler(int signum) {
+    if (signum != SIGINT) {
+        log_warn("WARNING: Unkown signal received: %d\n.", signum);
+    } else {
+        log_debug("SIGINT received, aborting.\n");
+        graceful_quit = true;
+    }
+}
 
 int main(int argc, char* argv[]) {
+
+    register_handler(SIGINT_handler);
+
     log_info("Server started.");
     int socket = create_server_socket(PORT);
 
-    log_info("Waiting connections.");
-    int client_socket = accept_client(socket);
-    log_info("Client connected.");
-    // TODO fork and process, loop back to accept.
-    close(client_socket);
-    close(socket);
+    while (!graceful_quit) {
+        log_info("Waiting connections.");
+        int client_socket = accept_client(socket);
+        if (graceful_quit || client_socket < 0) {
+            break;
+        }
+        log_info("Client connected.");
+        pid_t handler = fork();
+        if (handler < 0) {
+            log_error("Error forking handler.");
+            exit(-1);
+        }
+        if (handler == 0) {
+            if (close(socket) < 0) {
+                log_error("Error closing server socket.");
+            }
+            log_info("Starting handler.");
+            // TODO exec instead of close and exit
+            close(client_socket);
+            exit(0);
+        }
+        if (close(client_socket) < 0) {
+            log_error("Error closing client socket.");
+        }
+    }
+
+    log_info("Stopping server.");
+    if(close(socket) < 0) {
+        log_error("Error closing server socket.");
+    }
 }

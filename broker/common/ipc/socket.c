@@ -73,7 +73,6 @@ int accept_client(int server_socket) {
     int client_fd = accept(server_socket, (struct sockaddr*) &client_addr, &client_addr_size);
     if (client_fd < 0) {
         log_error("Error accepting client.");
-        exit(-1);
     }
     return client_fd;
 }
