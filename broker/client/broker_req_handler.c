@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <memory.h>
 #include "../common/log/log.h"
 #include "../common/ipc/msg_queue.h"
 #include "broker_handler.h"
@@ -21,6 +22,12 @@ int main(int argc, char* argv[]) {
 
     int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
     log_info("Connected to server");
+
+    char* msg = "hola";
+    log_info("Sending %s to server.", msg);
+    if (write(socket_fd, msg, strlen(msg)) < 0) {
+        log_error("Error writing to socket.");
+    }
 
     // TODO dont close here!
     close(socket_fd);

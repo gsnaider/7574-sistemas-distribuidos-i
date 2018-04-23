@@ -44,10 +44,11 @@ int main(int argc, char* argv[]) {
             if (close(socket) < 0) {
                 log_error("Error closing server socket.");
             }
-            log_info("Starting handler.");
-            // TODO exec instead of close and exit
-            close(client_socket);
-            exit(0);
+            char client_socket_str[3];
+            snprintf(client_socket_str, 3, "%d", client_socket);
+            execl("./req_handler", "./req_handler", client_socket_str, (char*)NULL);
+            log_error("Error executing request handler.");
+            exit(-1);
         }
         if (close(client_socket) < 0) {
             log_error("Error closing client socket.");
