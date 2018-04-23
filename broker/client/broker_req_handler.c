@@ -22,6 +22,9 @@ int main(int argc, char* argv[]) {
     int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
     log_info("Connected to server");
 
+    // TODO dont close here!
+    close(socket_fd);
+
     // TODO create shm for incoming msgs and send to resp process.
     create_broker_resp_handler();
 
