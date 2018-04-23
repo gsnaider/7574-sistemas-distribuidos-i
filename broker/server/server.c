@@ -14,9 +14,9 @@ bool graceful_quit = false;
 
 void SIGINT_handler(int signum) {
     if (signum != SIGINT) {
-        log_warn("WARNING: Unkown signal received: %d\n.", signum);
+        log_warn("WARNING: Unkown signal received: %d.", signum);
     } else {
-        log_debug("SIGINT received, aborting.\n");
+        log_debug("SIGINT received, aborting.");
         graceful_quit = true;
     }
 }
