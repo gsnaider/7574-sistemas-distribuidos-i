@@ -7,6 +7,12 @@
 
 #define BROKER_REQ_MSG 1
 #define BROKER_RESP_MSG 2
+#define INCOMING_MSG_SHM 3
+#define INCOMING_MSG_COUNT_SHM 4
+#define INCOMING_MSG_SEM 5
+
+
+#define MAX_INCOMING_MSG 10
 
 #define SERVER_IP "127.0.0.1"
 #define SERVER_PORT 8080
