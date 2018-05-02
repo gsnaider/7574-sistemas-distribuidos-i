@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <memory.h>
+#include <stdbool.h>
 #include "../common/log/log.h"
 #include "../common/ipc/msg_queue.h"
 #include "broker_handler.h"
@@ -13,12 +14,19 @@
 #include "../common/ipc/shm.h"
 #include "../common/message.h"
 #include "../common/ipc/semaphore.h"
+#include "../common/ipc/sig.h"
 
-void create_broker_resp_handler(int socket_fd);
+bool graceful_quit = false;
 
-int init_msg_req_queue();
+void SIGINT_handler(int signum) {
+    if (signum != SIGINT) {
+        log_warn("WARNING: Unknown signal received: %d\n.", signum);
+    } else {
+        log_debug("SIGINT received, aborting.\n");
+        graceful_quit = true;
+    }
+}
 
-int init_msg_resp_queue();
 
 msg_t* create_msg_shm() {
     int msg_shm = creashm(INCOMING_MSG_SHM, sizeof(msg_t) * MAX_INCOMING_MSG);
@@ -48,45 +56,6 @@ int create_incoming_msg_sem() {
     return incoming_msgs_sem;
 }
 
-int main(int argc, char* argv[]) {
-    log_info("Starting local broker Request Handler.");
-
-    int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
-    log_info("Connected to server");
-
-    msg_t* incoming_msgs = create_msg_shm();
-    int* incoming_msg_count = create_msg_count_shm();
-    int incoming_msgs_sem = create_incoming_msg_sem();
-    int req_queue = init_msg_req_queue();
-    int resp_queue = init_msg_resp_queue();
-
-    create_broker_resp_handler(socket_fd);
-
-    // TODO while(true) read from req_queue and send msg to server.
-
-    sleep(10);
-
-    log_info("Msg type %d", incoming_msgs[0].type);
-    log_info("Msg type %d", incoming_msgs[MAX_INCOMING_MSG + 1].type);
-
-
-
-    log_debug("Deleting message queue.");
-    delmsg(req_queue);
-    delmsg(resp_queue);
-
-    log_debug("Deleting incoming messages shared memory.");
-    unmap(incoming_msgs);
-    delshm(getshm(INCOMING_MSG_SHM));
-    unmap(incoming_msg_count);
-    delshm(getshm(INCOMING_MSG_COUNT_SHM));
-
-    log_debug("Deleting msg shm semaphore");
-    delsem(incoming_msgs_sem);
-
-    log_debug("Closing socket.");
-    close(socket_fd);
-}
 
 int init_msg_req_queue() {
     if (creamsg(BROKER_REQ_MSG) < 0) {
@@ -117,7 +86,7 @@ int init_msg_resp_queue() {
 
 }
 
-void create_broker_resp_handler(int socket_fd) {
+pid_t create_broker_resp_handler(int socket_fd) {
 
     pid_t pid = fork();
     if (pid < 0) {
@@ -133,5 +102,66 @@ void create_broker_resp_handler(int socket_fd) {
         perror("Error");
         exit(-1);
     }
+    return pid;
 
+}
+
+void process_msg(msg_t msg) {
+    // TODO change local id to global id and send to server.
+    // Unless it's create, in that case just redirect to server (no id yet)
+    // Or if it's receive, just read the shm for new messages.
+    log_info("Processing message...");
+}
+
+int main(int argc, char* argv[]) {
+    register_handler(SIGINT_handler);
+
+    log_info("Starting local broker Request Handler.");
+
+    int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
+    log_info("Connected to server");
+
+    msg_t* incoming_msgs = create_msg_shm();
+    int* incoming_msg_count = create_msg_count_shm();
+    int incoming_msgs_sem = create_incoming_msg_sem();
+    int req_queue = init_msg_req_queue();
+    int resp_queue = init_msg_resp_queue();
+
+    pid_t resp_handler = create_broker_resp_handler(socket_fd);
+
+    while(!graceful_quit) {
+        log_info("Waiting request messages...");
+        msg_t msg;
+        rcvmsg(req_queue, &msg, sizeof(msg_t), 0);
+        if (graceful_quit) {
+            break;
+        }
+        if (msg.type == ACK) {
+            log_warn("Invalid msg type (ACK) received.");
+        } else {
+            log_info("Message received of type %d.", msg.type);
+            process_msg(msg);
+        }
+    }
+
+    log_info("Stopping broker.");
+    if (kill(resp_handler, SIGINT) < 0) {
+        log_error("Error killing response handler.");
+    }
+
+    log_debug("Deleting message queue.");
+    delmsg(req_queue);
+    delmsg(resp_queue);
+
+    log_debug("Deleting incoming messages shared memory.");
+    unmap(incoming_msgs);
+    delshm(getshm(INCOMING_MSG_SHM));
+    unmap(incoming_msg_count);
+    delshm(getshm(INCOMING_MSG_COUNT_SHM));
+
+    log_debug("Deleting msg shm semaphore");
+    delsem(incoming_msgs_sem);
+
+    log_debug("Closing socket.");
+    close(socket_fd);
 }
