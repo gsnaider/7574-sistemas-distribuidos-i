@@ -7,12 +7,20 @@
 
 int send(msg_t* msg) {
     int req_queue = getmsg(BROKER_REQ_MSG);
+    if (req_queue < 0) {
+        log_error("Error getting req queue.");
+        return -1;
+    }
     return sendmsg(req_queue, msg, sizeof(msg_t));
 }
 
 int recv(int id, msg_t* msg) {
     int resp_queue = getmsg(BROKER_RESP_MSG);
-    rcvmsg(resp_queue, msg, sizeof(msg_t), id);
+    if (resp_queue < 0){
+        log_error("Error getting resp queue.");
+        return -1;
+    }
+    return rcvmsg(resp_queue, msg, sizeof(msg_t), id);
 }
 
 int creabrk() {
@@ -20,12 +28,19 @@ int creabrk() {
     msg.type = CREATE;
 
     log_info("Sending create message.");
-    send(&msg);
+    if (send(&msg) < 0) {
+        log_error("Error sending message.");
+        return -1;
+    }
 
     log_info("Waiting response.");
     //TODO(optional): We are assuming that the mtype of the response (AKA the local id) will be the pid of the client.
     // Maybe we can do this more generically, and have the broker reply with our local id (maybe through a special queue for creation responses)
-    recv(getpid(), &msg);
+
+    if (recv(getpid(), &msg) < 0) {
+        log_error("Error receiving response.");
+        return -1;
+    }
 
     if (msg.type == ACK_OK) {
         log_info("Creation successful.");
@@ -52,9 +67,17 @@ int publish(int id, char *message, char *topic) {
     msg.payload.topic[MAX_TOPIC_LENGTH - 1] = 0; //Add null pointer terminator.
 
     log_info("Sending publish message. Msg: '%s', topic: '%s'.", msg.payload.msg, msg.payload.topic);
-    send(&msg);
+    if (send(&msg) < 0) {
+        log_error("Error sending message.");
+        return -1;
+    }
+
     log_info("Waiting response.");
-    recv(id, &msg);
+    if (recv(id, &msg) < 0) {
+        log_error("Error receiving response.");
+        return -1;
+    }
+
 
 
     if (msg.type == ACK_OK) {
@@ -79,9 +102,16 @@ int subscribe(int id, char *topic) {
     msg.payload.topic[MAX_TOPIC_LENGTH - 1] = 0; //Add null pointer terminator.
 
     log_info("Sending subscribe message. Topic: '%s'.", msg.payload.topic);
-    send(&msg);
+    if (send(&msg) < 0) {
+        log_error("Error sending message.");
+        return -1;
+    }
+
     log_info("Waiting response.");
-    recv(id, &msg);
+    if (recv(id, &msg) < 0) {
+        log_error("Error receiving response.");
+        return -1;
+    }
 
 
     if (msg.type == ACK_OK) {
@@ -102,9 +132,16 @@ int receive(int id, payload_t* payload) {
     msg.type = RECEIVE;
 
     log_info("Sending receive message.");
-    send(&msg);
+    if (send(&msg) < 0) {
+        log_error("Error sending message.");
+        return -1;
+    }
+
     log_info("Waiting response.");
-    recv(id, &msg);
+    if (recv(id, &msg) < 0) {
+        log_error("Error receiving response.");
+        return -1;
+    }
 
 
     if (msg.type == ACK_OK) {
@@ -126,9 +163,16 @@ int delbrk(int id) {
     msg.type = DESTROY;
 
     log_info("Sending destroy message.");
-    send(&msg);
+    if (send(&msg) < 0) {
+        log_error("Error sending message.");
+        return -1;
+    }
+
     log_info("Waiting response.");
-    recv(id, &msg);
+    if (recv(id, &msg) < 0) {
+        log_error("Error receiving response.");
+        return -1;
+    }
 
     if (msg.type == ACK_OK) {
         log_info("Destroy successful.");

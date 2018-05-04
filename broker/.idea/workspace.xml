@@ -16,14 +16,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0ba66d1-bb3e-4967-93ed-487a2f9a4e9b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/broker.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/broker.h" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/broker_req_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker_req_handler.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/ipc/msg_queue.c" beforeDir="false" afterPath="$PROJECT_DIR$/common/ipc/msg_queue.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/ipc/msg_queue.h" beforeDir="false" afterPath="$PROJECT_DIR$/common/ipc/msg_queue.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/common/message.h" beforeDir="false" afterPath="$PROJECT_DIR$/common/message.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/server.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -52,7 +45,7 @@
         <entry file="file://$PROJECT_DIR$/client/broker.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="682">
-              <caret line="136" column="35" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="35" />
+              <caret line="175" lean-forward="true" selection-start-line="175" selection-end-line="175" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -63,8 +56,8 @@
       <file leaf-file-name="msg_queue.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/common/ipc/msg_queue.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="677">
-              <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
+            <state relative-caret-position="308">
+              <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -311,12 +304,12 @@
       <workItem from="1525217616169" duration="11605000" />
       <workItem from="1525286035053" duration="730000" />
       <workItem from="1525444889497" duration="6974000" />
-      <workItem from="1525458025624" duration="3927000" />
+      <workItem from="1525458025624" duration="4229000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40978000" />
+    <option name="totallyTimeSpent" value="41280000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -679,13 +672,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/common/ipc/msg_queue.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="677">
-          <caret line="49" column="13" selection-start-line="49" selection-start-column="13" selection-end-line="49" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/message.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -710,10 +696,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/common/ipc/msg_queue.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="22" column="4" selection-start-line="22" selection-start-column="4" selection-end-line="22" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/broker.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="682">
-          <caret line="136" column="35" selection-start-line="136" selection-start-column="35" selection-end-line="136" selection-end-column="35" />
+          <caret line="175" lean-forward="true" selection-start-line="175" selection-end-line="175" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
           </folding>
