@@ -134,8 +134,8 @@ int main(int argc, char* argv[]) {
         if (graceful_quit) {
             break;
         }
-        if (msg.type == ACK) {
-            log_warn("Invalid msg type (ACK) received.");
+        if (msg.type == ACK_OK || msg.type == ACK_ERROR) {
+            log_warn("Invalid msg type (%d) received.", msg.type);
         } else {
             log_info("Message received of type %d.", msg.type);
             process_msg(msg);

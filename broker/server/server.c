@@ -28,6 +28,9 @@ int main(int argc, char* argv[]) {
     log_info("Server started.");
     int socket = create_server_socket(PORT);
 
+    //TODO create worker queue.
+    //TODO create worker
+
     while (!graceful_quit) {
         log_info("Waiting connections.");
         int client_socket = accept_client(socket);

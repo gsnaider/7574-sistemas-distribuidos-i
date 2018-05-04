@@ -5,11 +5,11 @@
 
 int creabrk();
 
-int publish(int id, char *msg, char *topic);
+int publish(int id, char *message, char *topic);
 
 int subscribe(int id, char *topic);
 
-payload_t receive(int id);
+int receive(int id, payload_t* payload);
 
 int delbrk(int id);
 

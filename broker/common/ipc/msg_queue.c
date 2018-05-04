@@ -34,16 +34,20 @@ int getmsg(int id){
     return msg_id;
 }
 
-void sendmsg(int id, const void *msgp, size_t msgsz){
+int sendmsg(int id, const void *msgp, size_t msgsz){
     if(msgsnd(id,msgp,msgsz-sizeof(long),0)==-1){
         log_error("Error sending message over queue");
+        return -1;
     }
+    return 0;
 }
 
-void rcvmsg(int id, void *msgp, size_t msgsz, long type){
+int rcvmsg(int id, void *msgp, size_t msgsz, long type){
     if(msgrcv(id,msgp,msgsz-sizeof(long),type,0)==-1){
         log_error("Error receiving message over queue");
+        return -1;
     }
+    return 0;
 }
 
 int   delmsg(int id){

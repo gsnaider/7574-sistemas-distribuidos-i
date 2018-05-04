@@ -11,9 +11,9 @@ int creamsg(int id);
 
 int getmsg(int id);
 
-void sendmsg(int id, const void *msgp, size_t msgsz);
+int sendmsg(int id, const void *msgp, size_t msgsz);
 
-void rcvmsg(int id, void *msgp, size_t msgsz, long type);
+int rcvmsg(int id, void *msgp, size_t msgsz, long type);
 
 int delmsg(int id);
 
