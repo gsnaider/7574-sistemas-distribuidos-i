@@ -25,6 +25,8 @@ set(DEPENDENCIES
 
 add_executable(broker_resp_handler client/broker_resp_handler.c ${DEPENDENCIES})
 add_executable(broker_req_handler client/broker_req_handler.c ${DEPENDENCIES})
+add_executable(test_client client/test_client.c ${DEPENDENCIES})
+
 add_executable(server server/server.c server/server.h ${DEPENDENCIES})
 add_executable(req_handler server/req_handler.c ${DEPENDENCIES})
 add_executable(resp_handler server/resp_handler.c ${DEPENDENCIES})
