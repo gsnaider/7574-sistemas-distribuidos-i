@@ -87,7 +87,7 @@ int init_msg_resp_queue() {
 }
 
 pid_t create_broker_resp_handler(int socket_fd) {
-
+    //TODO(optional) send req pid to resp handler, so that if there's an error he can kill the req handler.
     pid_t pid = fork();
     if (pid < 0) {
         log_error("Error forking broker resp handler");

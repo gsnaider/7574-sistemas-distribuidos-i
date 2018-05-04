@@ -90,9 +90,11 @@ int main(int argc, char* argv[]) {
         }
         if (bytes < 0) {
             log_error("Error reading socket.");
+            // TODO(optional) kill broker req handler
             break;
         } else if (bytes == 0) {
             log_error("Lost connection from server.");
+            // TODO(optional) kill broker req handler
             break;
         }
         msg_t* msg = (msg_t*) buffer;

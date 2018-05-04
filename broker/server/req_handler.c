@@ -70,7 +70,7 @@ int main(int argc, char* argv[]) {
         // TODO send msg to worker.
     }
 
-
+    //TODO kill resp handler.
     log_info("Stopping request handler.");
     if (close(client_socket) < 0) {
         log_error("Error closing client socket.");
