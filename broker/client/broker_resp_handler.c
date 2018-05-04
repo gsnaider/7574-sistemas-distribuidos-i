@@ -18,9 +18,9 @@ bool graceful_quit = false;
 
 void SIGINT_handler(int signum) {
     if (signum != SIGINT) {
-        log_warn("WARNING: Unknown signal received: %d\n.", signum);
+        log_warn("WARNING: Unknown signal received: %d.", signum);
     } else {
-        log_debug("SIGINT received, aborting.\n");
+        log_debug("SIGINT received, aborting.");
         graceful_quit = true;
     }
 }
@@ -80,19 +80,20 @@ int main(int argc, char* argv[]) {
     int* incoming_msg_count = get_msg_count_shm();
     int incoming_msgs_sem = get_incoming_msg_sem();
 
-
-    incoming_msgs[0].type = CREATE;
-
     while (!graceful_quit) {
         char buffer[sizeof(msg_t) / sizeof(char)];
         // TODO check bytes read (if not all, retry).
+        log_info("Waiting responses from server...");
         int bytes = read(socket_fd, buffer, sizeof(buffer) / sizeof(char));
         if (graceful_quit) {
             break;
         }
         if (bytes < 0) {
             log_error("Error reading socket.");
-            exit(-1);
+            break;
+        } else if (bytes == 0) {
+            log_error("Lost connection from server.");
+            break;
         }
         msg_t* msg = (msg_t*) buffer;
         log_info("Received type: %d", msg->type);

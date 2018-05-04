@@ -20,9 +20,9 @@ bool graceful_quit = false;
 
 void SIGINT_handler(int signum) {
     if (signum != SIGINT) {
-        log_warn("WARNING: Unknown signal received: %d\n.", signum);
+        log_warn("WARNING: Unknown signal received: %d.", signum);
     } else {
-        log_debug("SIGINT received, aborting.\n");
+        log_debug("SIGINT received, aborting.");
         graceful_quit = true;
     }
 }
@@ -91,7 +91,6 @@ pid_t create_broker_resp_handler(int socket_fd) {
     pid_t pid = fork();
     if (pid < 0) {
         log_error("Error forking broker resp handler");
-        perror("Error");
         exit(-1);
     }
     if (pid == 0) {
@@ -99,7 +98,6 @@ pid_t create_broker_resp_handler(int socket_fd) {
         snprintf(socket_str, 3, "%d", socket_fd);
         execl("./broker_resp_handler", "./broker_resp_handler", socket_str, (char*)NULL);
         log_error("Error executing broker resp handler");
-        perror("Error");
         exit(-1);
     }
     return pid;
@@ -130,7 +128,7 @@ int main(int argc, char* argv[]) {
     pid_t resp_handler = create_broker_resp_handler(socket_fd);
 
     while(!graceful_quit) {
-        log_info("Waiting request messages...");
+        log_info("Waiting request messages from client...");
         msg_t msg;
         rcvmsg(req_queue, &msg, sizeof(msg_t), 0);
         if (graceful_quit) {
