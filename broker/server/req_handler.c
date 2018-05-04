@@ -48,7 +48,6 @@ int main(int argc, char* argv[]) {
     int client_socket;
     sscanf(argv[1], "%d", &client_socket);
 
-    // TODO fork resp_handler
     pid_t resp_handler_pid = create_req_handler(client_socket);
 
     while(!graceful_quit) {
