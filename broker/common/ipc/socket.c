@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <strings.h>
+#include <unistd.h>
 #include "socket.h"
 #include "../log/log.h"
 
@@ -75,4 +76,18 @@ int accept_client(int server_socket) {
         log_error("Error accepting client.");
     }
     return client_fd;
+}
+
+int snd(int socket, msg_t* msg) {
+    // TODO see if we need to check that all bytes are send
+    return write(socket, msg, sizeof(msg_t));
+}
+
+int rcv(int socket, msg_t* msg) {
+    char buffer[sizeof(msg_t) / sizeof(char)];
+    ssize_t bytes = read(socket, buffer, sizeof(buffer) / sizeof(char));
+    // TODO keep reading in case full message not arrived.
+
+    *msg = *((msg_t*) buffer);
+    return bytes;
 }

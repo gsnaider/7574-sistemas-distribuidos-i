@@ -8,6 +8,7 @@
 #include "../common/log/log.h"
 #include "../common/message.h"
 #include "../common/ipc/sig.h"
+#include "../common/ipc/socket.h"
 
 
 bool graceful_quit = false;
@@ -51,22 +52,21 @@ int main(int argc, char* argv[]) {
     pid_t resp_handler_pid = create_req_handler(client_socket);
 
     while(!graceful_quit) {
-        char buffer[sizeof(msg_t) / sizeof(char)];
-        // TODO check bytes read (if not all, retry).
+        msg_t msg;
         log_info("Waiting for messages from client...");
-        ssize_t bytes = read(client_socket, buffer, sizeof(buffer) / sizeof(char));
+        int res = rcv(client_socket, &msg);
         if(graceful_quit) {
             break;
         }
-        if (bytes < 0) {
+        if (res < 0) {
             log_error("Error reading client socket.");
             break;
-        } else if (bytes == 0) {
+        } else if (res == 0) {
             log_error("Lost connection from client.");
             break;
         }
-        msg_t* msg = (msg_t*) buffer;
-        log_info("Received type: %d", msg->type);
+
+        log_info("Received type: %d", msg.type);
         // TODO send msg to worker.
     }
 

@@ -104,10 +104,34 @@ pid_t create_broker_resp_handler(int socket_fd) {
 
 }
 
-void process_msg(msg_t msg) {
-    // TODO change local id to global id and send to server.
-    // Unless it's create, in that case just redirect to server (no id yet)
-    // Or if it's receive, just read the shm for new messages.
+void process_receive(msg_t *msg) {
+    //TODO read from shm...
+}
+
+long get_global_id(long local_id) {
+    //TODO read from hashtable..
+    return 0;
+}
+
+void add_local_id(int local_id) {
+    //TODO add to hashtable.
+}
+
+void process_msg(int socket, msg_t* msg) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR) {
+        log_error("Unexpected msg type received: %d", msg->type);
+        return;
+    }
+    if (msg->type == RECEIVE) {
+        process_receive(msg);
+    } else if (msg->type == CREATE) {
+        add_local_id(msg->mtype);
+        snd(socket, msg);
+    } else {
+        msg->mtype = get_global_id(msg->mtype);
+        snd(socket, msg);
+    }
+
     log_info("Processing message...");
 }
 
@@ -116,7 +140,7 @@ int main(int argc, char* argv[]) {
 
     log_info("Starting local broker Request Handler.");
 
-    int socket_fd = create_client_socket(SERVER_IP, SERVER_PORT);
+    int server_socket = create_client_socket(SERVER_IP, SERVER_PORT);
     log_info("Connected to server");
 
     msg_t* incoming_msgs = create_msg_shm();
@@ -125,7 +149,7 @@ int main(int argc, char* argv[]) {
     int req_queue = init_msg_req_queue();
     int resp_queue = init_msg_resp_queue();
 
-    pid_t resp_handler = create_broker_resp_handler(socket_fd);
+    pid_t resp_handler = create_broker_resp_handler(server_socket);
 
     while(!graceful_quit) {
         log_info("Waiting request messages from client...");
@@ -138,7 +162,7 @@ int main(int argc, char* argv[]) {
             log_warn("Invalid msg type (%d) received.", msg.type);
         } else {
             log_info("Message received of type %d.", msg.type);
-            process_msg(msg);
+            process_msg(server_socket, &msg);
         }
     }
 
@@ -161,5 +185,5 @@ int main(int argc, char* argv[]) {
     delsem(incoming_msgs_sem);
 
     log_debug("Closing socket.");
-    close(socket_fd);
+    close(server_socket);
 }

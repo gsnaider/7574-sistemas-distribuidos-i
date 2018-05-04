@@ -13,6 +13,7 @@
 #include "../common/message.h"
 #include "../common/ipc/semaphore.h"
 #include "../common/ipc/sig.h"
+#include "../common/ipc/socket.h"
 
 bool graceful_quit = false;
 
@@ -81,24 +82,23 @@ int main(int argc, char* argv[]) {
     int incoming_msgs_sem = get_incoming_msg_sem();
 
     while (!graceful_quit) {
-        char buffer[sizeof(msg_t) / sizeof(char)];
-        // TODO check bytes read (if not all, retry).
+        msg_t msg;
         log_info("Waiting responses from server...");
-        int bytes = read(socket_fd, buffer, sizeof(buffer) / sizeof(char));
+        int res = rcv(socket_fd, &msg);
         if (graceful_quit) {
             break;
         }
-        if (bytes < 0) {
+        if (res < 0) {
             log_error("Error reading socket.");
             // TODO(optional) kill broker req handler
             break;
-        } else if (bytes == 0) {
+        } else if (res == 0) {
             log_error("Lost connection from server.");
             // TODO(optional) kill broker req handler
             break;
         }
-        msg_t* msg = (msg_t*) buffer;
-        log_info("Received type: %d", msg->type);
+
+        log_info("Received type: %d", msg.type);
         // TODO process message.
     }
     unmap(incoming_msgs);
