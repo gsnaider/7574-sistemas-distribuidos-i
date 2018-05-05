@@ -15,6 +15,8 @@ int sendmsg(int id, const void *msgp, size_t msgsz);
 
 int rcvmsg(int id, void *msgp, size_t msgsz, long type);
 
+int rcvmsg_no_wait(int id, void *msgp, size_t msgsz, long type);
+
 int delmsg(int id);
 
 #endif //BROKER_MSG_QUEUE_H
