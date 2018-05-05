@@ -57,8 +57,11 @@ int main(int argc, char* argv[]) {
         process_msg(client_socket, &msg);
     }
 
-    //TODO(optional) kill req handler if we get his pid.
     log_info("Stopping response handler.");
+
+    //TODO(optional) kill req handler if we get his pid.
+
+    log_debug("Closing socket");
     if (close(client_socket) < 0) {
         log_error("Error closing client socket.");
     }

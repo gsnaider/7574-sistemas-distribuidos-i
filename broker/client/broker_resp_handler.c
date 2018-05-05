@@ -148,6 +148,9 @@ int main(int argc, char* argv[]) {
         process_message(resp_queue, &msg);
 
     }
+
+    log_info("Stopping response handler.");
+
     unmap(incoming_msgs);
     unmap(incoming_msg_count);
 

@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include <stdbool.h>
+#include <sys/wait.h>
 #include "../common/log/log.h"
 #include "../common/ipc/msg_queue.h"
 #include "broker_handler.h"
@@ -155,9 +156,12 @@ int main(int argc, char* argv[]) {
         process_msg(server_socket, &msg);
     }
 
-    log_info("Stopping broker.");
+    log_info("Stopping request handler.");
+
     if (kill(resp_handler, SIGINT) < 0) {
         log_error("Error killing response handler.");
+    } else {
+        waitpid(resp_handler, (int*) NULL, 0);
     }
 
     log_debug("Deleting message queue.");

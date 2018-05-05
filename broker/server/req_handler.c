@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <wait.h>
 #include "../common/log/log.h"
 #include "../common/message.h"
 #include "../common/ipc/sig.h"
@@ -96,8 +97,15 @@ int main(int argc, char* argv[]) {
         process_message(worker_queue, &msg, resp_handler_pid);
     }
 
-    //TODO kill resp handler.
     log_info("Stopping request handler.");
+
+    if (kill(resp_handler_pid, SIGINT) < 0) {
+        log_error("Error killing response handler.");
+    } else {
+        waitpid(resp_handler_pid, (int*) NULL, 0);
+    }
+
+    log_debug("Closing socket");
     if (close(client_socket) < 0) {
         log_error("Error closing client socket.");
     }
