@@ -106,19 +106,23 @@ pid_t create_broker_resp_handler(int socket_fd) {
 
 void process_receive(msg_t *msg) {
     //TODO read from shm...
+    log_debug("Checking for incoming messages.");
 }
 
-long get_global_id(long local_id) {
+int get_global_id(int local_id) {
+    int global_id = 0;
     //TODO read from hashtable..
+    log_debug("Global id %d found for local id %d", global_id, local_id);
     return 0;
 }
 
 void add_local_id(int local_id) {
     //TODO add to hashtable.
+    log_debug("Local id %d added to hashtable", local_id);
 }
 
 void process_msg(int socket, msg_t* msg) {
-    if (msg->type == ACK_OK || msg->type == ACK_ERROR) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
@@ -126,13 +130,12 @@ void process_msg(int socket, msg_t* msg) {
         process_receive(msg);
     } else if (msg->type == CREATE) {
         add_local_id(msg->mtype);
-        snd(socket, msg);
+        socket_send(socket, msg);
     } else {
         msg->mtype = get_global_id(msg->mtype);
-        snd(socket, msg);
+        socket_send(socket, msg);
     }
 
-    log_info("Processing message...");
 }
 
 int main(int argc, char* argv[]) {
@@ -158,7 +161,7 @@ int main(int argc, char* argv[]) {
         if (graceful_quit) {
             break;
         }
-        if (msg.type == ACK_OK || msg.type == ACK_ERROR) {
+        if (msg.type == ACK_OK || msg.type == ACK_ERROR || msg.type == ACK_CREATE) {
             log_warn("Invalid msg type (%d) received.", msg.type);
         } else {
             log_info("Message received of type %d.", msg.type);

@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
     while(!graceful_quit) {
         msg_t msg;
         log_info("Waiting for messages from client...");
-        int res = rcv(client_socket, &msg);
+        int res = socket_receive(client_socket, &msg);
         if(graceful_quit) {
             break;
         }

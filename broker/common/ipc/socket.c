@@ -78,16 +78,23 @@ int accept_client(int server_socket) {
     return client_fd;
 }
 
-int snd(int socket, msg_t* msg) {
+int socket_send(int socket, msg_t *msg) {
     // TODO see if we need to check that all bytes are send
-    return write(socket, msg, sizeof(msg_t));
+    ssize_t bytes = write(socket, msg, sizeof(msg_t));
+    if (bytes < 0) {
+        log_error("Error writing to socket.");
+    }
+    return bytes;
 }
 
-int rcv(int socket, msg_t* msg) {
+int socket_receive(int socket, msg_t *msg) {
     char buffer[sizeof(msg_t) / sizeof(char)];
     ssize_t bytes = read(socket, buffer, sizeof(buffer) / sizeof(char));
     // TODO keep reading in case full message not arrived.
-
-    *msg = *((msg_t*) buffer);
+    if (bytes < 0) {
+        log_error("Error reading from socket.");
+    } else {
+        *msg = *((msg_t*) buffer);
+    }
     return bytes;
 }

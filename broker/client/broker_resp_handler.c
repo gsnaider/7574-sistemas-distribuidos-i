@@ -64,6 +64,49 @@ int get_incoming_msg_sem() {
     return incoming_msgs_sem;
 }
 
+void process_publish(msg_t *msg) {
+    log_debug("Adding message '%s', topic '%s' to incoming messages.", msg->payload.msg, msg->payload.topic);
+    // TODO store in shm.
+}
+
+int add_global_id(int global_id) {
+    int local_id = 0;
+    // TODO search in hashtable for any local_id without global_id, and assign it.
+    log_debug("Global id %d set to local id %d.", global_id, local_id);
+    return local_id;
+}
+
+int get_local_id(int global_id) {
+    int local_id = 0;
+    // TODO search global_id in hashtable
+    log_debug("Local id %d found from global_id %d", local_id, global_id);
+    return local_id;
+}
+
+void process_message(int queue, msg_t *msg) {
+    log_info("Processing message.");
+    if (msg->type == PUBLISH) {
+        process_publish(msg);
+    } else {
+        int local_id;
+        if (msg->type == ACK_CREATE){
+            msg->type = ACK_OK;
+            local_id = add_global_id(msg->mtype);
+        } else if (msg->type == ACK_OK) {
+            local_id = get_local_id(msg->mtype);
+        } else if (msg->type == ACK_ERROR) {
+            log_error("Received message with an error from the server.");
+            local_id = get_local_id(msg->mtype);
+        } else {
+            log_error("Unexpected msg type received: %d", msg->type);
+            local_id = get_local_id(msg->mtype);
+        }
+        msg->mtype = local_id;
+        log_info("Sending message to client.");
+        sendmsg(queue, msg, sizeof(msg_t));
+    }
+}
+
 int main(int argc, char* argv[]) {
     register_handler(SIGINT_handler);
 
@@ -84,7 +127,7 @@ int main(int argc, char* argv[]) {
     while (!graceful_quit) {
         msg_t msg;
         log_info("Waiting responses from server...");
-        int res = rcv(socket_fd, &msg);
+        int res = socket_receive(socket_fd, &msg);
         if (graceful_quit) {
             break;
         }
@@ -98,8 +141,9 @@ int main(int argc, char* argv[]) {
             break;
         }
 
-        log_info("Received type: %d", msg.type);
-        // TODO process message.
+        log_info("Received message of type: %d", msg.type);
+        process_message(resp_queue, &msg);
+
     }
     unmap(incoming_msgs);
     unmap(incoming_msg_count);

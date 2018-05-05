@@ -10,7 +10,8 @@
 #define RECEIVE 4
 #define DESTROY 5
 #define ACK_OK 6
-#define ACK_ERROR 6
+#define ACK_CREATE 7
+#define ACK_ERROR 8
 
 typedef struct payload_t {
     char topic[MAX_TOPIC_LENGTH];

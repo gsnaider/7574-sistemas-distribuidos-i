@@ -25,6 +25,7 @@ int recv(int id, msg_t* msg) {
 
 int creabrk() {
     msg_t msg;
+    msg.mtype = getpid();
     msg.type = CREATE;
 
     log_info("Sending create message.");
@@ -34,9 +35,6 @@ int creabrk() {
     }
 
     log_info("Waiting response.");
-    //TODO(optional): We are assuming that the mtype of the response (AKA the local id) will be the pid of the client.
-    // Maybe we can do this more generically, and have the broker reply with our local id (maybe through a special queue for creation responses)
-
     if (recv(getpid(), &msg) < 0) {
         log_error("Error receiving response.");
         return -1;
