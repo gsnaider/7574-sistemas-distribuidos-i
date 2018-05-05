@@ -7,8 +7,8 @@
 
 int   creashm(int,int);
 int   getshm(int);
-void* map(int);
-int   unmap(void*);
+void* shm_map(int);
+int   shm_unmap(void *);
 int   delshm(int);
 
 #endif //BROKER_SHM_H
