@@ -71,5 +71,5 @@ int main(int argc, char* argv[]) {
         process_msg(resp_queue, &msg);
     }
 
-
+    log_info("Stopping worker.");
 }

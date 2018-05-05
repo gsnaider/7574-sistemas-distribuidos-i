@@ -5,13 +5,17 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <wait.h>
 #include "../common/ipc/socket.h"
 #include "server.h"
 #include "../common/log/log.h"
 #include "../common/ipc/sig.h"
 #include "../common/ipc/msg_queue.h"
+#include "../common/ds/data-structures/list.h"
 
 bool graceful_quit = false;
+
+list childs;
 
 void SIGINT_handler(int signum) {
     if (signum != SIGINT) {
@@ -37,7 +41,6 @@ void create_queues() {
 }
 
 void create_workers() {
-    // TODO store child pids (workers and handlers) in array for killing them in case of terminating signal.
     for (int i = 0; i < WORKERS; i++) {
         pid_t worker = fork();
         if (worker < 0) {
@@ -49,7 +52,23 @@ void create_workers() {
             log_error("Error executing worker.");
             exit(-1);
         }
+        list_append(&childs, &worker);
     }
+}
+
+bool kill_child(void* child) {
+    pid_t child_pid = *((pid_t*) child);
+    log_debug("Killing %d", child_pid);
+    if (kill(child_pid, SIGINT) < 0) {
+        log_error("Error killing child %d.", child_pid);
+    } else {
+        waitpid(child_pid, (int*) NULL, 0);
+    }
+    return true;
+}
+
+void kill_childs() {
+    list_for_each(&childs, kill_child);
 }
 
 int main(int argc, char* argv[]) {
@@ -57,6 +76,8 @@ int main(int argc, char* argv[]) {
     register_handler(SIGINT_handler);
 
     log_info("Server started.");
+
+    list_new(&childs, sizeof(pid_t), NULL);
 
     create_queues();
     create_workers();
@@ -85,12 +106,16 @@ int main(int argc, char* argv[]) {
             log_error("Error executing request handler.");
             exit(-1);
         }
+        list_append(&childs, &handler);
         if (close(client_socket) < 0) {
             log_error("Error closing client socket.");
         }
     }
 
     log_info("Stopping server.");
+
+    kill_childs();
+
     if(close(socket) < 0) {
         log_error("Error closing server socket.");
     }

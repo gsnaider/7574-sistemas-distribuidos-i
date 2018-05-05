@@ -2,13 +2,13 @@
 <project version="4">
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
-      <config projectName="broker" targetName="worker" />
-      <config projectName="broker" targetName="req_handler" />
-      <config projectName="broker" targetName="broker_req_handler" />
-      <config projectName="broker" targetName="resp_handler" />
-      <config projectName="broker" targetName="test_client" />
       <config projectName="broker" targetName="server" />
+      <config projectName="broker" targetName="test_client" />
       <config projectName="broker" targetName="broker_resp_handler" />
+      <config projectName="broker" targetName="broker_req_handler" />
+      <config projectName="broker" targetName="req_handler" />
+      <config projectName="broker" targetName="resp_handler" />
+      <config projectName="broker" targetName="worker" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -19,10 +19,9 @@
   <component name="ChangeListManager">
     <list default="true" id="f0ba66d1-bb3e-4967-93ed-487a2f9a4e9b" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/broker_req_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker_req_handler.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/broker_resp_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker_resp_handler.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/req_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/req_handler.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/resp_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/resp_handler.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/worker.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/worker.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -59,13 +58,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="req_handler.c" pinned="false" current-in-tab="true">
+      <file leaf-file-name="req_handler.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/req_handler.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
+            <state relative-caret-position="292">
+              <caret line="101" column="3" selection-start-line="101" selection-start-column="3" selection-end-line="105" selection-end-column="5" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="worker.c" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server/worker.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="463">
+              <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
+              <folding>
+                <element signature="e#42#61#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,7 +86,7 @@
         <entry file="file://$PROJECT_DIR$/server/resp_handler.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="406">
-              <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="63" selection-end-column="32" />
+              <caret line="62" selection-start-line="62" selection-end-line="63" selection-end-column="32" />
               <folding>
                 <element signature="e#41#61#0" expanded="true" />
               </folding>
@@ -83,11 +94,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="server.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/server.h">
+      <file leaf-file-name="server.c" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/server.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+            <state relative-caret-position="160">
+              <caret line="69" column="12" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
+              <folding>
+                <element signature="e#41#60#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -96,8 +110,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>htons</find>
-      <find />
+      <find>&quot; &quot;</find>
       <find>perror</find>
       <find>util</find>
       <find>last</find>
@@ -107,14 +120,13 @@
       <find>get_msg_req_queue</find>
       <find>get_incoming_msg_sem</find>
       <find>test</find>
-      <find>fork</find>
       <find>req_handler</find>
       <find>perr</find>
       <find>recv</find>
       <find>ACK</find>
       <find>ACK_OK</find>
       <find>topic</find>
-      <find />
+      <find>char buffer[sizeof(msg_t)</find>
       <find>socket</find>
       <find>snd</find>
       <find>unex</find>
@@ -125,12 +137,14 @@
       <find>ACK_ERROR</find>
       <find>sendmsg</find>
       <find>sendms</find>
+      <find>TODO.</find>
       <find>TODO</find>
+      <find>fork</find>
     </findStrings>
     <replaceStrings>
       <replace>stdout</replace>
       <replace>log_error</replace>
-      <replace />
+      <replace>&quot; &quot;</replace>
       <replace>&quot;\n&quot;</replace>
     </replaceStrings>
     <dirStrings>
@@ -165,17 +179,17 @@
         <option value="$PROJECT_DIR$/common/ipc/socket.c" />
         <option value="$PROJECT_DIR$/common/ipc/socket.h" />
         <option value="$PROJECT_DIR$/server/server.h" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/server/server.c" />
         <option value="$PROJECT_DIR$/common/message.h" />
         <option value="$PROJECT_DIR$/client/broker_handler.h" />
-        <option value="$PROJECT_DIR$/server/worker.c" />
         <option value="$PROJECT_DIR$/common/ipc/msg_queue.c" />
         <option value="$PROJECT_DIR$/client/broker.c" />
         <option value="$PROJECT_DIR$/client/broker_resp_handler.c" />
         <option value="$PROJECT_DIR$/client/broker_req_handler.c" />
         <option value="$PROJECT_DIR$/server/resp_handler.c" />
         <option value="$PROJECT_DIR$/server/req_handler.c" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/server/server.c" />
+        <option value="$PROJECT_DIR$/server/worker.c" />
       </list>
     </option>
   </component>
@@ -190,7 +204,7 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1856" />
+    <option name="x" value="64" />
     <option name="y" value="-11" />
     <option name="width" value="1857" />
     <option name="height" value="1092" />
@@ -221,6 +235,19 @@
               <item name="broker" type="b2602c69:ProjectViewProjectNode" />
               <item name="broker" type="462c0819:PsiDirectoryNode" />
               <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="broker" type="b2602c69:ProjectViewProjectNode" />
+              <item name="broker" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="ds" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="broker" type="b2602c69:ProjectViewProjectNode" />
+              <item name="broker" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="ds" type="462c0819:PsiDirectoryNode" />
+              <item name="data-structures" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="broker" type="b2602c69:ProjectViewProjectNode" />
@@ -312,12 +339,12 @@
       <workItem from="1525444889497" duration="6974000" />
       <workItem from="1525458025624" duration="4669000" />
       <workItem from="1525467763861" duration="15358000" />
-      <workItem from="1525550346180" duration="1492000" />
+      <workItem from="1525550346180" duration="3350000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58570000" />
+    <option name="totallyTimeSpent" value="60428000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -355,23 +382,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/server.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="988">
-          <caret line="52" selection-start-line="52" selection-end-line="54" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/req_handler.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
-          <folding>
-            <element signature="e#41#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/broker_resp_handler.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="665">
@@ -591,13 +601,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="584">
-          <caret line="32" column="54" lean-forward="true" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/log/log.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="325">
@@ -609,16 +612,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
           <caret line="11" column="10" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/server.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="64" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#41#60#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -663,27 +656,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/worker.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="25" column="24" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/ipc/msg_queue.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="824">
           <caret line="60" selection-start-line="60" selection-end-line="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/server.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -707,22 +683,62 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server/server.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="209">
+          <caret line="11" column="22" selection-start-line="11" selection-start-column="22" selection-end-line="11" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server/resp_handler.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="406">
-          <caret line="62" lean-forward="true" selection-start-line="62" selection-end-line="63" selection-end-column="32" />
+          <caret line="62" selection-start-line="62" selection-end-line="63" selection-end-column="32" />
           <folding>
             <element signature="e#41#61#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="15" column="24" lean-forward="true" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/ds/data-structures/vector.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/common/ds/data-structures/list.h">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/server/req_handler.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
+        <state relative-caret-position="292">
+          <caret line="101" column="3" selection-start-line="101" selection-start-column="3" selection-end-line="105" selection-end-column="5" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/server.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="69" column="12" selection-start-line="69" selection-start-column="12" selection-end-line="69" selection-end-column="12" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/worker.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="73" column="33" selection-start-line="73" selection-start-column="33" selection-end-line="73" selection-end-column="33" />
+          <folding>
+            <element signature="e#42#61#0" expanded="true" />
           </folding>
         </state>
       </provider>
