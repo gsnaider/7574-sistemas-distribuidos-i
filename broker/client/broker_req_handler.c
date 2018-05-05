@@ -58,32 +58,22 @@ int create_incoming_msg_sem() {
 
 
 int init_msg_req_queue() {
-    if (creamsg(BROKER_REQ_MSG) < 0) {
+    int req_queue = creamsg(BROKER_REQ_MSG);
+    if (req_queue < 0) {
         log_error("Error creating req msg queue.");
         exit(-1);
-    }
-    int req_queue = getmsg(BROKER_REQ_MSG);
-    if (req_queue < 0) {
-        log_error("Error getting req message queue.");
-        exit(-1)    ;
     }
     return req_queue;
 }
 
 
 int init_msg_resp_queue() {
-
-    if (creamsg(BROKER_RESP_MSG) < 0) {
+    int resp_queue = creamsg(BROKER_RESP_MSG);
+    if (resp_queue < 0) {
         log_error("Error creating resp msg queue.");
         exit(-1);
     }
-    int resp_queue = getmsg(BROKER_RESP_MSG);
-    if (resp_queue < 0) {
-        log_error("Error getting resp message queue");
-        exit(-1);
-    }
     return resp_queue;
-
 }
 
 pid_t create_broker_resp_handler(int socket_fd) {
@@ -126,6 +116,7 @@ void process_msg(int socket, msg_t* msg) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
+    log_info("Message received of type %d.", msg->type);
     if (msg->type == RECEIVE) {
         process_receive(msg);
     } else if (msg->type == CREATE) {
@@ -161,12 +152,7 @@ int main(int argc, char* argv[]) {
         if (graceful_quit) {
             break;
         }
-        if (msg.type == ACK_OK || msg.type == ACK_ERROR || msg.type == ACK_CREATE) {
-            log_warn("Invalid msg type (%d) received.", msg.type);
-        } else {
-            log_info("Message received of type %d.", msg.type);
-            process_msg(server_socket, &msg);
-        }
+        process_msg(server_socket, &msg);
     }
 
     log_info("Stopping broker.");
