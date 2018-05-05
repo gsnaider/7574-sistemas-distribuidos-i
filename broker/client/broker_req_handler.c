@@ -28,36 +28,6 @@ void SIGINT_handler(int signum) {
     }
 }
 
-
-msg_t* create_msg_shm() {
-    int msg_shm = creashm(INCOMING_MSG_SHM, sizeof(msg_t) * MAX_INCOMING_MSG);
-    if (msg_shm < 0) {
-        log_error("Error getting msg shm.");
-        exit(-1);
-    }
-    return map(msg_shm);
-}
-
-int* create_msg_count_shm() {
-    int msg_count_shm = creashm(INCOMING_MSG_COUNT_SHM, sizeof(int));
-    if (msg_count_shm < 0) {
-        log_error("Error getting msg count shm.");
-        exit(-1);
-    }
-    return map(msg_count_shm);
-}
-
-int create_incoming_msg_sem() {
-    int incoming_msgs_sem = creasem(INCOMING_MSG_SEM);
-    if (incoming_msgs_sem < 0) {
-        log_error("Error getting msg sem.");
-        exit(-1);
-    }
-    inisem(incoming_msgs_sem, 1);
-    return incoming_msgs_sem;
-}
-
-
 int init_msg_req_queue() {
     int req_queue = creamsg(BROKER_REQ_MSG);
     if (req_queue < 0) {
@@ -75,6 +45,16 @@ int init_msg_resp_queue() {
         exit(-1);
     }
     return resp_queue;
+}
+
+
+int init_incoming_msg_queue() {
+    int queue = creamsg(INCOMING_MSG_QUEUE);
+    if (queue < 0) {
+        log_error("Error creating incoming msg queue.");
+        exit(-1);
+    }
+    return queue;
 }
 
 pid_t create_broker_resp_handler(int socket_fd) {
@@ -95,9 +75,28 @@ pid_t create_broker_resp_handler(int socket_fd) {
 
 }
 
-void process_receive(msg_t *msg) {
-    //TODO read from shm...
+void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_debug("Checking for incoming messages.");
+
+    msg_t incoming_msg;
+    incoming_msg.type = 0;
+    if (rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), 0)  < 0) {
+        log_error("Error receiving incoming message.");
+        incoming_msg.type = ACK_ERROR;
+    } else {
+        if (incoming_msg.type == 0) {
+            log_info("No new messages.");
+        }
+        incoming_msg.type = ACK_OK;
+    }
+
+    // Replace the id from the sender with the local id of the one who requested the receive.
+    incoming_msg.mtype = msg->mtype;
+
+    if (sendmsg(resp_queue, &incoming_msg, sizeof(msg_t)) < 0) {
+        log_error("Error sending incoming message to repsonse queue.");
+    }
+
 }
 
 int get_global_id(int local_id) {
@@ -112,14 +111,14 @@ void add_local_id(int local_id) {
     log_debug("Local id %d added to hashtable", local_id);
 }
 
-void process_msg(int socket, msg_t* msg) {
+void process_msg(int resp_queue, int socket, int incoming_msg_queue, msg_t* msg) {
     if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
     log_info("Message received of type %d.", msg->type);
     if (msg->type == RECEIVE) {
-        process_receive(msg);
+        process_receive(resp_queue, incoming_msg_queue, msg);
     } else if (msg->type == CREATE) {
         add_local_id(msg->mtype);
         socket_send(socket, msg);
@@ -138,11 +137,9 @@ int main(int argc, char* argv[]) {
     int server_socket = create_client_socket(SERVER_IP, SERVER_PORT);
     log_info("Connected to server");
 
-    msg_t* incoming_msgs = create_msg_shm();
-    int* incoming_msg_count = create_msg_count_shm();
-    int incoming_msgs_sem = create_incoming_msg_sem();
     int req_queue = init_msg_req_queue();
     int resp_queue = init_msg_resp_queue();
+    int incoming_msg_queue = init_incoming_msg_queue();
 
     pid_t resp_handler = create_broker_resp_handler(server_socket);
 
@@ -153,7 +150,7 @@ int main(int argc, char* argv[]) {
         if (graceful_quit) {
             break;
         }
-        process_msg(server_socket, &msg);
+        process_msg(resp_queue, server_socket, incoming_msg_queue, &msg);
     }
 
     log_info("Stopping request handler.");
@@ -164,18 +161,11 @@ int main(int argc, char* argv[]) {
         waitpid(resp_handler, (int*) NULL, 0);
     }
 
-    log_debug("Deleting message queue.");
+    log_debug("Deleting message queues.");
     delmsg(req_queue);
     delmsg(resp_queue);
+    delmsg(incoming_msg_queue);
 
-    log_debug("Deleting incoming messages shared memory.");
-    unmap(incoming_msgs);
-    delshm(getshm(INCOMING_MSG_SHM));
-    unmap(incoming_msg_count);
-    delshm(getshm(INCOMING_MSG_COUNT_SHM));
-
-    log_debug("Deleting msg shm semaphore");
-    delsem(incoming_msgs_sem);
 
     log_debug("Closing socket.");
     close(server_socket);

@@ -34,40 +34,26 @@ int get_msg_resp_queue() {
         exit(-1);
     }
     return resp_queue;
-
 }
 
-msg_t* get_msg_shm() {
-    int msg_shm = getshm(INCOMING_MSG_SHM);
-    if (msg_shm < 0) {
-        log_error("Error getting msg shm.");
+
+int get_incoming_msg_queue() {
+    int queue = getmsg(INCOMING_MSG_QUEUE);
+    if (queue < 0) {
+        log_error("Error getting incoming message queue");
         exit(-1);
     }
-    return map(msg_shm);
+    return queue;
 }
 
-int* get_msg_count_shm() {
-    int msg_count_shm = getshm(INCOMING_MSG_COUNT_SHM);
-    if (msg_count_shm < 0) {
-        log_error("Error getting msg count shm.");
-        exit(-1);
+
+void process_publish(int incoming_msg_queue, msg_t *msg) {
+    log_debug("Adding message '%s', topic '%s' to incoming messages queue.", msg->payload.msg, msg->payload.topic);
+    if (sendmsg(incoming_msg_queue, msg, sizeof(msg_t)) < 0) {
+        log_error("Error adding incoming message to queue.");
     }
-    return map(msg_count_shm);
 }
 
-int get_incoming_msg_sem() {
-    int incoming_msgs_sem = getsem(INCOMING_MSG_SEM);
-    if (incoming_msgs_sem < 0) {
-        log_error("Error getting msg sem.");
-        exit(-1);
-    }
-    return incoming_msgs_sem;
-}
-
-void process_publish(msg_t *msg) {
-    log_debug("Adding message '%s', topic '%s' to incoming messages.", msg->payload.msg, msg->payload.topic);
-    // TODO store in shm.
-}
 
 int add_global_id(int global_id) {
     int local_id = 42;
@@ -83,10 +69,10 @@ int get_local_id(int global_id) {
     return local_id;
 }
 
-void process_message(int queue, msg_t *msg) {
+void process_message(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Processing message.");
     if (msg->type == PUBLISH) {
-        process_publish(msg);
+        process_publish(incoming_msg_queue, msg);
     } else {
         int local_id;
         if (msg->type == ACK_CREATE){
@@ -104,7 +90,7 @@ void process_message(int queue, msg_t *msg) {
         }
         msg->mtype = local_id;
         log_info("Sending message to client.");
-        if (sendmsg(queue, msg, sizeof(msg_t)) < 0 ) {
+        if (sendmsg(resp_queue, msg, sizeof(msg_t)) < 0 ) {
             log_error("Error sending message to client.");
         }
     }
@@ -123,10 +109,7 @@ int main(int argc, char* argv[]) {
     sscanf(argv[1], "%d", &socket_fd);
 
     int resp_queue = get_msg_resp_queue();
-    msg_t* incoming_msgs = get_msg_shm();
-    int* incoming_msg_count = get_msg_count_shm();
-    int incoming_msgs_sem = get_incoming_msg_sem();
-
+    int incoming_msg_queue = get_incoming_msg_queue();
     while (!graceful_quit) {
         msg_t msg;
         log_info("Waiting responses from server...");
@@ -145,14 +128,11 @@ int main(int argc, char* argv[]) {
         }
 
         log_info("Received message of type: %d", msg.type);
-        process_message(resp_queue, &msg);
+        process_message(resp_queue, incoming_msg_queue, &msg);
 
     }
 
     log_info("Stopping response handler.");
-
-    unmap(incoming_msgs);
-    unmap(incoming_msg_count);
 
     log_debug("Closing socket");
     close(socket_fd);
