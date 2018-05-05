@@ -9,6 +9,8 @@
 #include "../common/message.h"
 #include "../common/ipc/sig.h"
 #include "../common/ipc/socket.h"
+#include "../common/ipc/msg_queue.h"
+#include "server.h"
 
 
 bool graceful_quit = false;
@@ -38,6 +40,29 @@ pid_t create_req_handler(int socket) {
     return pid;
 }
 
+int get_worker_queue() {
+    int worker_queue = getmsg(WORKER_QUEUE);
+    if (worker_queue < 0) {
+        log_error("Error getting worker queue.");
+        exit(-1);
+    }
+    return worker_queue;
+}
+
+void process_message(int queue, msg_t *msg, int resp_handler_pid) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == RECEIVE) {
+        log_error("Unexpected msg type received: %d", msg->type);
+        return;
+    }
+    if (msg->type == CREATE) {
+        // TODO set resp_handler_pid as mtype in a new record on global ids table.
+        msg->mtype = resp_handler_pid;
+    }
+    if (sendmsg(queue, msg, sizeof(msg_t)) < 0) {
+        log_error("Error sending message to worker.");
+    }
+}
+
 int main(int argc, char* argv[]) {
     register_handler(SIGINT_handler);
     log_info("Starting request handler.");
@@ -49,6 +74,8 @@ int main(int argc, char* argv[]) {
     sscanf(argv[1], "%d", &client_socket);
 
     pid_t resp_handler_pid = create_req_handler(client_socket);
+
+    int worker_queue = get_worker_queue();
 
     while(!graceful_quit) {
         msg_t msg;
@@ -66,7 +93,7 @@ int main(int argc, char* argv[]) {
         }
 
         log_info("Received type: %d", msg.type);
-        // TODO send msg to worker.
+        process_message(worker_queue, &msg, resp_handler_pid);
     }
 
     //TODO kill resp handler.

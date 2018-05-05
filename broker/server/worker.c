@@ -42,6 +42,7 @@ int get_resp_queue() {
 }
 
 void process_msg(int queue, msg_t *msg) {
+    log_info("Message received of type %d", msg->type);
     //TODO: add real functionality, all this is just a mock
     if (msg->type == CREATE) {
         msg->type = ACK_CREATE;
@@ -63,7 +64,7 @@ int main(int argc, char* argv[]) {
     while(!graceful_quit) {
         log_info("Waiting request messages from handler...");
         msg_t msg;
-        rcvmsg(resp_queue, &msg, sizeof(msg_t), 0);
+        rcvmsg(worker_queue, &msg, sizeof(msg_t), 0);
         if (graceful_quit) {
             break;
         }

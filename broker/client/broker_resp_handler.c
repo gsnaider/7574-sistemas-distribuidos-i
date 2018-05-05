@@ -27,7 +27,7 @@ void SIGINT_handler(int signum) {
 }
 
 
-int get_msg_req_queue() {
+int get_msg_resp_queue() {
     int resp_queue = getmsg(BROKER_RESP_MSG);
     if (resp_queue < 0) {
         log_error("Error getting resp message queue");
@@ -70,14 +70,14 @@ void process_publish(msg_t *msg) {
 }
 
 int add_global_id(int global_id) {
-    int local_id = 0;
+    int local_id = 42;
     // TODO search in hashtable for any local_id without global_id, and assign it.
     log_debug("Global id %d set to local id %d.", global_id, local_id);
     return local_id;
 }
 
 int get_local_id(int global_id) {
-    int local_id = 0;
+    int local_id = 42;
     // TODO search global_id in hashtable
     log_debug("Local id %d found from global_id %d", local_id, global_id);
     return local_id;
@@ -104,7 +104,9 @@ void process_message(int queue, msg_t *msg) {
         }
         msg->mtype = local_id;
         log_info("Sending message to client.");
-        sendmsg(queue, msg, sizeof(msg_t));
+        if (sendmsg(queue, msg, sizeof(msg_t)) < 0 ) {
+            log_error("Error sending message to client.");
+        }
     }
 }
 
@@ -120,7 +122,7 @@ int main(int argc, char* argv[]) {
     int socket_fd;
     sscanf(argv[1], "%d", &socket_fd);
 
-    int resp_queue = get_msg_req_queue();
+    int resp_queue = get_msg_resp_queue();
     msg_t* incoming_msgs = get_msg_shm();
     int* incoming_msg_count = get_msg_count_shm();
     int incoming_msgs_sem = get_incoming_msg_sem();
