@@ -93,12 +93,13 @@ void process_message(int queue, msg_t *msg) {
             msg->type = ACK_OK;
             local_id = add_global_id(msg->mtype);
         } else if (msg->type == ACK_OK) {
+            log_debug("OK message received from server.");
             local_id = get_local_id(msg->mtype);
         } else if (msg->type == ACK_ERROR) {
-            log_error("Received message with an error from the server.");
+            log_error("Error message received from server.");
             local_id = get_local_id(msg->mtype);
         } else {
-            log_error("Unexpected msg type received: %d", msg->type);
+            log_error("Unexpected msg type received from server: %d", msg->type);
             local_id = get_local_id(msg->mtype);
         }
         msg->mtype = local_id;
