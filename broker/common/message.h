@@ -20,6 +20,12 @@ typedef struct payload_t {
 
 typedef struct msg_t {
     long mtype;
+
+    // So that when worker responds to resp_handler, it can send the handler's pid in mtype,
+    // but global_id is still in the msg. The handler couldn't lookup the global id in the table, since there could be
+    // more than one global id for the same mtype (i.e. multiple clients in same machine).
+    int global_id;
+
     int type;
     payload_t payload;
 } msg_t;
