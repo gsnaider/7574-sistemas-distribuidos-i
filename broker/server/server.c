@@ -116,6 +116,10 @@ int main(int argc, char* argv[]) {
 
     kill_childs();
 
+    log_debug("Destroying childs pids list.");
+    list_destroy(&childs);
+
+    log_debug("Closing socket.");
     if(close(socket) < 0) {
         log_error("Error closing server socket.");
     }
