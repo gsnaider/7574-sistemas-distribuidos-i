@@ -9,6 +9,7 @@
 #include "server.h"
 #include "../common/log/log.h"
 #include "../common/ipc/sig.h"
+#include "../common/ipc/msg_queue.h"
 
 bool graceful_quit = false;
 
@@ -21,15 +22,46 @@ void SIGINT_handler(int signum) {
     }
 }
 
+void create_queues() {
+    int worker_queue = creamsg(WORKER_QUEUE);
+    if (worker_queue < 0) {
+        log_error("Error creating worker queue.");
+        exit(-1);
+    }
+
+    int resp_queue = creamsg(RESP_QUEUE);
+    if (resp_queue < 0) {
+        log_error("Error creating response queue.");
+        exit(-1);
+    }
+}
+
+void create_workers() {
+    // TODO store child pids (workers and handlers) in array for killing them in case of terminating signal.
+    for (int i = 0; i < WORKERS; i++) {
+        pid_t worker = fork();
+        if (worker < 0) {
+            log_error("Error creating worker.");
+            exit(-1);
+        }
+        if (worker == 0) {
+            execl("./worker", "./worker", (char*)NULL);
+            log_error("Error executing worker.");
+            exit(-1);
+        }
+    }
+}
+
 int main(int argc, char* argv[]) {
 
     register_handler(SIGINT_handler);
 
     log_info("Server started.");
-    int socket = create_server_socket(PORT);
 
-    //TODO create worker queue.
-    //TODO create worker
+    create_queues();
+    create_workers();
+
+    int socket = create_server_socket(PORT);
 
     while (!graceful_quit) {
         log_info("Waiting connections.");
