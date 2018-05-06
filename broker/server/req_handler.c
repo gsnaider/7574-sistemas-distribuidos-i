@@ -25,7 +25,7 @@ void SIGINT_handler(int signum) {
     }
 }
 
-pid_t create_req_handler(int socket) {
+pid_t create_resp_handler(int socket) {
     pid_t pid = fork();
     if (pid < 0) {
         log_error("Error forking resp handler");
@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
     int client_socket;
     sscanf(argv[1], "%d", &client_socket);
 
-    pid_t resp_handler_pid = create_req_handler(client_socket);
+    pid_t resp_handler_pid = create_resp_handler(client_socket);
 
     int worker_queue = get_worker_queue();
 
