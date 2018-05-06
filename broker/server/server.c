@@ -40,6 +40,22 @@ void create_queues() {
     }
 }
 
+void destroy_queues() {
+    int worker_queue = getmsg(WORKER_QUEUE);
+    if (worker_queue < 0) {
+        log_error("Error getting worker queue for deletion.");
+    } else {
+        delmsg(worker_queue);
+    }
+
+    int resp_queue = getmsg(RESP_QUEUE);
+    if (resp_queue < 0) {
+        log_error("Error getting resp queue for deletion.");
+    } else {
+        delmsg(resp_queue);
+    }
+}
+
 void create_workers() {
     for (int i = 0; i < WORKERS; i++) {
         pid_t worker = fork();
@@ -118,6 +134,9 @@ int main(int argc, char* argv[]) {
 
     log_debug("Destroying childs pids list.");
     list_destroy(&childs);
+
+    log_debug("Destroying queues");
+    destroy_queues();
 
     log_debug("Closing socket.");
     if(close(socket) < 0) {
