@@ -153,7 +153,7 @@
       <find>ACK</find>
       <find>ACK_OK</find>
       <find>topic</find>
-      <find>char buffer[sizeof(msg_t)</find>
+      <find />
       <find>socket</find>
       <find>snd</find>
       <find>unex</find>
@@ -181,7 +181,7 @@
     <replaceStrings>
       <replace>stdout</replace>
       <replace>log_error</replace>
-      <replace>&quot; &quot;</replace>
+      <replace />
       <replace>&quot;\n&quot;</replace>
     </replaceStrings>
     <dirStrings>
@@ -246,7 +246,7 @@
   </component>
   <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1855" />
+    <option name="x" value="65" />
     <option name="y" value="-4" />
     <option name="width" value="1855" />
     <option name="height" value="1084" />
