@@ -51,8 +51,7 @@ int main(int argc, char* argv[]) {
     while(!graceful_quit) {
         log_info("Waiting response messages from worker...");
         msg_t msg;
-        // TODO test, read with getpid() instead of 0.
-        rcvmsg(resp_queue, &msg, sizeof(msg_t), 0);
+        rcvmsg(resp_queue, &msg, sizeof(msg_t), getpid());
         if (graceful_quit) {
             break;
         }

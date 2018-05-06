@@ -12,6 +12,7 @@
 #include "../common/ipc/sig.h"
 #include "../common/ipc/msg_queue.h"
 #include "../common/ds/data-structures/list.h"
+#include "global_id.h"
 
 bool graceful_quit = false;
 
@@ -25,6 +26,14 @@ void SIGINT_handler(int signum) {
         graceful_quit = true;
     }
 }
+
+void create_global_ids() {
+    if (global_ids_create() < 0) {
+        log_error("Error creating global ids table.");
+        exit(-1);
+    }
+}
+
 
 void create_queues() {
     int worker_queue = creamsg(WORKER_QUEUE);
@@ -40,6 +49,14 @@ void create_queues() {
     }
 }
 
+void destroy_global_ids() {
+    int global_ids = global_ids_get();
+    if (global_ids < 0) {
+        log_error("Error getting global ids for deletion.");
+    } else {
+        global_ids_destroy(global_ids);
+    }
+}
 void destroy_queues() {
     int worker_queue = getmsg(WORKER_QUEUE);
     if (worker_queue < 0) {
@@ -98,6 +115,9 @@ void safe_exit(int socket) {
     log_debug("Destroying queues");
     destroy_queues();
 
+    log_debug("Destroying global ids");
+    destroy_global_ids();
+
     log_debug("Closing socket.");
     if(close(socket) < 0) {
         log_error("Error closing server socket.");
@@ -112,6 +132,7 @@ int main(int argc, char* argv[]) {
 
     list_new(&childs, sizeof(pid_t), NULL);
 
+    create_global_ids();
     create_queues();
     create_workers();
 

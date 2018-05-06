@@ -81,12 +81,12 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Checking for incoming messages.");
 
     msg_t incoming_msg;
-    incoming_msg.type = 0;
-    if (rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), 0)  < 0) {
+    int res = rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), 0);
+    if ( res < 0) {
         log_error("Error receiving incoming message.");
         incoming_msg.type = ACK_ERROR;
     } else {
-        if (incoming_msg.type == 0) {
+        if (res == 0) {
             log_info("No new messages.");
         } else {
             log_info("New message found.");

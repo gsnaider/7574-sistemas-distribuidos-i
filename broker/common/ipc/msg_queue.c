@@ -2,6 +2,7 @@
 // Created by gaston on 22/04/18.
 //
 
+#include <errno.h>
 #include "msg_queue.h"
 #include "resources.h"
 #include "../log/log.h"
@@ -52,10 +53,14 @@ int rcvmsg(int id, void *msgp, size_t msgsz, long type){
 
 int rcvmsg_no_wait(int id, void *msgp, size_t msgsz, long type){
     if(msgrcv(id,msgp,msgsz-sizeof(long),type,IPC_NOWAIT)==-1){
+        if (errno == ENOMSG) {
+            log_debug("No messages on queue.");
+            return 0;
+        }
         log_error("Error receiving message over queue");
         return -1;
     }
-    return 0;
+    return 1;
 }
 int   delmsg(int id){
     int res = msgctl(id, IPC_RMID, NULL);

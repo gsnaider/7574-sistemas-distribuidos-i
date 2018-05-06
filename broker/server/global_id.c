@@ -28,7 +28,7 @@ int global_ids_create() {
 }
 
 int global_ids_get() {
-    int ids_shm = getshm(GLOBAL_IDS_SEM);
+    int ids_shm = getshm(GLOBAL_IDS_SHM);
     if (ids_shm < 0) {
         log_error("Error getting global ids shm.");
         exit(-1);
