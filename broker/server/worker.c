@@ -42,15 +42,11 @@ int get_resp_queue() {
     return resp_queue;
 }
 
-int generate_global_id() {
-    //TODO
-    return 23;
-}
-
 void process_create(int global_ids, msg_t *msg) {
-    msg->global_id = generate_global_id();
-    if (add_global_id(global_ids, msg->mtype, msg->global_id) < 0) {
-        log_error("Error adding new global id %d with mtype %d.", msg->global_id, msg->mtype);
+    msg->global_id = add_global_id(global_ids, msg->mtype);
+
+    if (msg->global_id < 0) {
+        log_error("Error adding new global id for mtype %d.", msg->mtype);
         msg->type = ACK_ERROR;
         return;
     }

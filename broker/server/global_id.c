@@ -36,8 +36,13 @@ int global_ids_get() {
     return ids_shm;
 }
 
-int add_global_id(int global_ids, int mtype, int global_id) {
-    log_debug("Attempting to add global id %d with mtype %d.", global_id, mtype);
+static int next_global_id() {
+    // TODO read shm and increment.
+    return 23;
+}
+
+int add_global_id(int global_ids, int mtype) {
+    log_debug("Attempting to add global id with mtype %d.", mtype);
     int sem = getsem(GLOBAL_IDS_SEM);
     if (sem < 0) {
         log_error("Error getting global ids sem.");
@@ -52,18 +57,24 @@ int add_global_id(int global_ids, int mtype, int global_id) {
         return -1;
     }
 
-    global_id_t id;
-    id.global_id = global_id;
-    id.mtype = mtype;
 
-    ids->ids[ids->count] = id;
-    ids->count = ids->count + 1;
+    int global_id = next_global_id();
+    if (global_id < 0) {
+        log_error("Error generating global id.");
+    } else {
+        global_id_t id;
+        id.global_id = global_id;
+        id.mtype = mtype;
+
+        ids->ids[ids->count] = id;
+        ids->count = ids->count + 1;
+        log_debug("Global id %d added with mtype %d", global_id, mtype);
+    }
 
     shm_unmap(ids);
-
     v(sem);
-
-    log_debug("Global id %d added with mtype %d", global_id, mtype);
+    
+    return global_id;
 }
 
 int get_mtype(int global_ids, int global_id) {
