@@ -24,13 +24,14 @@ void SIGINT_handler(int signum) {
 }
 
 void process_msg(int socket, msg_t *msg) {
-    if (msg->type != ACK_OK && msg->type != ACK_ERROR && msg->type != ACK_CREATE && msg->type != PUBLISH) {
+    if (msg->type != ACK_OK && msg->type != ACK_ERROR && msg->type != ACK_CREATE && msg->type != ACK_DESTROY && msg->type != PUBLISH) {
         log_error("Invalid msg type (%d) received.", msg->type);
         return;
     }
     log_info("Message received of type %d.", msg->type);
     // Set the global_id (previously set by worker) on the msg mtype.
     msg->mtype = msg->global_id;
+    log_info("Sending message to client.");
     socket_send(socket, msg);
 
 }

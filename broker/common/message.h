@@ -11,7 +11,7 @@
 #define DESTROY 5
 #define ACK_OK 6
 #define ACK_CREATE 7
-#define ACK_DESTROY 8 //TODO when brk resp receives ACK destroy, it must remove client from broker_ids
+#define ACK_DESTROY 8
 #define ACK_ERROR 9
 
 typedef struct payload_t {

@@ -36,7 +36,7 @@ int global_ids_get() {
     return ids_shm;
 }
 
-int add_id(int global_ids, int mtype, int global_id {
+int add_global_id(int global_ids, int mtype, int global_id) {
     log_debug("Attempting to add global id %d with mtype %d.", global_id, mtype);
     int sem = getsem(GLOBAL_IDS_SEM);
     if (sem < 0) {
@@ -98,7 +98,7 @@ int get_mtype(int global_ids, int global_id) {
     }
 }
 
-int remove_id(int global_ids, int global_id) {
+int remove_global_id(int global_ids, int global_id) {
     log_debug("Attempting to remove global id %d.", global_id);
     int sem = getsem(GLOBAL_IDS_SEM);
     if (sem < 0) {

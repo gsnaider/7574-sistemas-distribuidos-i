@@ -78,7 +78,7 @@ pid_t create_broker_resp_handler(int socket_fd) {
 }
 
 void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
-    log_debug("Checking for incoming messages.");
+    log_info("Checking for incoming messages.");
 
     msg_t incoming_msg;
     incoming_msg.type = 0;
@@ -88,6 +88,8 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     } else {
         if (incoming_msg.type == 0) {
             log_info("No new messages.");
+        } else {
+            log_info("New message found.");
         }
         incoming_msg.type = ACK_OK;
     }
@@ -95,6 +97,7 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     // Replace the id from the sender with the local id of the one who requested the receive.
     incoming_msg.mtype = msg->mtype;
 
+    log_info("Sending message to client.");
     if (sendmsg(resp_queue, &incoming_msg, sizeof(msg_t)) < 0) {
         log_error("Error sending incoming message to repsonse queue.");
     }
@@ -107,7 +110,7 @@ void process_msg(int broker_ids, int resp_queue, int socket, int incoming_msg_qu
         return;
     }
 
-    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == ACK_DESTROY) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
@@ -115,14 +118,16 @@ void process_msg(int broker_ids, int resp_queue, int socket, int incoming_msg_qu
     log_info("Message received of type %d.", msg->type);
     if (msg->type == RECEIVE) {
         process_receive(resp_queue, incoming_msg_queue, msg);
-    } else if (msg->type == CREATE) {
-        if (add_local_id(broker_ids, msg->mtype) < 0) {
-            log_error("Error adding local client.");
-            return;
-        }
-        socket_send(socket, msg);
     } else {
-        msg->mtype = get_global_id(broker_ids, msg->mtype);
+        if (msg->type == CREATE) {
+            if (add_local_id(broker_ids, msg->mtype) < 0) {
+                log_error("Error adding local client.");
+                return;
+            }
+        } else {
+            msg->mtype = get_global_id(broker_ids, msg->mtype);
+        }
+        log_info("Sending message to server.");
         socket_send(socket, msg);
     }
 

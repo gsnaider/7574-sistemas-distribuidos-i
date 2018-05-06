@@ -51,14 +51,14 @@ int get_worker_queue() {
 }
 
 void process_message(int queue, msg_t *msg, int resp_handler_pid) {
-    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == RECEIVE) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == ACK_DESTROY || msg->type == RECEIVE) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
     if (msg->type == CREATE) {
-        // TODO set resp_handler_pid as mtype in a new record on global ids table.
         msg->mtype = resp_handler_pid;
     }
+    log_info("Sending message to worker.");
     if (sendmsg(queue, msg, sizeof(msg_t)) < 0) {
         log_error("Error sending message to worker.");
     }

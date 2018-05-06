@@ -63,7 +63,7 @@ int add_local_id(int broker_ids, int local_id) {
 
 // searches in broker_ids for any local_id without global_id, and assigns the global id to it.
 // Returns the local_id to which global_id was assigned.
-int add_global_id(int broker_ids, int global_id) {
+int set_global_id(int broker_ids, int global_id) {
     log_debug("Attempting to assign global id %d to a local id.", global_id);
     int sem = getsem(BROKER_IDS_SEM);
     if (sem < 0) {

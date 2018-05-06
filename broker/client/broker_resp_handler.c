@@ -64,11 +64,14 @@ void process_message(int broker_ids, int resp_queue, int incoming_msg_queue, msg
         int local_id;
         if (msg->type == ACK_CREATE){
             msg->type = ACK_OK;
-            local_id = add_global_id(broker_ids, msg->mtype);
+            local_id = set_global_id(broker_ids, msg->mtype);
         } else {
             local_id = get_local_id(broker_ids, msg->mtype);
             if (msg->type == ACK_OK) {
                 log_debug("OK message received from server.");
+            } else if (msg->type == ACK_DESTROY) {
+                log_debug("OK DESTROY message received from server.");
+                remove_id(broker_ids, local_id);
             } else if (msg->type == ACK_ERROR) {
                 log_error("Error message received from server.");
             } else {
