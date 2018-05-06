@@ -8,6 +8,7 @@
 #include <netdb.h>
 #include <strings.h>
 #include <unistd.h>
+#include <memory.h>
 #include "socket.h"
 #include "../log/log.h"
 
@@ -79,22 +80,38 @@ int accept_client(int server_socket) {
 }
 
 int socket_send(int socket, msg_t *msg) {
-    // TODO see if we need to check that all bytes are send
-    ssize_t bytes = write(socket, msg, sizeof(msg_t));
-    if (bytes < 0) {
-        log_error("Error writing to socket.");
+    char buffer[sizeof(msg_t) / sizeof(char)];
+    memcpy(buffer, msg, sizeof(msg_t));
+    int bytes_sent = 0;
+    while (bytes_sent < sizeof(msg_t)) {
+        int bytes = write(socket, buffer + bytes_sent, sizeof(msg_t) - bytes_sent);
+        if (bytes < 0) {
+            log_error("Error writing to socket.");
+            return -1;
+        } else if (bytes == 0) {
+            log_error("Lost connection.");
+            return 0;
+        }
+        bytes_sent += bytes;
     }
-    return bytes;
+
+    return bytes_sent;
 }
 
 int socket_receive(int socket, msg_t *msg) {
     char buffer[sizeof(msg_t) / sizeof(char)];
-    ssize_t bytes = read(socket, buffer, sizeof(buffer) / sizeof(char));
-    // TODO keep reading in case full message not arrived.
-    if (bytes < 0) {
-        log_error("Error reading from socket.");
-    } else {
-        *msg = *((msg_t*) buffer);
+    int bytes_read = 0;
+    while (bytes_read < sizeof(msg_t)) {
+        int bytes = read(socket, buffer + bytes_read, sizeof(msg_t) - bytes_read);
+        if (bytes < 0) {
+            log_error("Error reading from socket.");
+            return -1;
+        } else if (bytes == 0) {
+            log_error("Lost connection.");
+            return 0;
+        }
+        bytes_read += bytes;
     }
-    return bytes;
+    *msg = *((msg_t*) buffer);
+    return bytes_read;
 }
