@@ -10,6 +10,8 @@ set(DEPENDENCIES
         common/log/log.h
         common/message.h
         client/broker.c
+        client/broker_id.h
+        client/broker_id.c
         common/ipc/msg_queue.c
         common/ipc/msg_queue.h
         common/ipc/resources.h

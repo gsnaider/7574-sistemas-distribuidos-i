@@ -14,6 +14,7 @@
 #include "../common/ipc/semaphore.h"
 #include "../common/ipc/sig.h"
 #include "../common/ipc/socket.h"
+#include "broker_id.h"
 
 bool graceful_quit = false;
 
@@ -55,21 +56,7 @@ void process_publish(int incoming_msg_queue, msg_t *msg) {
 }
 
 
-int add_global_id(int global_id) {
-    int local_id = 42;
-    // TODO search in hashtable for any local_id without global_id, and assign it.
-    log_debug("Global id %d set to local id %d.", global_id, local_id);
-    return local_id;
-}
-
-int get_local_id(int global_id) {
-    int local_id = 42;
-    // TODO search global_id in hashtable
-    log_debug("Local id %d found from global_id %d", local_id, global_id);
-    return local_id;
-}
-
-void process_message(int resp_queue, int incoming_msg_queue, msg_t *msg) {
+void process_message(int broker_ids, int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Processing message.");
     if (msg->type == PUBLISH) {
         process_publish(incoming_msg_queue, msg);
@@ -77,16 +64,16 @@ void process_message(int resp_queue, int incoming_msg_queue, msg_t *msg) {
         int local_id;
         if (msg->type == ACK_CREATE){
             msg->type = ACK_OK;
-            local_id = add_global_id(msg->mtype);
-        } else if (msg->type == ACK_OK) {
-            log_debug("OK message received from server.");
-            local_id = get_local_id(msg->mtype);
-        } else if (msg->type == ACK_ERROR) {
-            log_error("Error message received from server.");
-            local_id = get_local_id(msg->mtype);
+            local_id = add_global_id(broker_ids, msg->mtype);
         } else {
-            log_error("Unexpected msg type received from server: %d", msg->type);
-            local_id = get_local_id(msg->mtype);
+            local_id = get_local_id(broker_ids, msg->mtype);
+            if (msg->type == ACK_OK) {
+                log_debug("OK message received from server.");
+            } else if (msg->type == ACK_ERROR) {
+                log_error("Error message received from server.");
+            } else {
+                log_error("Unexpected msg type received from server: %d", msg->type);
+            }
         }
         msg->mtype = local_id;
         log_info("Sending message to client.");
@@ -110,6 +97,8 @@ int main(int argc, char* argv[]) {
 
     int resp_queue = get_msg_resp_queue();
     int incoming_msg_queue = get_incoming_msg_queue();
+    int broker_ids = broker_id_get();
+
     while (!graceful_quit) {
         msg_t msg;
         log_info("Waiting responses from server...");
@@ -128,7 +117,7 @@ int main(int argc, char* argv[]) {
         }
 
         log_info("Received message of type: %d", msg.type);
-        process_message(resp_queue, incoming_msg_queue, &msg);
+        process_message(broker_ids, resp_queue, incoming_msg_queue, &msg);
 
     }
 

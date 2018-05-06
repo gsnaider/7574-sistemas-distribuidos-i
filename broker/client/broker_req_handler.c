@@ -16,6 +16,7 @@
 #include "../common/message.h"
 #include "../common/ipc/semaphore.h"
 #include "../common/ipc/sig.h"
+#include "broker_id.h"
 
 bool graceful_quit = false;
 
@@ -56,6 +57,7 @@ int init_incoming_msg_queue() {
     }
     return queue;
 }
+
 
 pid_t create_broker_resp_handler(int socket_fd) {
     //TODO(optional) send req pid to resp handler, so that if there's an error he can kill the req handler.
@@ -99,31 +101,25 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
 
 }
 
-int get_global_id(int local_id) {
-    int global_id = 0;
-    //TODO read from hashtable..
-    log_debug("Global id %d found for local id %d", global_id, local_id);
-    return 0;
-}
+void process_msg(int broker_ids, int resp_queue, int socket, int incoming_msg_queue, msg_t* msg) {
+    if (msg->type != CREATE && !local_id_exists(broker_ids, msg->mtype)) {
+        log_error("Invalid broker id: %d for message type %d", msg->mtype, msg->type);
+        return;
+    }
 
-void add_local_id(int local_id) {
-    //TODO add to hashtable.
-    log_debug("Local id %d added to hashtable", local_id);
-}
-
-void process_msg(int resp_queue, int socket, int incoming_msg_queue, msg_t* msg) {
     if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
+
     log_info("Message received of type %d.", msg->type);
     if (msg->type == RECEIVE) {
         process_receive(resp_queue, incoming_msg_queue, msg);
     } else if (msg->type == CREATE) {
-        add_local_id(msg->mtype);
+        add_local_id(broker_ids, msg->mtype);
         socket_send(socket, msg);
     } else {
-        msg->mtype = get_global_id(msg->mtype);
+        msg->mtype = get_global_id(broker_ids, msg->mtype);
         socket_send(socket, msg);
     }
 
@@ -140,6 +136,7 @@ int main(int argc, char* argv[]) {
     int req_queue = init_msg_req_queue();
     int resp_queue = init_msg_resp_queue();
     int incoming_msg_queue = init_incoming_msg_queue();
+    int broker_ids = broker_id_create();
 
     pid_t resp_handler = create_broker_resp_handler(server_socket);
 
@@ -150,7 +147,7 @@ int main(int argc, char* argv[]) {
         if (graceful_quit) {
             break;
         }
-        process_msg(resp_queue, server_socket, incoming_msg_queue, &msg);
+        process_msg(broker_ids, resp_queue, server_socket, incoming_msg_queue, &msg);
     }
 
     log_info("Stopping request handler.");
@@ -166,6 +163,8 @@ int main(int argc, char* argv[]) {
     delmsg(resp_queue);
     delmsg(incoming_msg_queue);
 
+    log_debug("Deleting broker ids");
+    broker_id_destroy(broker_ids);
 
     log_debug("Closing socket.");
     close(server_socket);
