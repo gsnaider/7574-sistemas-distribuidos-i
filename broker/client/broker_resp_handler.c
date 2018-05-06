@@ -63,7 +63,6 @@ void process_message(int broker_ids, int resp_queue, int incoming_msg_queue, msg
     } else {
         int local_id;
         if (msg->type == ACK_CREATE){
-            msg->type = ACK_OK;
             local_id = set_global_id(broker_ids, msg->mtype);
         } else {
             local_id = get_local_id(broker_ids, msg->mtype);

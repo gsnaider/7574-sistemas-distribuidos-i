@@ -40,7 +40,7 @@ int creabrk() {
         return -1;
     }
 
-    if (msg.type == ACK_OK) {
+    if (msg.type == ACK_CREATE) {
         log_info("Creation successful.");
         // It's ok to return mtype (long), since mtype will be the client's pid, which is an int.
         return msg.mtype;
@@ -172,7 +172,7 @@ int delbrk(int id) {
         return -1;
     }
 
-    if (msg.type == ACK_OK) {
+    if (msg.type == ACK_DESTROY) {
         log_info("Destroy successful.");
         return 0;
     } else if (msg.type == ACK_ERROR) {

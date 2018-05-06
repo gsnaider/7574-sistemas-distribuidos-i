@@ -87,6 +87,23 @@ void kill_childs() {
     list_for_each(&childs, kill_child);
 }
 
+void safe_exit(int socket) {
+    log_info("Stopping server.");
+
+    kill_childs();
+
+    log_debug("Destroying childs pids list.");
+    list_destroy(&childs);
+
+    log_debug("Destroying queues");
+    destroy_queues();
+
+    log_debug("Closing socket.");
+    if(close(socket) < 0) {
+        log_error("Error closing server socket.");
+    }
+}
+
 int main(int argc, char* argv[]) {
 
     register_handler(SIGINT_handler);
@@ -99,6 +116,9 @@ int main(int argc, char* argv[]) {
     create_workers();
 
     int socket = create_server_socket(PORT);
+    if (socket < 0) {
+        safe_exit(socket);
+    }
 
     while (!graceful_quit) {
         log_info("Waiting connections.");
@@ -128,18 +148,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    log_info("Stopping server.");
+    safe_exit(socket);
 
-    kill_childs();
-
-    log_debug("Destroying childs pids list.");
-    list_destroy(&childs);
-
-    log_debug("Destroying queues");
-    destroy_queues();
-
-    log_debug("Closing socket.");
-    if(close(socket) < 0) {
-        log_error("Error closing server socket.");
-    }
 }

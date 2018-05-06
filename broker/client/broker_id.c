@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <unistd.h>
 #include "broker_id.h"
 #include "../common/log/log.h"
 #include "../common/ipc/shm.h"
@@ -78,7 +79,7 @@ int set_global_id(int broker_ids, int global_id) {
     for (int i = 0; i < ids->count; i++) {
         broker_id_t id = ids->ids[i];
         if (id.global_id == 0) {
-            id.global_id = global_id;
+            ids->ids[i].global_id = global_id;
             assigned_local_id = id.local_id;
             break;
         }
@@ -87,6 +88,7 @@ int set_global_id(int broker_ids, int global_id) {
     shm_unmap(ids);
 
     v(sem);
+
 
     if (assigned_local_id < 0) {
         log_error("No local_id found without a global_id to be assigned.");

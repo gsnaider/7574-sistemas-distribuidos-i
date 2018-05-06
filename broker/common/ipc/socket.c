@@ -44,7 +44,7 @@ int create_server_socket(int port) {
     int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_fd < 0) {
         log_error("Error creating server socket.");
-        exit(-1);
+        return -1;
     }
 
     struct sockaddr_in myaddr;
@@ -56,12 +56,12 @@ int create_server_socket(int port) {
 
     if (bind(socket_fd, (struct sockaddr*) &myaddr, myaddr_size ) < 0) {
         log_error("Error calling bind.");
-        exit(-1);
+        return -1;
     }
 
     if (listen(socket_fd, 10) < 0) {
         log_error("Error calling listen.");
-        exit(-1);
+        return -1;
     }
 
     return socket_fd;

@@ -41,14 +41,31 @@ int get_resp_queue() {
     return resp_queue;
 }
 
-void process_msg(int queue, msg_t *msg) {
+void process_msg(int resp_queue, msg_t *msg) {
     log_info("Message received of type %d", msg->type);
     //TODO: add real functionality, all this is just a mock
+    msg->global_id = 23;
     if (msg->type == CREATE) {
         msg->type = ACK_CREATE;
-        msg->global_id = 23;
+    } else if (msg->type == SUBSCRIBE) {
+        msg->type = ACK_OK;
+    } else if (msg->type == PUBLISH) {
+        // send to subscribers.
+        log_info("Sending publish message to response handler.");
+        if (sendmsg(resp_queue, msg, sizeof(msg_t)) < 0) {
+            log_error("Error sending publish message.");
+        }
+        msg->type = ACK_OK;
+    } else if (msg->type == DESTROY) {
+        msg->type = ACK_DESTROY;
+    } else {
+        log_error("Unexpected msg type %d", msg->type);
+        msg->type = ACK_ERROR;
     }
-    if (sendmsg(queue, msg, sizeof(msg_t)) < 0) {
+
+
+    log_info("Sending message to response handler.");
+    if (sendmsg(resp_queue, msg, sizeof(msg_t)) < 0) {
         log_error("Error sending response message.");
     }
 }
