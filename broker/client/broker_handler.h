@@ -8,7 +8,6 @@
 #define BROKER_REQ_MSG 3
 #define BROKER_RESP_MSG 4
 #define INCOMING_MSG_QUEUE 5
-#define BROKER_IDS_SHM 6
 
 #define MAX_CLIENTS 10
 

@@ -2,11 +2,21 @@
 #define BROKER_ID_H
 
 #include <stdbool.h>
+#include "broker_handler.h"
+
+#define BROKER_IDS_SHM 6
+#define BROKER_IDS_SEM 7
 
 typedef struct broker_id {
     int local_id;
     int global_id;
 } broker_id_t;
+
+
+typedef struct broker_ids {
+    int count;
+    broker_id_t ids[MAX_CLIENTS];
+} broker_ids_t;
 
 int broker_id_create();
 

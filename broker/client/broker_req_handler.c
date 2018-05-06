@@ -116,7 +116,10 @@ void process_msg(int broker_ids, int resp_queue, int socket, int incoming_msg_qu
     if (msg->type == RECEIVE) {
         process_receive(resp_queue, incoming_msg_queue, msg);
     } else if (msg->type == CREATE) {
-        add_local_id(broker_ids, msg->mtype);
+        if (add_local_id(broker_ids, msg->mtype) < 0) {
+            log_error("Error adding local client.");
+            return;
+        }
         socket_send(socket, msg);
     } else {
         msg->mtype = get_global_id(broker_ids, msg->mtype);
