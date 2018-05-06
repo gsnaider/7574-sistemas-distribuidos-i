@@ -35,6 +35,8 @@ int get_local_id(int broker_ids, int global_id);
 
 bool local_id_exists(int broker_ids, int local_id);
 
+int remove_id(int broker_ids, int local_id); // TODO implement.
+
 int broker_id_destroy(int id);
 
 #endif

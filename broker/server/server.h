@@ -9,6 +9,8 @@
 
 #define WORKERS 1
 
+#define MAX_CLIENTS 50
+
 #define WORKER_QUEUE 1
 #define RESP_QUEUE 2
 

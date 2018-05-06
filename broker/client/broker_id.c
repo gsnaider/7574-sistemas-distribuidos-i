@@ -201,11 +201,52 @@ bool local_id_exists(int broker_ids, int local_id) {
     }
 }
 
-int broker_id_destroy(int id) {
-    log_debug("Deleting broker ids.");
-    if (delshm(id) < 0) {
-        log_error("Error deleting broker ids shm");
+int remove_id(int broker_ids, int local_id) {
+    log_debug("Attempting to remove local id %d.", local_id);
+    int sem = getsem(BROKER_IDS_SEM);
+    if (sem < 0) {
+        log_error("Error getting broker ids sem.");
         return -1;
     }
-    return 0;
+    p(sem);
+
+    broker_ids_t* ids = shm_map(broker_ids);
+
+    int pos = -1;
+    for (int i = 0; i < ids->count; i++) {
+        broker_id_t id = ids->ids[i];
+        if (id.local_id == local_id) {
+            pos = i;
+            break;
+        }
+    }
+    if (pos < 0) {
+        log_error("No id found for local_id %d.", local_id);
+    } else {
+        for (int i = pos + 1; i < ids->count; i++) {
+            ids->ids[i - 1] = ids->ids[i];
+        }
+        ids->count = ids->count - 1;
+    }
+
+    shm_unmap(ids);
+
+    v(sem);
+
+    return pos;
+}
+
+int broker_id_destroy(int id) {
+    log_debug("Deleting broker ids.");
+    int res = 0;
+    int sem = getsem(BROKER_IDS_SEM);
+    if (delsem(sem) < 0) {
+        log_error("Error deleting broker ids sem");
+        res = -1;
+    }
+    if (delshm(id) < 0) {
+        log_error("Error deleting broker ids shm");
+        res = -1;
+    }
+    return res;
 }

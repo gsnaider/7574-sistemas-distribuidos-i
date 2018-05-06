@@ -4,7 +4,19 @@ project(broker C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLOG_USE_COLOR")
 
-set(DEPENDENCIES
+set(CLIENT_DEPENDENCIES
+        client/broker.h
+        client/broker.c
+        client/broker_id.h
+        client/broker_id.c
+        client/broker_handler.h)
+
+set(SERVER_DEPENDENCIES
+        server/global_id.h
+        server/global_id.c
+        server/server.h)
+
+set(COMMON_DEPENDENCIES
         client/broker.h
         common/log/log.c
         common/log/log.h
@@ -27,11 +39,11 @@ set(DEPENDENCIES
         common/ds/data-structures/list.h
         common/ds/implementation/list.c)
 
-add_executable(broker_resp_handler client/broker_resp_handler.c ${DEPENDENCIES})
-add_executable(broker_req_handler client/broker_req_handler.c ${DEPENDENCIES})
-add_executable(test_client client/test_client.c ${DEPENDENCIES})
+add_executable(broker_resp_handler client/broker_resp_handler.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
+add_executable(broker_req_handler client/broker_req_handler.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
+add_executable(test_client client/test_client.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
 
-add_executable(server server/server.c server/server.h ${DEPENDENCIES})
-add_executable(req_handler server/req_handler.c ${DEPENDENCIES})
-add_executable(resp_handler server/resp_handler.c ${DEPENDENCIES})
-add_executable(worker server/worker.c ${DEPENDENCIES})
+add_executable(server server/server.c server/server.h ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
+add_executable(req_handler server/req_handler.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
+add_executable(resp_handler server/resp_handler.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
+add_executable(worker server/worker.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})

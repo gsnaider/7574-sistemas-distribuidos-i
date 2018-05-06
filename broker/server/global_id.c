@@ -1,0 +1,149 @@
+//
+// Created by gaston on 06/05/18.
+//
+
+#include <stdlib.h>
+#include "global_id.h"
+#include "../common/ipc/semaphore.h"
+#include "../common/log/log.h"
+#include "../common/ipc/shm.h"
+
+#define GLOBAL_IDS_SHM 8
+#define GLOBAL_IDS_SEM 9
+
+int global_ids_create() {
+    int sem = creasem(GLOBAL_IDS_SEM);
+    if (sem < 0) {
+        log_error("Error creating global ids sem.");
+        exit(-1);
+    }
+    inisem(sem, 1);
+
+    int ids_shm = creashm(GLOBAL_IDS_SHM, sizeof(global_ids_t));
+    if (ids_shm < 0) {
+        log_error("Error creating global ids shm.");
+        exit(-1);
+    }
+    return ids_shm;
+}
+
+int global_ids_get() {
+    int ids_shm = getshm(GLOBAL_IDS_SEM);
+    if (ids_shm < 0) {
+        log_error("Error getting global ids shm.");
+        exit(-1);
+    }
+    return ids_shm;
+}
+
+int add_id(int global_ids, int mtype, int global_id {
+    log_debug("Attempting to add global id %d with mtype %d.", global_id, mtype);
+    int sem = getsem(GLOBAL_IDS_SEM);
+    if (sem < 0) {
+        log_error("Error getting global ids sem.");
+        return -1;
+    }
+    p(sem);
+
+    global_ids_t* ids = shm_map(global_ids);
+
+    if (ids->count >= MAX_CLIENTS) {
+        log_warn("Global clients capacity reached. Can't add more clients.");
+        return -1;
+    }
+
+    global_id_t id;
+    id.global_id = global_id;
+    id.mtype = mtype;
+
+    ids->ids[ids->count] = id;
+    ids->count = ids->count + 1;
+
+    shm_unmap(ids);
+
+    v(sem);
+
+    log_debug("Global id %d added with mtype %d", global_id, mtype);
+}
+
+int get_mtype(int global_ids, int global_id) {
+    log_debug("Searching mtype from global id %d.", global_id);
+    int sem = getsem(GLOBAL_IDS_SEM);
+    if (sem < 0) {
+        log_error("Error getting global ids sem.");
+        return -1;
+    }
+    p(sem);
+
+    global_ids_t* ids = shm_map(global_ids);
+
+    int found_mtype = -1;
+    for (int i = 0; i < ids->count; i++) {
+        global_id_t id = ids->ids[i];
+        if (id.global_id == global_id) {
+            found_mtype = id.mtype;
+            break;
+        }
+    }
+
+    shm_unmap(ids);
+
+    v(sem);
+    if (found_mtype < 0) {
+        log_error("No mtype found for global_id %d.", global_id);
+        return -1;
+    } else {
+        log_debug("mtype %d found for global id %d", found_mtype, global_id);
+        return found_mtype;
+    }
+}
+
+int remove_id(int global_ids, int global_id) {
+    log_debug("Attempting to remove global id %d.", global_id);
+    int sem = getsem(GLOBAL_IDS_SEM);
+    if (sem < 0) {
+        log_error("Error getting global ids sem.");
+        return -1;
+    }
+    p(sem);
+
+    global_ids_t* ids = shm_map(global_ids);
+
+    int pos = -1;
+    for (int i = 0; i < ids->count; i++) {
+        global_id_t id = ids->ids[i];
+        if (id.global_id == global_id) {
+            pos = i;
+            break;
+        }
+    }
+    if (pos < 0) {
+        log_error("No id found for global_id %d.", global_id);
+    } else {
+        for (int i = pos + 1; i < ids->count; i++) {
+            ids->ids[i - 1] = ids->ids[i];
+        }
+        ids->count = ids->count - 1;
+    }
+
+    shm_unmap(ids);
+
+    v(sem);
+
+    return pos;
+}
+
+int global_ids_destroy(int id) {
+    log_debug("Deleting global ids.");
+    int res = 0;
+    int sem = getsem(GLOBAL_IDS_SEM);
+    if (delsem(sem) < 0) {
+        log_error("Error deleting global ids sem");
+        res = -1;
+    }
+    if (delshm(id) < 0) {
+        log_error("Error deleting global ids shm");
+        res = -1;
+    }
+    return res;
+}
