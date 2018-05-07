@@ -14,6 +14,8 @@ set(CLIENT_DEPENDENCIES
 set(SERVER_DEPENDENCIES
         server/global_id.h
         server/global_id.c
+        server/db.h
+        server/db.c
         server/server.h)
 
 set(COMMON_DEPENDENCIES
@@ -37,7 +39,9 @@ set(COMMON_DEPENDENCIES
         common/ipc/sig.c
         common/ipc/sig.h
         common/ds/data-structures/list.h
-        common/ds/implementation/list.c)
+        common/ds/implementation/list.c
+        common/ds/data-structures/vector.h
+        common/ds/implementation/vector.c)
 
 add_executable(broker_resp_handler client/broker_resp_handler.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
 add_executable(broker_req_handler client/broker_req_handler.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})

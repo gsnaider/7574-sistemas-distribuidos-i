@@ -11,6 +11,7 @@
 #include "../common/ipc/sig.h"
 #include "../common/message.h"
 #include "global_id.h"
+#include "db.h"
 
 
 bool graceful_quit = false;
@@ -44,35 +45,74 @@ int get_resp_queue() {
 
 void process_create(int global_ids, msg_t *msg) {
     msg->global_id = add_global_id(global_ids, msg->mtype);
-
     if (msg->global_id < 0) {
         log_error("Error adding new global id for mtype %d.", msg->mtype);
         msg->type = ACK_ERROR;
         return;
     }
-    //TODO create client in DB.
+
+    db_add_user(msg->global_id);
+
     msg->type = ACK_CREATE;
 }
 
 void process_subscribe(int global_ids, msg_t *msg) {
     msg->global_id = msg->mtype;
-    //TODO subscribe client in DB.
     msg->mtype = get_mtype(global_ids, msg->global_id);
     if (msg->mtype < 0) {
         log_error("Error getting mtype for global id %d.", msg->global_id);
         msg->type = ACK_ERROR;
         return;
     }
+
+    db_subscribe(msg->global_id, msg->payload.topic);
+
     msg->type = ACK_OK;
 }
 
-void process_publish(int global_ids, int resp_queue, msg_t *msg) {
-    msg->global_id = msg->mtype;
-    //TODO search subscribed clients in DB and forward msg.
+int send_to_subs(int global_ids, int resp_queue, msg_t msg) {
+    int res = 0;
+    vector subscribed;
+    vector_new(&subscribed, sizeof(int), NULL);
+    if (db_get_subscribed(msg.payload.topic, &subscribed) < 0) {
+        vector_destroy(&subscribed);
+        log_error("Error getting subscribed users to topic '%s'.", msg.payload.topic);
+        return -1;
+    }
+    for (int i = 0; i < vector_size(&subscribed); i++) {
+        int sub_id;
+        vector_item_at(&subscribed, i, &sub_id);
+        msg.global_id = sub_id;
+        msg.mtype = get_mtype(global_ids, sub_id);
+        if (msg.mtype < 0) {
+            log_error("Error getting mtype for global id %d.", sub_id);
+            res = -1;
+            break;
+        }
+        if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
+            log_error("Error sending message to subscribed id %d", sub_id);
+            res = -1;
+            break;
+        }
+    }
+    vector_destroy(&subscribed);
+    return res;
 
+}
+
+void process_publish(int global_ids, int resp_queue, msg_t *msg) {
+
+    msg->global_id = msg->mtype;
     msg->mtype = get_mtype(global_ids, msg->global_id);
     if (msg->mtype < 0) {
         log_error("Error getting mtype for global id %d.", msg->global_id);
+        msg->type = ACK_ERROR;
+        return;
+    }
+
+    // We send the msg (not a pointer) so as to not modify this one, which already has the global id of the sender.
+    if (send_to_subs(global_ids, resp_queue, *msg) < 0) {
+        log_error("Error sending message to subscribers.");
         msg->type = ACK_ERROR;
         return;
     }
@@ -84,21 +124,25 @@ void process_publish(int global_ids, int resp_queue, msg_t *msg) {
 }
 
 void process_destroy(int global_ids, msg_t *msg) {
-    msg->global_id = msg->mtype;
-    // TODO delete client in DB.
+    msg->type = ACK_DESTROY;
 
+    msg->global_id = msg->mtype;
     msg->mtype = get_mtype(global_ids, msg->global_id);
     if (msg->mtype < 0) {
         log_error("Error getting mtype for global id %d.", msg->global_id);
         msg->type = ACK_ERROR;
-        return;
     }
+
+    if (db_delete(msg->global_id) < 0) {
+        log_error("Error deleting client from DB.");
+        msg->type = ACK_ERROR;
+    }
+
     if (remove_global_id(global_ids, msg->global_id) < 0) {
         log_error("Error deleting global id %d.", msg->global_id);
         msg->type = ACK_ERROR;
-        return;
     }
-    msg->type = ACK_DESTROY;
+
 }
 
 void process_msg(int global_ids, int resp_queue, msg_t *msg) {
