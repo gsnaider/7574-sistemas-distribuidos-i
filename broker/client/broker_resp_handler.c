@@ -48,7 +48,10 @@ int get_incoming_msg_queue() {
 }
 
 
-void process_publish(int incoming_msg_queue, msg_t *msg) {
+void process_publish(int broker_ids, int incoming_msg_queue, msg_t *msg) {
+    int local_id = get_local_id(broker_ids, msg->mtype);
+    msg->mtype = local_id;
+
     log_debug("Adding message '%s', topic '%s' to incoming messages queue.", msg->payload.msg, msg->payload.topic);
     if (sendmsg(incoming_msg_queue, msg, sizeof(msg_t)) < 0) {
         log_error("Error adding incoming message to queue.");
@@ -58,10 +61,10 @@ void process_publish(int incoming_msg_queue, msg_t *msg) {
 
 void process_message(int broker_ids, int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Processing message.");
+    int local_id;
     if (msg->type == PUBLISH) {
-        process_publish(incoming_msg_queue, msg);
+        process_publish(broker_ids, incoming_msg_queue, msg);
     } else {
-        int local_id;
         if (msg->type == ACK_CREATE){
             local_id = set_global_id(broker_ids, msg->mtype);
         } else {

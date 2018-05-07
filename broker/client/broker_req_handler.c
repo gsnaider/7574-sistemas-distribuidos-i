@@ -81,7 +81,7 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Checking for incoming messages.");
 
     msg_t incoming_msg;
-    int res = rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), 0);
+    int res = rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), msg->mtype);
     if ( res < 0) {
         log_error("Error receiving incoming message.");
         incoming_msg.type = ACK_ERROR;
@@ -93,9 +93,6 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
         }
         incoming_msg.type = ACK_OK;
     }
-
-    // Replace the id from the sender with the local id of the one who requested the receive.
-    incoming_msg.mtype = msg->mtype;
 
     log_info("Sending message to client.");
     if (sendmsg(resp_queue, &incoming_msg, sizeof(msg_t)) < 0) {
