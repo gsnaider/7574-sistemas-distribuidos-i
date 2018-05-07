@@ -7,16 +7,45 @@
 #include <memory.h>
 #include <dirent.h>
 #include <errno.h>
+#include <unistd.h>
 #include "db.h"
 #include "../common/log/log.h"
 
 #define BASE_DB_DIR "../db/"
 #define USERS_DIR "../db/users/"
 #define TOPICS_DIR "../db/topics/"
-#define ID_MAX_LENGTH 12 //max length of int
+#define INT_MAX_LENGTH 12
 
-static int create_dir_if_not_exists(char* dir_path) {
-    DIR* dir = opendir(dir_path);
+
+static bool file_exists(char *path) {
+    return (access(path, F_OK) != -1);
+}
+
+static int create_file(char *path) {
+    FILE *file = fopen(path, "a");
+    if (file == NULL) {
+        log_error("Error creating file '%s'.", path);
+        return -1;
+    } else {
+        log_debug("File created '%s'", path);
+        fclose(file);
+        return 0;
+    }
+
+}
+
+static int create_file_if_not_exists(char *path) {
+    if (!file_exists(path)) {
+        log_debug("File %s does not exist. Creating it.", path);
+        return create_file(path);
+    } else {
+        log_debug("File %s already exists.", path);
+        return 0;
+    }
+}
+
+static int create_dir_if_not_exists(char *dir_path) {
+    DIR *dir = opendir(dir_path);
     if (dir) {
         log_debug("Directory '%s' already exists.", dir_path);
         closedir(dir);
@@ -52,23 +81,42 @@ static int create_topics_dir_if_not_exists() {
     }
 }
 
-void get_user_path(int id, char* path) {
-    char id_str[ID_MAX_LENGTH];
-    snprintf(id_str, ID_MAX_LENGTH, "%d", id);
+void get_topic_path(char *topic, char *path) {
+    strcpy(path, TOPICS_DIR);
+    strcat(path, topic);
+}
+
+void get_user_path(int id, char *path) {
+    char id_str[INT_MAX_LENGTH];
+    snprintf(id_str, INT_MAX_LENGTH, "%d", id);
     strcpy(path, USERS_DIR);
     strcat(path, id_str);
 }
 
-static int create_file(char *path) {
-    FILE* file = fopen(path, "a");
+
+static int append_to_file(char *path, char *str) {
+    log_debug("Appending '%s' to file '%s'", str, path);
+
+    FILE *file = fopen(path, "a");
     if (file == NULL) {
-        log_error("Error creating file '%s'.", path);
+        log_error("Error opening file '%s'", path);
         return -1;
-    } else {
-        log_debug("File created '%s'", path);
-        fclose(file);
-        return 0;
     }
+
+    if (fputs(str, file) < 0) {
+        log_error("Error writing '%s' to file '%s'", str, path);
+        fclose(file);
+        return -1;
+    }
+
+    if (fputc('\n', file) < 0) {
+        log_error("Error writing '\\n' to file '%s'", path);
+        fclose(file);
+        return -1;
+    }
+
+    fclose(file);
+    return 0;
 }
 
 int db_add_user(int id) {
@@ -76,7 +124,7 @@ int db_add_user(int id) {
     if (create_users_dir_if_not_exists() < 0) {
         return -1;
     }
-    char path[strlen(USERS_DIR) + ID_MAX_LENGTH];
+    char path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, path);
     if (create_file(path) < 0) {
         return -1;
@@ -85,16 +133,41 @@ int db_add_user(int id) {
     return 0;
 }
 
-int db_subscribe(int id, char* topic){
+int db_subscribe(int id, char *topic) {
     log_debug("Subscribing user %d to topic '%s'.", id, topic);
+    if (create_topics_dir_if_not_exists() < 0) {
+        return -1;
+    }
 
+    char user_path[strlen(USERS_DIR) + INT_MAX_LENGTH];
+    get_user_path(id, user_path);
+    if (!file_exists(user_path)) {
+        log_error("User file %s does not exist.", user_path);
+        return -1;
+    }
 
+    char topic_path[strlen(TOPICS_DIR) + strlen(topic) + 1];
+    get_topic_path(topic, topic_path);
+    if (create_file_if_not_exists(topic_path) < 0) {
+        return -1;
+    }
 
+    char id_str[INT_MAX_LENGTH];
+    snprintf(id_str, INT_MAX_LENGTH, "%d", id);
+
+    if (append_to_file(user_path, topic) < 0) {
+        return -1;
+    }
+    if (append_to_file(topic_path, id_str) < 0) {
+        return -1;
+    }
+
+    log_debug("User %d subscribed to topic '%s'.", id, topic);
     return 0;
 }
 
 // Returns list of ids (ints)
-int db_get_subscribed(char* topic, vector* subscribed){
+int db_get_subscribed(char *topic, vector *subscribed) {
     log_debug("Getting subscribed users to topic '%s'.", topic);
     //TODO add subscribed users to list.
     return 0;

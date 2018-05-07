@@ -13,6 +13,9 @@ int main(int argc, char* argv[]) {
     int res = subscribe(mom, "Avengers");
     log_info("Subscribed result %d.", res);
 
+    res = subscribe(mom, "Marvel");
+    log_info("Subscribed result %d.", res);
+
     res = publish(mom, "Infinity war rules!", "Avengers");
     log_info("Published message result %d.", res);
 
