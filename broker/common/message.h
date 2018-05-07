@@ -11,8 +11,9 @@
 #define DESTROY 5
 #define ACK_OK 6
 #define ACK_CREATE 7
-#define ACK_DESTROY 8
-#define ACK_ERROR 9
+#define ACK_NO_MSG 8
+#define ACK_DESTROY 9
+#define ACK_ERROR 10
 
 typedef struct payload_t {
     char topic[MAX_TOPIC_LENGTH];

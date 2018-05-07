@@ -90,11 +90,11 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
         if (res == 0) {
             log_info("No new messages.");
             incoming_msg.mtype = msg->mtype;
-            //TODO set new type ACK_NO_MESSAGE
+            incoming_msg.type = ACK_NO_MSG;
         } else {
             log_info("New message found: %s : %s", incoming_msg.payload.topic, incoming_msg.payload.msg);
+            incoming_msg.type = ACK_OK;
         }
-        incoming_msg.type = ACK_OK;
     }
 
     log_info("Sending message to client %d.", incoming_msg.mtype);
@@ -110,7 +110,7 @@ void process_msg(int broker_ids, int resp_queue, int socket, int incoming_msg_qu
         return;
     }
 
-    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == ACK_DESTROY) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == ACK_DESTROY || msg->type == ACK_NO_MSG) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }
