@@ -135,7 +135,7 @@ int receive(int id, payload_t* payload) {
         return -1;
     }
 
-    log_info("Waiting response.");
+    log_info("Waiting response for id %d.", id);
     if (recv(id, &msg) < 0) {
         log_error("Error receiving response.");
         return -1;

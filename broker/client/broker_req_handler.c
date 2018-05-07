@@ -89,13 +89,15 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     } else {
         if (res == 0) {
             log_info("No new messages.");
+            incoming_msg.mtype = msg->mtype;
+            //TODO set new type ACK_NO_MESSAGE
         } else {
-            log_info("New message found.");
+            log_info("New message found: %s : %s", incoming_msg.payload.topic, incoming_msg.payload.msg);
         }
         incoming_msg.type = ACK_OK;
     }
 
-    log_info("Sending message to client.");
+    log_info("Sending message to client %d.", incoming_msg.mtype);
     if (sendmsg(resp_queue, &incoming_msg, sizeof(msg_t)) < 0) {
         log_error("Error sending incoming message to repsonse queue.");
     }

@@ -52,7 +52,7 @@ void process_publish(int broker_ids, int incoming_msg_queue, msg_t *msg) {
     int local_id = get_local_id(broker_ids, msg->mtype);
     msg->mtype = local_id;
 
-    log_debug("Adding message '%s', topic '%s' to incoming messages queue.", msg->payload.msg, msg->payload.topic);
+    log_debug("Adding message '%s', topic '%s' to incoming messages queue (id %d).", msg->payload.msg, msg->payload.topic, msg->mtype);
     if (sendmsg(incoming_msg_queue, msg, sizeof(msg_t)) < 0) {
         log_error("Error adding incoming message to queue.");
     }
