@@ -2,7 +2,6 @@
 // Created by gaston on 04/05/18.
 //
 
-#include <unistd.h>
 #include "../common/log/log.h"
 #include "broker.h"
 
@@ -24,6 +23,5 @@ int main(int argc, char* argv[]) {
 
     res = delbrk(mom);
     log_info("Delete result %d.", res);
-
 
 }

@@ -8,6 +8,8 @@
 #include "../common/ds/data-structures/list.h"
 #include "../common/ds/data-structures/vector.h"
 
+//TODO get new global_ids from DB instead from global_ids.h.
+
 int db_add_user(int id);
 
 int db_subscribe(int id, char* topic);

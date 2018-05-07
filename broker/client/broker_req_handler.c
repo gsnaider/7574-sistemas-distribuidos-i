@@ -67,6 +67,7 @@ pid_t create_broker_resp_handler(int socket_fd) {
         exit(-1);
     }
     if (pid == 0) {
+        //TODO see if we need to update 3 to 12.
         char socket_str[3];
         snprintf(socket_str, 3, "%d", socket_fd);
         execl("./broker_resp_handler", "./broker_resp_handler", socket_str, (char*)NULL);
