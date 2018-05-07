@@ -89,6 +89,7 @@ int send_to_subs(int global_ids, int resp_queue, msg_t msg) {
             res = -1;
             break;
         }
+        log_info("Sending message to subscribed user %d", sub_id);
         if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
             log_error("Error sending message to subscribed id %d", sub_id);
             res = -1;
@@ -116,9 +117,6 @@ void process_publish(int global_ids, int resp_queue, msg_t *msg) {
         msg->type = ACK_ERROR;
         return;
     }
-
-    //TODO test remove
-    sendmsg(resp_queue, msg, sizeof(msg_t));
 
     msg->type = ACK_OK;
 }

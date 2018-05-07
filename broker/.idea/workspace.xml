@@ -18,8 +18,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0ba66d1-bb3e-4967-93ed-487a2f9a4e9b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/test_client.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/test_client.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/db.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/db.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/worker.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/worker.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,8 +36,8 @@
       <file leaf-file-name="worker.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/worker.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1273">
-              <caret line="67" column="4" selection-start-line="67" selection-start-column="4" selection-end-line="67" selection-end-column="4" />
+            <state relative-caret-position="426">
+              <caret line="120" selection-start-line="120" selection-end-line="120" />
               <folding>
                 <element signature="e#42#61#0" expanded="true" />
               </folding>
@@ -70,11 +71,11 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file leaf-file-name="db.c" pinned="false" current-in-tab="true">
+      <file leaf-file-name="db.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/db.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="188" selection-start-line="188" selection-end-line="188" />
+            <state relative-caret-position="425">
+              <caret line="202" column="13" selection-start-line="202" selection-start-column="13" selection-end-line="202" selection-end-column="13" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
@@ -94,13 +95,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_client.c" pinned="false" current-in-tab="false">
+      <file leaf-file-name="test_client.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/test_client.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
+            <state relative-caret-position="426">
+              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
               <folding>
-                <element signature="e#41#71#0" expanded="true" />
+                <element signature="e#41#60#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,11 +157,11 @@
       <find>list</find>
       <find>each</find>
       <find>subscribed</find>
-      <find>TODO</find>
       <find>printf</find>
       <find>snpri</find>
       <find>create_file</find>
       <find>fopen</find>
+      <find>TODO</find>
     </findStrings>
     <replaceStrings>
       <replace>stdout</replace>
@@ -215,11 +216,11 @@
         <option value="$PROJECT_DIR$/server/global_id.c" />
         <option value="$PROJECT_DIR$/client/broker_resp_handler.c" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
-        <option value="$PROJECT_DIR$/server/worker.c" />
         <option value="$PROJECT_DIR$/server/db.h" />
         <option value="$PROJECT_DIR$/client/broker_req_handler.c" />
-        <option value="$PROJECT_DIR$/client/test_client.c" />
         <option value="$PROJECT_DIR$/server/db.c" />
+        <option value="$PROJECT_DIR$/server/worker.c" />
+        <option value="$PROJECT_DIR$/client/test_client.c" />
       </list>
     </option>
   </component>
@@ -348,12 +349,12 @@
       <workItem from="1525550346180" duration="3350000" />
       <workItem from="1525577967810" duration="15092000" />
       <workItem from="1525629748896" duration="15833000" />
-      <workItem from="1525705751422" duration="1739000" />
+      <workItem from="1525705751422" duration="2762000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="104152000" />
+    <option name="totallyTimeSpent" value="105175000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -361,11 +362,12 @@
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24959569" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" weight="0.32854208" />
+      <window_info active="true" anchor="bottom" id="Messages" order="7" visible="true" weight="0.32854208" />
       <window_info anchor="bottom" id="CMake" order="7" weight="0.32786885" />
       <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.50026953" side_tool="true" weight="0.3295688" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32854208" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49973047" visible="true" weight="0.3295688" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49973047" weight="0.3295688" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -377,7 +379,6 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" x="0" y="0" width="414" height="892" id="Documentation" order="3" side_tool="true" weight="0.22964959" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32854208" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -427,6 +428,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
           <caret line="25" column="20" selection-start-line="25" selection-start-column="20" selection-end-line="25" selection-end-column="20" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -560,6 +564,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
           <caret line="37" column="8" selection-start-line="37" selection-start-column="8" selection-end-line="37" selection-end-column="8" />
+          <folding>
+            <element signature="e#41#61#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -574,6 +581,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="684">
           <caret line="36" column="1" selection-start-line="36" selection-start-column="1" selection-end-line="36" selection-end-column="1" />
+          <folding>
+            <element signature="e#41#61#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -581,6 +591,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1577">
           <caret line="83" column="22" selection-start-line="83" selection-start-column="22" selection-end-line="83" selection-end-column="22" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -616,6 +629,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="387">
           <caret line="179" column="16" selection-start-line="179" selection-start-column="16" selection-end-line="179" selection-end-column="16" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -623,6 +639,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="54" column="56" lean-forward="true" selection-start-line="54" selection-start-column="56" selection-end-line="54" selection-end-column="56" />
+          <folding>
+            <element signature="e#42#61#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -671,6 +690,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
           <caret line="69" column="48" selection-start-line="69" selection-start-column="48" selection-end-line="69" selection-end-column="48" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -680,26 +702,6 @@
           <caret line="120" selection-start-line="120" selection-end-line="120" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/worker.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1273">
-          <caret line="67" column="4" selection-start-line="67" selection-start-column="4" selection-end-line="67" selection-end-column="4" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/test_client.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="2" selection-start-line="2" selection-start-column="2" selection-end-line="2" selection-end-column="2" />
-          <folding>
-            <element signature="e#41#71#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -716,8 +718,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/db.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="188" selection-start-line="188" selection-end-line="188" />
+        <state relative-caret-position="425">
+          <caret line="202" column="13" selection-start-line="202" selection-start-column="13" selection-end-line="202" selection-end-column="13" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/worker.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="120" selection-start-line="120" selection-end-line="120" />
+          <folding>
+            <element signature="e#42#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/test_client.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
           </folding>

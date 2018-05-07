@@ -120,7 +120,7 @@ static int append_to_file(char *path, char *str) {
 }
 
 int db_add_user(int id) {
-    log_debug("Adding user %d to DB.", id);
+    log_info("Adding user %d to DB.", id);
     if (create_users_dir_if_not_exists() < 0) {
         return -1;
     }
@@ -134,7 +134,7 @@ int db_add_user(int id) {
 }
 
 int db_subscribe(int id, char *topic) {
-    log_debug("Subscribing user %d to topic '%s'.", id, topic);
+    log_info("Subscribing user %d to topic '%s'.", id, topic);
     if (create_topics_dir_if_not_exists() < 0) {
         return -1;
     }
@@ -187,18 +187,20 @@ int db_get_subscribed(char *topic, vector *subscribed) {
     ssize_t read;
     size_t len = 0;
     while ((read = getline(&line, &len, file)) != -1) {
-    
-
+        int sub_id = (int) strtol(line, (char **)NULL, 10);
+        log_info("Found id '%d' subscribed to topic '%s'", sub_id, topic);
+        vector_add(subscribed, &sub_id);
     }
     fclose(file);
-    if (line)
+    if (line) {
         free(line);
+    }
 
     return 0;
 }
 
 int db_delete(int id) {
-    log_debug("Deleting user %d from DB.", id);
+    log_info("Deleting user %d from DB.", id);
     //TODO
     return 0;
 }
