@@ -166,10 +166,34 @@ int db_subscribe(int id, char *topic) {
     return 0;
 }
 
-// Returns list of ids (ints)
 int db_get_subscribed(char *topic, vector *subscribed) {
     log_debug("Getting subscribed users to topic '%s'.", topic);
-    //TODO add subscribed users to list.
+
+    char topic_path[strlen(TOPICS_DIR) + strlen(topic) + 1];
+    get_topic_path(topic, topic_path);
+    if (!file_exists(topic_path)) {
+        log_info("No subscribed users for topic '%s'.", topic);
+        return 0;
+    }
+
+    log_debug("Opening file %s for reading.", topic_path);
+    FILE* file = fopen(topic_path, "r");
+    if (file == NULL) {
+        log_error("Error opening file %s for reading.", topic_path);
+        return -1;
+    }
+
+    char* line = NULL;
+    ssize_t read;
+    size_t len = 0;
+    while ((read = getline(&line, &len, file)) != -1) {
+    
+
+    }
+    fclose(file);
+    if (line)
+        free(line);
+
     return 0;
 }
 
