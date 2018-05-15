@@ -3,13 +3,14 @@
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
       <config projectName="broker" targetName="test_client_read" />
-      <config projectName="broker" targetName="worker" />
-      <config projectName="broker" targetName="req_handler" />
-      <config projectName="broker" targetName="broker_req_handler" />
       <config projectName="broker" targetName="test_client_write" />
       <config projectName="broker" targetName="server" />
       <config projectName="broker" targetName="broker_resp_handler" />
+      <config projectName="broker" targetName="broker_req_handler" />
+      <config projectName="broker" targetName="req_handler" />
       <config projectName="broker" targetName="resp_handler" />
+      <config projectName="broker" targetName="worker" />
+      <config projectName="broker" targetName="client" />
     </generated>
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
@@ -19,7 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0ba66d1-bb3e-4967-93ed-487a2f9a4e9b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/client/test_client_read.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/test_client_read.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,7 +37,7 @@
       <file leaf-file-name="worker.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/worker.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2090">
+            <state relative-caret-position="560">
               <caret line="110" selection-start-line="110" selection-end-line="110" />
               <folding>
                 <element signature="e#42#61#0" expanded="true" />
@@ -44,14 +46,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test_client_read.c" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test_client_read.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="42" column="15" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
+            <state relative-caret-position="464">
+              <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="client.c" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/client.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+              <folding>
+                <element signature="e#41#61#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -72,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/client/broker_req_handler.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="312">
-              <caret line="92" column="23" lean-forward="true" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
+              <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
@@ -83,8 +106,8 @@
       <file leaf-file-name="broker.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/broker.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2793">
-              <caret line="147" column="5" selection-start-line="147" selection-start-column="5" selection-end-line="147" selection-end-column="5" />
+            <state relative-caret-position="133">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -116,8 +139,8 @@
       <file leaf-file-name="db.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/db.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4484">
-              <caret line="236" column="6" selection-start-line="236" selection-start-column="6" selection-end-line="236" selection-end-column="6" />
+            <state relative-caret-position="351">
+              <caret line="222" column="21" selection-start-line="222" selection-start-column="21" selection-end-line="222" selection-end-column="59" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
@@ -180,7 +203,6 @@
         <option value="$PROJECT_DIR$/common/log.h" />
         <option value="$PROJECT_DIR$/common/log.c" />
         <option value="$PROJECT_DIR$/client/client.h" />
-        <option value="$PROJECT_DIR$/client/client.c" />
         <option value="$PROJECT_DIR$/common/ipc/semaphore.h" />
         <option value="$PROJECT_DIR$/common/ipc/semaphore.c" />
         <option value="$PROJECT_DIR$/client/constants.h" />
@@ -208,7 +230,6 @@
         <option value="$PROJECT_DIR$/common/ipc/msg_queue.c" />
         <option value="$PROJECT_DIR$/common/ipc/socket.c" />
         <option value="$PROJECT_DIR$/client/test_client.c" />
-        <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/client/broker_resp_handler.c" />
         <option value="$PROJECT_DIR$/server/db.h" />
         <option value="$PROJECT_DIR$/server/global_id.h" />
@@ -221,6 +242,8 @@
         <option value="$PROJECT_DIR$/server/req_handler.c" />
         <option value="$PROJECT_DIR$/client/broker_req_handler.c" />
         <option value="$PROJECT_DIR$/client/test_client_read.c" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/client/client.c" />
       </list>
     </option>
   </component>
@@ -340,11 +363,12 @@
   </component>
   <component name="RunManager" selected="Application.Build All">
     <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" EXPLICIT_BUILD_TARGET_NAME="all" />
-    <configuration name="broker_req_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="broker_req_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" />
-    <configuration name="broker_resp_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="broker_resp_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" />
-    <configuration name="req_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="req_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" />
-    <configuration name="resp_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="resp_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" />
-    <configuration name="server" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="server" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" />
+    <configuration name="broker_req_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="broker_req_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="broker_req_handler" />
+    <configuration name="broker_resp_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="broker_resp_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="broker_resp_handler" />
+    <configuration name="client" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="client" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="client" />
+    <configuration name="req_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="req_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="req_handler" />
+    <configuration name="resp_handler" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="resp_handler" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="resp_handler" />
+    <configuration name="server" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="server" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="server" />
     <configuration name="test_client_read" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="test_client_read" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_read" />
     <configuration name="test_client_write" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="test_client_write" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="test_client_write" />
     <configuration name="worker" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="broker" TARGET_NAME="worker" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="broker" RUN_TARGET_NAME="worker" />
@@ -352,6 +376,7 @@
       <item itemvalue="Application.Build All" />
       <item itemvalue="Application.broker_req_handler" />
       <item itemvalue="Application.broker_resp_handler" />
+      <item itemvalue="Application.client" />
       <item itemvalue="Application.req_handler" />
       <item itemvalue="Application.resp_handler" />
       <item itemvalue="Application.server" />
@@ -385,12 +410,12 @@
       <workItem from="1525719481787" duration="417000" />
       <workItem from="1526335788117" duration="869000" />
       <workItem from="1526337410933" duration="23000" />
-      <workItem from="1526404477082" duration="1042000" />
+      <workItem from="1526404477082" duration="2729000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="114964000" />
+    <option name="totallyTimeSpent" value="116651000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -432,16 +457,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/db.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2413">
-          <caret line="127" column="31" lean-forward="true" selection-start-line="127" selection-start-column="31" selection-end-line="127" selection-end-column="31" />
-          <folding>
-            <element signature="e#41#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/common/ipc/msg_queue.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="209">
@@ -672,13 +687,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" column="24" selection-start-line="23" selection-start-column="24" selection-end-line="23" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/global_id.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
@@ -700,26 +708,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/db.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4484">
-          <caret line="236" column="6" selection-start-line="236" selection-start-column="6" selection-end-line="236" selection-end-column="6" />
-          <folding>
-            <element signature="e#41#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/worker.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2090">
-          <caret line="110" selection-start-line="110" selection-end-line="110" />
-          <folding>
-            <element signature="e#42#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/test_client_write.c">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -737,20 +725,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/broker.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2793">
-          <caret line="147" column="5" selection-start-line="147" selection-start-column="5" selection-end-line="147" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/broker_req_handler.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="312">
-          <caret line="92" column="23" lean-forward="true" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
+          <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
           </folding>
@@ -767,12 +745,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/worker.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="110" selection-start-line="110" selection-end-line="110" />
+          <folding>
+            <element signature="e#42#61#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="42" column="15" selection-start-line="42" selection-start-column="15" selection-end-line="42" selection-end-column="15" />
+        <state relative-caret-position="464">
+          <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/broker.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/db.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="351">
+          <caret line="222" column="21" selection-start-line="222" selection-start-column="21" selection-end-line="222" selection-end-column="59" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/client.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+          <folding>
+            <element signature="e#41#61#0" expanded="true" />
           </folding>
         </state>
       </provider>
