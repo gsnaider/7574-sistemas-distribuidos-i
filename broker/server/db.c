@@ -16,6 +16,11 @@
 #define TOPICS_DIR "../db/topics/"
 #define INT_MAX_LENGTH 12
 
+#define DB_SEM 11
+//TODO (optional) init sem (add new db_create and db_destroy)
+//TODO (optional) use sem for accesing files.
+// This is just in case there are multiple workers.
+
 
 static bool file_exists(char *path) {
     return (access(path, F_OK) != -1);
@@ -119,18 +124,46 @@ static int append_to_file(char *path, char *str) {
     return 0;
 }
 
-int db_add_user(int id) {
-    log_info("Adding user %d to DB.", id);
+int get_next_id() {
+    int max_id = 0;
+    DIR *dir;
+    struct dirent *ent;
+    if ((dir = opendir (USERS_DIR)) != NULL) {
+        while ((ent = readdir (dir)) != NULL) {
+            log_debug("Directory found: %s", ent->d_name);
+            int sub_id = (int) strtol(ent->d_name, (char **)NULL, 10);
+            if (sub_id > max_id) {
+                max_id = sub_id;
+            }
+        }
+        closedir (dir);
+    } else {
+        log_error("Error opening users directory.");
+        return -1;
+    }
+    return max_id + 1;
+}
+
+int db_add_user() {
+    log_info("Adding user to DB.");
     if (create_users_dir_if_not_exists() < 0) {
         return -1;
     }
+
+    int id = get_next_id();
+    if (id < 0) {
+        log_error("Error generating new user id.");
+        return -1;
+    }
+    log_info("New user id: %d", id);
+
     char path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, path);
     if (create_file(path) < 0) {
         return -1;
     }
     log_debug("User %d added to DB.", id);
-    return 0;
+    return id;
 }
 
 int db_subscribe(int id, char *topic) {

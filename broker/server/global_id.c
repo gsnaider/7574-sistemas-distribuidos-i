@@ -9,10 +9,7 @@
 #include "../common/ipc/shm.h"
 
 #define GLOBAL_IDS_SHM 8
-#define NEXT_GLOBAL_ID_SHM 9
 #define GLOBAL_IDS_SEM 10
-
-#define INITIAL_ID 1
 
 int global_ids_create() {
     int sem = creasem(GLOBAL_IDS_SEM);
@@ -21,15 +18,6 @@ int global_ids_create() {
         exit(-1);
     }
     inisem(sem, 1);
-
-    int next_id_shm = creashm(NEXT_GLOBAL_ID_SHM, sizeof(int));
-    if (next_id_shm < 0) {
-        log_error("Error creating next global id shm.");
-        exit(-1);
-    }
-    int* next_id = shm_map(next_id_shm);
-    *next_id = INITIAL_ID;
-    shm_unmap(next_id);
 
     int ids_shm = creashm(GLOBAL_IDS_SHM, sizeof(global_ids_t));
     if (ids_shm < 0) {
@@ -48,26 +36,13 @@ int global_ids_get() {
     return ids_shm;
 }
 
-static int next_global_id(int* next_id) {
-    int id = *next_id;
-    *next_id = id + 1;
-    return id;
-}
-
-int add_global_id(int global_ids, int mtype) {
-    log_debug("Attempting to add global id with mtype %d.", mtype);
+int add_global_id(int global_ids, int global_id, int mtype) {
+    log_debug("Attempting to add global id %d with mtype %d.", global_id, mtype);
     int sem = getsem(GLOBAL_IDS_SEM);
     if (sem < 0) {
         log_error("Error getting global ids sem.");
         return -1;
     }
-
-    int next_id_shm = getshm(NEXT_GLOBAL_ID_SHM);
-    if (next_id_shm < 0) {
-        log_error("Error getting next global id shm.");
-        return -1;
-    }
-    int* next_id = shm_map(next_id_shm);
 
     global_ids_t* ids = shm_map(global_ids);
 
@@ -79,7 +54,7 @@ int add_global_id(int global_ids, int mtype) {
     }
 
     global_id_t id;
-    id.global_id = next_global_id(next_id);
+    id.global_id = global_id;
     id.mtype = mtype;
     ids->ids[ids->count] = id;
     ids->count = ids->count + 1;
@@ -168,12 +143,6 @@ int global_ids_destroy(int id) {
     int sem = getsem(GLOBAL_IDS_SEM);
     if (delsem(sem) < 0) {
         log_error("Error deleting global ids sem");
-        res = -1;
-    }
-
-    int next_id_shm = getshm(NEXT_GLOBAL_ID_SHM);
-    if (delshm(next_id_shm) < 0) {
-        log_error("Error deleting next global id shm");
         res = -1;
     }
 

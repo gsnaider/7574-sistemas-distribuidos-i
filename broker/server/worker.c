@@ -44,14 +44,18 @@ int get_resp_queue() {
 }
 
 void process_create(int global_ids, msg_t *msg) {
-    msg->global_id = add_global_id(global_ids, msg->mtype);
+    msg->global_id = db_add_user();
     if (msg->global_id < 0) {
-        log_error("Error adding new global id for mtype %d.", msg->mtype);
+        log_error("Error adding user to db.");
+        msg->type = ACK_ERROR;
+        return;
+    }
+    if (add_global_id(global_ids, msg->global_id, msg->mtype) < 0) {
+        log_error("Error adding new global id %d for mtype %d.", msg->global_id, msg->mtype);
         msg->type = ACK_ERROR;
         return;
     }
 
-    db_add_user(msg->global_id);
 
     msg->type = ACK_CREATE;
 }
@@ -65,7 +69,11 @@ void process_subscribe(int global_ids, msg_t *msg) {
         return;
     }
 
-    db_subscribe(msg->global_id, msg->payload.topic);
+    if (db_subscribe(msg->global_id, msg->payload.topic) < 0) {
+        log_error("Error subscribing user %d to topic %s", msg->global_id, msg->payload.topic);
+        msg->type = ACK_ERROR;
+        return;
+    }
 
     msg->type = ACK_OK;
 }
@@ -102,6 +110,8 @@ int send_to_subs(int global_ids, int resp_queue, msg_t msg) {
 }
 
 void process_publish(int global_ids, int resp_queue, msg_t *msg) {
+
+    log_info("Message received: %s : %s", msg->payload.topic, msg->payload.msg);
 
     msg->global_id = msg->mtype;
     msg->mtype = get_mtype(global_ids, msg->global_id);

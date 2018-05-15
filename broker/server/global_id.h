@@ -23,7 +23,7 @@ int global_ids_create();
 
 int global_ids_get();
 
-int add_global_id(int global_ids, int mtype);
+int add_global_id(int global_ids, int global_id, int mtype);
 
 int get_mtype(int global_ids, int global_id);
 
