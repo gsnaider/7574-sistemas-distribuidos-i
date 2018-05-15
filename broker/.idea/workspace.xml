@@ -19,7 +19,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0ba66d1-bb3e-4967-93ed-487a2f9a4e9b" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/client/broker.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/broker_req_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/broker_req_handler.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/test_client_read.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/test_client_read.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/message.h" beforeDir="false" afterPath="$PROJECT_DIR$/common/message.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/req_handler.c" beforeDir="false" afterPath="$PROJECT_DIR$/server/req_handler.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -48,7 +52,7 @@
         <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="385">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+              <caret line="23" selection-start-line="23" selection-end-line="23" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
@@ -71,8 +75,8 @@
       <file leaf-file-name="broker_req_handler.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/broker_req_handler.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="559">
-              <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+            <state relative-caret-position="160">
+              <caret line="84" column="45" selection-start-line="84" selection-start-column="45" selection-end-line="84" selection-end-column="45" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
@@ -385,12 +389,12 @@
       <workItem from="1525719481787" duration="417000" />
       <workItem from="1526335788117" duration="869000" />
       <workItem from="1526337410933" duration="23000" />
-      <workItem from="1526404477082" duration="814000" />
+      <workItem from="1526404477082" duration="955000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="114736000" />
+    <option name="totallyTimeSpent" value="114877000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -760,7 +764,7 @@
     <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="385">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
           </folding>
@@ -769,8 +773,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/broker_req_handler.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="559">
-          <caret line="176" lean-forward="true" selection-start-line="176" selection-end-line="176" />
+        <state relative-caret-position="160">
+          <caret line="84" column="45" selection-start-line="84" selection-start-column="45" selection-end-line="84" selection-end-column="45" />
           <folding>
             <element signature="e#41#60#0" expanded="true" />
           </folding>

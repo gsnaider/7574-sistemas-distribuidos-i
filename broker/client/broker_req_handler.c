@@ -82,16 +82,22 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Checking for incoming messages.");
 
     msg_t incoming_msg;
-    // TODO This causes broer_req_handler to block until a new message arrives.
+    // TODO If we recv with block, it'd cause broer_req_handler to block until a new message arrives.
     // Other clients cant use broker_req_handler until it is unlocked..
     // Maybe fork another process for waiting messages.
-    int res = rcvmsg(incoming_msg_queue, &incoming_msg, sizeof(msg_t), msg->mtype);
+    int res = rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), msg->mtype);
     if ( res < 0) {
         log_error("Error receiving incoming message.");
         incoming_msg.type = ACK_ERROR;
     } else {
-        log_info("New message found: %s : %s", incoming_msg.payload.topic, incoming_msg.payload.msg);
-        incoming_msg.type = ACK_OK;
+        if (res == 0) {
+            log_info("No new messages.");
+            incoming_msg.mtype = msg->mtype;
+            incoming_msg.type = ACK_NO_MSG;
+        } else {
+            log_info("New message found: %s : %s", incoming_msg.payload.topic, incoming_msg.payload.msg);
+            incoming_msg.type = ACK_OK;
+        }
     }
 
     log_info("Sending message to client %d.", incoming_msg.mtype);
@@ -107,7 +113,7 @@ void process_msg(int broker_ids, int resp_queue, int socket, int incoming_msg_qu
         return;
     }
 
-    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == ACK_DESTROY) {
+    if (msg->type == ACK_OK || msg->type == ACK_ERROR || msg->type == ACK_CREATE || msg->type == ACK_DESTROY || msg->type == ACK_NO_MSG) {
         log_error("Unexpected msg type received: %d", msg->type);
         return;
     }

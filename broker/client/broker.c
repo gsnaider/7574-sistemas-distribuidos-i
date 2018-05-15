@@ -145,6 +145,9 @@ int receive(int id, payload_t* payload) {
         log_info("Receive successful: new message found.");
         *payload = msg.payload;
         return 1;
+    } else if (msg.type == ACK_NO_MSG) {
+        log_info("Receive successful: no new messages.");
+        return 0;
     } else if (msg.type == ACK_ERROR) {
         log_error("Error on receive.");
         return -1;
