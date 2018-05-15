@@ -82,6 +82,9 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Checking for incoming messages.");
 
     msg_t incoming_msg;
+    // TODO This causes broer_req_handler to block until a new message arrives.
+    // Other clients cant use broker_req_handler until it is unlocked..
+    // Maybe fork another process for waiting messages.
     int res = rcvmsg(incoming_msg_queue, &incoming_msg, sizeof(msg_t), msg->mtype);
     if ( res < 0) {
         log_error("Error receiving incoming message.");
