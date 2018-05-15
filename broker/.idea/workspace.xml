@@ -20,8 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0ba66d1-bb3e-4967-93ed-487a2f9a4e9b" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/client.c" beforeDir="false" afterPath="$PROJECT_DIR$/client/client.c" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -49,8 +48,8 @@
       <file leaf-file-name="test_client_read.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="464">
-              <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
+            <state relative-caret-position="426">
+              <caret line="47" column="39" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="47" selection-end-column="39" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
               </folding>
@@ -61,20 +60,11 @@
       <file leaf-file-name="client.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/client.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+            <state relative-caret-position="502">
+              <caret line="71" selection-start-line="71" selection-end-line="71" />
               <folding>
                 <element signature="e#41#61#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -98,18 +88,6 @@
               <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
               <folding>
                 <element signature="e#41#60#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="broker.c" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/broker.c">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -410,12 +388,12 @@
       <workItem from="1525719481787" duration="417000" />
       <workItem from="1526335788117" duration="869000" />
       <workItem from="1526337410933" duration="23000" />
-      <workItem from="1526404477082" duration="2729000" />
+      <workItem from="1526404477082" duration="3117000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="116651000" />
+    <option name="totallyTimeSpent" value="117039000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
@@ -725,16 +703,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/broker_req_handler.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="312">
-          <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
-          <folding>
-            <element signature="e#41#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/req_handler.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="559">
@@ -745,39 +713,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/worker.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="560">
           <caret line="110" selection-start-line="110" selection-end-line="110" />
           <folding>
             <element signature="e#42#61#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="464">
-          <caret line="40" column="14" selection-start-line="40" selection-start-column="14" selection-end-line="40" selection-end-column="14" />
-          <folding>
-            <element signature="e#41#60#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/broker.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -792,10 +733,47 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/client/broker_req_handler.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="312">
+          <caret line="92" column="23" selection-start-line="92" selection-start-column="23" selection-end-line="92" selection-end-column="23" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/broker.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="199">
+          <caret line="93" column="4" selection-start-line="93" selection-start-column="4" selection-end-line="93" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="49" column="35" selection-start-line="49" selection-start-column="35" selection-end-line="49" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/test_client_read.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="426">
+          <caret line="47" column="39" lean-forward="true" selection-start-line="45" selection-start-column="5" selection-end-line="47" selection-end-column="39" />
+          <folding>
+            <element signature="e#41#60#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/client.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
+        <state relative-caret-position="502">
+          <caret line="71" selection-start-line="71" selection-end-line="71" />
           <folding>
             <element signature="e#41#61#0" expanded="true" />
           </folding>

@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "../common/log/log.h"
+#include "broker.h"
 
 bool quit = false;
 
@@ -16,17 +17,22 @@ static int read_option() {
     return option;
 }
 
-static void client_subscribe() {
-    printf("\nSubscribe to topic (blank for cancelling): ");
+
+
+static void client_subscribe(int mom) {
+    char topic[MAX_TOPIC_LENGTH];
+    printf("\nSubscribe to topic: ");
+    scanf("%s", topic);
+    subscribe(mom, topic);
 }
 
-static void client_send() {
-    printf("\nTopic (blank for cancelling): ");
-    printf("\nMessage (blank for cancelling): ");
+static void client_send(int mom) {
+    printf("\nTopic: ");
+    printf("\nMessage: ");
     //TODO
 }
 
-static void client_receive() {
+static void client_receive(int mom) {
     printf("\nLooking for messages...");
     //TODO
 }
@@ -34,9 +40,11 @@ static void client_receive() {
 int main(int argc, char* argv[]) {
 
     log_info("Starting client.");
+    int mom = creabrk();
+    log_info("mom created: %d", mom);
 
+    printf("\n\nWelcome to the message queue client!\n\n");
     while (!quit) {
-        printf("\nWelcome to the message queue client!\n\n");
         printf("1. Subscribe\n");
         printf("2. Send\n");
         printf("3. Receive\n");
@@ -44,13 +52,13 @@ int main(int argc, char* argv[]) {
 
         int option = read_option();
         if (option == 1) {
-            client_subscribe();
+            client_subscribe(mom);
         } else
         if (option == 2) {
-            client_send();
+            client_send(mom);
         } else
         if (option == 3) {
-            client_receive();
+            client_receive(mom);
         } else
         if (option == 4) {
             printf("Goodbye\n");
@@ -60,4 +68,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    log_info("Stopping read client.");
+    log_info("Deleting mom.");
+    log_info("Delete result %d.", delbrk(mom));
 }
