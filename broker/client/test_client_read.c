@@ -28,19 +28,14 @@ int main(int argc, char* argv[]) {
     int mom = creabrk();
     log_info("mom created: %d", mom);
 
-    int res = subscribe(mom, "Avengers");
+    int res = subscribe(mom, "marvel");
     log_info("Subscribed result %d.", res);
 
     while (!graceful_quit) {
         payload_t payload;
         res = receive(mom, &payload);
         log_info("Receive result %d.", res);
-        if (res > 0) {
-            log_info("Message received on topic '%s' : '%s'", payload.topic, payload.msg);
-        } else if (res == 0) {
-            log_info("No new messages.");
-        }
-        sleep(10);
+        log_info("Message received on topic '%s' : '%s'", payload.topic, payload.msg);
     }
 
     log_info("Stopping read client.");
