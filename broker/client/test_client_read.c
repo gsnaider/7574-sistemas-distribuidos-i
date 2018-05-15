@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
         } else if (res == 0) {
             log_info("No new messages.");
         }
-        sleep(10);
+        sleep(3);
     }
 
     log_info("Stopping read client.");
