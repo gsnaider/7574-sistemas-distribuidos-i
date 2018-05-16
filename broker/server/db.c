@@ -17,11 +17,7 @@
 #define TMP_FILE "../db/topics/topic_tmp"
 #define INT_MAX_LENGTH 12
 
-#define DB_SEM 11
-//TODO (optional) init sem (add new db_create and db_destroy)
-//TODO (optional) use sem for accesing files.
-// This is just in case there are multiple workers.
-
+//TODO (optional) use semaphore for managing DB in case there are multiple workers.
 
 static bool file_exists(char *path) {
     return (access(path, F_OK) != -1);

@@ -3,16 +3,26 @@
 //
 
 #include <stdbool.h>
+#include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include "../common/log/log.h"
 #include "broker.h"
 
 bool quit = false;
 
+static void read_input(char* buffer, int max_size) {
+    fgets(buffer, max_size, stdin);
+    //Remove trailing newline char.
+    if (strlen(buffer) > 0 && buffer[strlen(buffer) - 1] == '\n') {
+        buffer[strlen(buffer) - 1] = '\0';
+    }
+}
+
 static int read_option() {
     char buffer[10];
-    scanf("%s", buffer);
+    read_input(buffer, 10);
     int option = (int) strtol(buffer, (char **)NULL, 10);;
     return option;
 }
@@ -20,19 +30,18 @@ static int read_option() {
 static void client_subscribe(int mom) {
     char topic[MAX_TOPIC_LENGTH];
     printf("\nSubscribe to topic: ");
-    scanf("%s", topic);
+    read_input(topic, MAX_TOPIC_LENGTH);
     subscribe(mom, topic);
 }
 
 static void client_send(int mom) {
     char topic[MAX_TOPIC_LENGTH];
     printf("\nTopic: ");
-    scanf("%s", topic);
+    read_input(topic, MAX_TOPIC_LENGTH);
 
     char message[MAX_MSG_LENGTH];
-    printf("\nMessage: ");
-    //TODO allow spaces.
-    scanf("%s", message);
+    printf("Message: ");
+    read_input(message, MAX_MSG_LENGTH);
 
     publish(mom, message, topic);
 }
@@ -42,9 +51,9 @@ static void client_receive(int mom) {
     payload_t payload;
     int res = receive(mom, &payload);
     if (res > 0) {
-        printf("Message received on topic '%s' : '%s'\n", payload.topic, payload.msg);
+        printf("\nMessage received on topic '%s' : '%s'\n", payload.topic, payload.msg);
     } else if (res == 0) {
-        printf("No new messages.\n");
+        printf("\nNo new messages.\n");
     }
 }
 
