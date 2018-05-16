@@ -82,8 +82,8 @@ void process_receive(int resp_queue, int incoming_msg_queue, msg_t *msg) {
     log_info("Checking for incoming messages.");
 
     msg_t incoming_msg;
-    // TODO If we recv with block, it'd cause broer_req_handler to block until a new message arrives.
-    // Other clients cant use broker_req_handler until it is unlocked..
+    // TODO (optional) If we do a blocking receive, it'd cause broker_req_handler to block until a new message arrives.
+    // Other clients won't be able to use broker_req_handler until it is unlocked..
     // Maybe fork another process for waiting messages.
     int res = rcvmsg_no_wait(incoming_msg_queue, &incoming_msg, sizeof(msg_t), msg->mtype);
     if ( res < 0) {

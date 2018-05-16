@@ -14,7 +14,7 @@
 #define BASE_DB_DIR "../db/"
 #define USERS_DIR "../db/users/"
 #define TOPICS_DIR "../db/topics/"
-#define TMP_FILE "/tmp/topic_tmp"
+#define TMP_FILE "../db/topics/topic_tmp"
 #define INT_MAX_LENGTH 12
 
 #define DB_SEM 11
@@ -42,10 +42,10 @@ static int create_file(char *path) {
 
 static int create_file_if_not_exists(char *path) {
     if (!file_exists(path)) {
-        log_debug("File %s does not exist. Creating it.", path);
+        log_debug("File '%s' does not exist. Creating it.", path);
         return create_file(path);
     } else {
-        log_debug("File %s already exists.", path);
+        log_debug("File '%s' already exists.", path);
         return 0;
     }
 }
@@ -135,7 +135,7 @@ static int get_next_id() {
     struct dirent *ent;
     if ((dir = opendir (USERS_DIR)) != NULL) {
         while ((ent = readdir (dir)) != NULL) {
-            log_debug("Directory found: %s", ent->d_name);
+            log_debug("Directory found: '%s'", ent->d_name);
             int sub_id = (int) strtol(ent->d_name, (char **)NULL, 10);
             if (sub_id > max_id) {
                 max_id = sub_id;
@@ -160,19 +160,19 @@ int db_add_user() {
         log_error("Error generating new user id.");
         return -1;
     }
-    log_info("New user id: %d", id);
+    log_info("New user id: '%d'", id);
 
     char path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, path);
     if (create_file(path) < 0) {
         return -1;
     }
-    log_debug("User %d added to DB.", id);
+    log_debug("User '%d' added to DB.", id);
     return id;
 }
 
 int db_subscribe(int id, char *topic) {
-    log_info("Subscribing user %d to topic '%s'.", id, topic);
+    log_info("Subscribing user '%d' to topic '%s'.", id, topic);
     if (create_topics_dir_if_not_exists() < 0) {
         return -1;
     }
@@ -180,7 +180,7 @@ int db_subscribe(int id, char *topic) {
     char user_path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, user_path);
     if (!file_exists(user_path)) {
-        log_error("User file %s does not exist.", user_path);
+        log_error("User file '%s' does not exist.", user_path);
         return -1;
     }
 
@@ -200,7 +200,7 @@ int db_subscribe(int id, char *topic) {
         return -1;
     }
 
-    log_debug("User %d subscribed to topic '%s'.", id, topic);
+    log_debug("User '%d' subscribed to topic '%s'.", id, topic);
     return 0;
 }
 
@@ -214,10 +214,10 @@ int db_get_subscribed(char *topic, vector *subscribed) {
         return 0;
     }
 
-    log_debug("Opening file %s for reading.", topic_path);
+    log_debug("Opening file '%s' for reading.", topic_path);
     FILE* file = fopen(topic_path, "r");
     if (file == NULL) {
-        log_error("Error opening file %s for reading.", topic_path);
+        log_error("Error opening file '%s' for reading.", topic_path);
         return -1;
     }
 
@@ -237,36 +237,40 @@ int db_get_subscribed(char *topic, vector *subscribed) {
     return 0;
 }
 
-static int unsubscribe(int id, char *topic) {
-    log_info("Unsubscribing user %d from topic %s", id, topic);
+int unsubscribe(int id, char *topic) {
+    log_info("Unsubscribing user '%d' from topic '%s'", id, topic);
 
     char topic_path[strlen(TOPICS_DIR) + strlen(topic) + 1];
     get_topic_path(topic, topic_path);
     if (!file_exists(topic_path)) {
-        log_error("Topic file %s does not exist.", topic_path);
+        log_error("Topic file '%s' does not exist.", topic_path);
         return -1;
     }
 
-    log_debug("Opening file %s for reading.", topic_path);
+    log_debug("Opening file '%s' for reading.", topic_path);
     FILE* file = fopen(topic_path, "r");
-    log_debug("Opening file %s for writing.", TMP_FILE);
+    log_debug("Opening file '%s' for writing.", TMP_FILE);
     FILE* out_file = fopen(TMP_FILE, "w+");
 
     if (file == NULL) {
-        log_error("Error opening file %s for reading.", topic_path);
+        log_error("Error opening file '%s' for reading.", topic_path);
         return -1;
     }
     if (out_file == NULL) {
-        log_error("Error opening file %s for reading.", TMP_FILE);
+        log_error("Error opening file '%s' for reading.", TMP_FILE);
         return -1;
     }
 
     char* line = NULL;
-    ssize_t read;
+    ssize_t chars_read;
     size_t len = 0;
-    while ((read = getline(&line, &len, file)) != -1) {
+    while ((chars_read = getline(&line, &len, file)) != -1) {
         int sub_id = (int) strtol(line, (char **)NULL, 10);
         if (sub_id != id) {
+            //Remove trailing newline char
+            if (line[chars_read - 1] == '\n') {
+                line[chars_read - 1] = '\0';
+            }
             if (append_to_fd(out_file, line) < 0) {
                 log_error("Error appending '%s' to file '%s'", line, TMP_FILE);
                 fclose(file);
@@ -277,11 +281,10 @@ static int unsubscribe(int id, char *topic) {
     }
     fclose(file);
     fclose(out_file);
-    if (unlink(topic_path) < 0) {
-        log_error("Error deleting file '%s'", topic_path);
-        return -1;
+    if (line) {
+        free(line);
     }
-    if (!rename(TMP_FILE, topic_path)) {
+    if (rename(TMP_FILE, topic_path) < 0) {
         log_error("Error renaming file '%s' to '%s'", TMP_FILE, topic_path);
         return -1;
     }
@@ -290,26 +293,33 @@ static int unsubscribe(int id, char *topic) {
 }
 
 int db_delete(int id) {
-    log_info("Deleting user %d from DB.", id);
+    log_info("Deleting user '%d' from DB.", id);
     char user_path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, user_path);
     if (!file_exists(user_path)) {
-        log_error("User file %s does not exist.", user_path);
+        log_error("User file '%s' does not exist.", user_path);
         return -1;
     }
 
-    log_debug("Opening file %s for reading.", user_path);
+    log_debug("Opening file '%s' for reading.", user_path);
     FILE* file = fopen(user_path, "r");
     if (file == NULL) {
-        log_error("Error opening file %s for reading.", user_path);
+        log_error("Error opening file '%s' for reading.", user_path);
         return -1;
     }
 
     char* topic = NULL;
-    ssize_t read;
+    ssize_t chars_read;
     size_t len = 0;
-    while ((read = getline(&topic, &len, file)) != -1) {
-        unsubscribe(id, topic);
+    while ((chars_read = getline(&topic, &len, file)) != -1) {
+        //Remove trailing newline char
+        if (topic[chars_read - 1] == '\n') {
+            topic[chars_read - 1] = '\0';
+        }
+        if (unsubscribe(id, topic) < 0) {
+            log_error("Error unsubscribing user '%d' from topic '%s'", id, topic);
+            return -1;
+        }
     }
     fclose(file);
     if (topic) {
