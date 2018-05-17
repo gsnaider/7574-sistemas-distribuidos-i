@@ -47,7 +47,7 @@ static void client_send(int mom) {
 }
 
 static void client_receive(int mom) {
-    printf("\nLooking for messages...");
+    printf("\nLooking for messages...\n");
     payload_t payload;
     int res = receive(mom, &payload);
     if (res > 0) {
