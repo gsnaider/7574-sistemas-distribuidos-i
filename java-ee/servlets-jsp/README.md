@@ -41,7 +41,7 @@ Finalmente, deberiamos tener un proyecto creado con la siguiente estructura:
 <img src="./images/project-created.png" alt="Project created">
 
 ## 2. Crear el modelo
-El primer paso sera crear nuestro modelo de datos. Para esto, crear un nuevo paquete en el directorio `src` con el onmbre `com.example.model`, y dentro de este paquete crear una clase java con nombre `Greeting`. Esta clase tendra un unico atributo `message` de tipo `String`. Ademas, agregamos un constructor que reciba dicho parametro, y un getter.
+El primer paso sera crear nuestro modelo de datos. Para esto, crear un nuevo paquete en el directorio `src` con el nombre `com.example.model`, y dentro de este paquete crear una clase java con nombre `Greeting`. Esta clase tendra un unico atributo `message` de tipo `String`. Ademas, agregamos un constructor que reciba dicho parametro, y un getter.
 ```java
 package com.example.model;
 
@@ -70,10 +70,10 @@ import java.io.IOException;
 ```
 Luego debemos extender esta clase de `HttpServlet`, y overridear el metodo `doGet`
 ```java
-public class HelloWorldServlet extends HttpServlet throws ServletException, IOException  {
+public class HelloWorldServlet extends HttpServlet {
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
     }
 }
