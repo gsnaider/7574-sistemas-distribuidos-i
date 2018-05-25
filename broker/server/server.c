@@ -104,7 +104,7 @@ void kill_childs() {
     list_for_each(&childs, kill_child);
 }
 
-void safe_exit(int socket) {
+void safe_exit(int socket, int error) {
     log_info("Stopping server.");
 
     kill_childs();
@@ -122,6 +122,8 @@ void safe_exit(int socket) {
     if(close(socket) < 0) {
         log_error("Error closing server socket.");
     }
+
+    exit(error);
 }
 
 int main(int argc, char* argv[]) {
@@ -138,7 +140,7 @@ int main(int argc, char* argv[]) {
 
     int socket = create_server_socket(PORT);
     if (socket < 0) {
-        safe_exit(socket);
+        safe_exit(socket, -1);
     }
 
     while (!graceful_quit) {
@@ -151,7 +153,7 @@ int main(int argc, char* argv[]) {
         pid_t handler = fork();
         if (handler < 0) {
             log_error("Error forking handler.");
-            exit(-1);
+            safe_exit(socket, -1);
         }
         if (handler == 0) {
             if (close(socket) < 0) {
@@ -161,7 +163,7 @@ int main(int argc, char* argv[]) {
             snprintf(client_socket_str, 3, "%d", client_socket);
             execl("./req_handler", "./req_handler", client_socket_str, (char*)NULL);
             log_error("Error executing request handler.");
-            exit(-1);
+            safe_exit(socket, -1);
         }
         list_append(&childs, &handler);
         if (close(client_socket) < 0) {
@@ -169,6 +171,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    safe_exit(socket);
+    safe_exit(socket, 0);
 
 }
