@@ -87,7 +87,7 @@ view.forward(req, resp);
 ```
 Esto crea un objeto `Greeting` con el mensaje **_Hello World!_**, y seteamos este objeto como un atributo dentro del request, con la clave **_greeting_**. Luego, obtenemos del request un `RequestDispatcher` que representa la vista a la cual enviaremos el request, y luego llamamos a `view.forward` para redirigir el request a la vista.
 
-Por ultimo, debemos configurar la URL sobre la que estara escuchando el Servlet. Para eso, agregamos la siguiente Annotation sobre la cabezera de la clase:
+Por último, debemos configurar la URL sobre la que estara escuchando el Servlet. Para eso, agregamos la siguiente Annotation sobre la cabecera de la clase:
 ```java
 @WebServlet(urlPatterns = "/hello")
 public class HelloWorldServlet extends HttpServlet {
