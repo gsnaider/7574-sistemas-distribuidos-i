@@ -45,8 +45,6 @@ set(COMMON_DEPENDENCIES
 
 add_executable(broker_resp_handler client/broker_resp_handler.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
 add_executable(broker_req_handler client/broker_req_handler.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
-add_executable(test_client_write client/test_client_write.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
-add_executable(test_client_read client/test_client_read.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
 add_executable(client client/client.c ${COMMON_DEPENDENCIES} ${CLIENT_DEPENDENCIES})
 
 add_executable(server server/server.c server/server.h ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
