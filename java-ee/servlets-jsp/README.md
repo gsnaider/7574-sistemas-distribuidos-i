@@ -14,7 +14,7 @@ En IntelliJ, ir a **_File->New->Proyect_** y elegir la opcion **_Java Enterprise
 <img src="./images/new-project-1.png" alt="New project 1">
 
 
-Seleccionar el SDK 1.8, Java EE 9, y Tomcat 9. No es necesario ningun framework o libreria adicional.
+Seleccionar el SDK 1.8, Java EE 8, y Tomcat 9. No es necesario ningun framework o libreria adicional.
 
 En caso de no tener el SDK configurado, hacer click en **_New_** y elegir el directorio donde esta instalado Java.
 
