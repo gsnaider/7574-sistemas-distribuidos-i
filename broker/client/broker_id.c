@@ -43,7 +43,7 @@ int add_local_id(int broker_ids, int local_id) {
 
     broker_ids_t* ids = shm_map(broker_ids);
 
-    if (ids->count >= MAX_CLIENTS) {
+    if (ids->count >= MAX_LOCAL_CLIENTS) {
         log_warn("Client capacity reached. Can't add more clients.");
         return -1;
     }

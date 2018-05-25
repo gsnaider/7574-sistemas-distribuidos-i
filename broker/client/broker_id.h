@@ -15,7 +15,7 @@ typedef struct broker_id {
 
 typedef struct broker_ids {
     int count;
-    broker_id_t ids[MAX_CLIENTS];
+    broker_id_t ids[MAX_LOCAL_CLIENTS];
 } broker_ids_t;
 
 int broker_id_create();

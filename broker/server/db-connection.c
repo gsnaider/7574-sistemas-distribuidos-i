@@ -3,11 +3,11 @@
 //
 
 #include <memory.h>
+#include <unistd.h>
 #include "db-connection.h"
 #include "../common/log/log.h"
 #include "../common/ipc/socket.h"
 
-//TODO call when worker starts.
 int db_connect() {
     int db_socket = create_client_socket(DB_IP, DB_PORT);
     if (db_socket < 0) {
@@ -134,5 +134,12 @@ int db_delete(int db_socket, int id) {
         return -1;
     }
 
+    return 0;
+}
+
+int db_disconnect(int db_socket) {
+    if (close(db_socket) < 0) {
+        log_error("Error disconnecting from DB.");
+    }
     return 0;
 }

@@ -22,4 +22,6 @@ int db_get_subscribed(int db_socket, char* topic, vector* subscribed);
 
 int db_delete(int db_socket, int id);
 
+int db_disconnect(int db_socket);
+
 #endif //BROKER_DB_H

@@ -43,8 +43,8 @@ int get_resp_queue() {
     return resp_queue;
 }
 
-void process_create(int global_ids, msg_t *msg) {
-    msg->global_id = db_add_user();
+void process_create(int db_connection, int global_ids, msg_t *msg) {
+    msg->global_id = db_add_user(db_connection);
     if (msg->global_id < 0) {
         log_error("Error adding user to db.");
         msg->type = ACK_ERROR;
@@ -60,7 +60,7 @@ void process_create(int global_ids, msg_t *msg) {
     msg->type = ACK_CREATE;
 }
 
-void process_subscribe(int global_ids, msg_t *msg) {
+void process_subscribe(int db_connection, int global_ids, msg_t *msg) {
     msg->global_id = msg->mtype;
     msg->mtype = get_mtype(global_ids, msg->global_id);
     if (msg->mtype < 0) {
@@ -69,7 +69,7 @@ void process_subscribe(int global_ids, msg_t *msg) {
         return;
     }
 
-    if (db_subscribe(msg->global_id, msg->payload.topic) < 0) {
+    if (db_subscribe(db_connection, msg->global_id, msg->payload.topic) < 0) {
         log_error("Error subscribing user %d to topic %s", msg->global_id, msg->payload.topic);
         msg->type = ACK_ERROR;
         return;
@@ -78,11 +78,11 @@ void process_subscribe(int global_ids, msg_t *msg) {
     msg->type = ACK_OK;
 }
 
-int send_to_subs(int global_ids, int resp_queue, msg_t msg) {
+int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
     int res = 0;
     vector subscribed;
     vector_new(&subscribed, sizeof(int), NULL);
-    if (db_get_subscribed(msg.payload.topic, &subscribed) < 0) {
+    if (db_get_subscribed(db_connection, msg.payload.topic, &subscribed) < 0) {
         vector_destroy(&subscribed);
         log_error("Error getting subscribed users to topic '%s'.", msg.payload.topic);
         return -1;
@@ -109,7 +109,7 @@ int send_to_subs(int global_ids, int resp_queue, msg_t msg) {
 
 }
 
-void process_publish(int global_ids, int resp_queue, msg_t *msg) {
+void process_publish(int db_connection, int global_ids, int resp_queue, msg_t *msg) {
 
     log_info("Message received: %s : %s", msg->payload.topic, msg->payload.msg);
 
@@ -122,7 +122,7 @@ void process_publish(int global_ids, int resp_queue, msg_t *msg) {
     }
 
     // We send the msg (not a pointer) so as to not modify this one, which already has the global id of the sender.
-    if (send_to_subs(global_ids, resp_queue, *msg) < 0) {
+    if (send_to_subs(db_connection, global_ids, resp_queue, *msg) < 0) {
         log_error("Error sending message to subscribers.");
         msg->type = ACK_ERROR;
         return;
@@ -131,7 +131,7 @@ void process_publish(int global_ids, int resp_queue, msg_t *msg) {
     msg->type = ACK_OK;
 }
 
-void process_destroy(int global_ids, msg_t *msg) {
+void process_destroy(int db_connection, int global_ids, msg_t *msg) {
     msg->type = ACK_DESTROY;
 
     msg->global_id = msg->mtype;
@@ -141,7 +141,7 @@ void process_destroy(int global_ids, msg_t *msg) {
         msg->type = ACK_ERROR;
     }
 
-    if (db_delete(msg->global_id) < 0) {
+    if (db_delete(db_connection, msg->global_id) < 0) {
         log_error("Error deleting client from DB.");
         msg->type = ACK_ERROR;
     }
@@ -153,16 +153,16 @@ void process_destroy(int global_ids, msg_t *msg) {
 
 }
 
-void process_msg(int global_ids, int resp_queue, msg_t *msg) {
+void process_msg(int db_connection, int global_ids, int resp_queue, msg_t *msg) {
     log_info("Message received of type %d", msg->type);
     if (msg->type == CREATE) {
-        process_create(global_ids, msg);
+        process_create(db_connection, global_ids, msg);
     } else if (msg->type == SUBSCRIBE) {
-        process_subscribe(global_ids, msg);
+        process_subscribe(db_connection, global_ids, msg);
     } else if (msg->type == PUBLISH) {
-        process_publish(global_ids, resp_queue, msg);
+        process_publish(db_connection, global_ids, resp_queue, msg);
     } else if (msg->type == DESTROY) {
-        process_destroy(global_ids, msg);
+        process_destroy(db_connection, global_ids, msg);
     } else {
         log_error("Unexpected msg type %d", msg->type);
         msg->type = ACK_ERROR;
@@ -182,6 +182,7 @@ int main(int argc, char* argv[]) {
     int worker_queue = get_worker_queue();
     int resp_queue = get_resp_queue();
     int global_ids = global_ids_get();
+    int db_connection = db_connect();
 
     while(!graceful_quit) {
         log_info("Waiting request messages from handler...");
@@ -190,8 +191,11 @@ int main(int argc, char* argv[]) {
         if (graceful_quit) {
             break;
         }
-        process_msg(global_ids, resp_queue, &msg);
+        process_msg(db_connection, global_ids, resp_queue, &msg);
     }
 
     log_info("Stopping worker.");
+    log_debug("Closing DB connection.");
+    db_disconnect(db_connection);
+
 }
