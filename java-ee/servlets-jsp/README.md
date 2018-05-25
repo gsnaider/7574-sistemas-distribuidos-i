@@ -13,22 +13,28 @@ En IntelliJ, ir a **_File->New->Proyect_** y elegir la opcion **_Java Enterprise
 
 <img src="./images/new-project-1.png" alt="New project 1">
 
+
 Seleccionar el SDK 1.8, Java EE 9, y Tomcat 9. No es necesario ningun framework o libreria adicional.
+
 En caso de no tener el SDK configurado, hacer click en **_New_** y elegir el directorio donde esta instalado Java.
 
 <img src="./images/sdk-config.png" alt="SDK config">
+
 
 En caso de no tener el Application Server configurado, hacer click en **_New->Tomcat Server_**,  y elegir tanto para **_Tomcat HOME_** como para **_Tomcat base directory_** el directorio donde esta instalado Tomcat.
 
 <img src="./images/tomcat-config.png" alt="Tomcat config">
 
+
 Hacer click en **_Next_**, y en la siguiente pantalla tildar la opcion **_Create project from template_**, y elegir **_Java Web Module_**.
 
 <img src="./images/new-project-2.png" alt="New project 2">
 
+
 Hacer click en next **_Next_**, elegir un nombre y una ubicacion para el proyecto. Dejar los demas parametros por default, y hacer click en **_Finish_**
 
 <img src="./images/new-project-3.png" alt="New project 3">
+
 
 Finalmente, deberiamos tener un proyecto creado con la siguiente estructura:
 
