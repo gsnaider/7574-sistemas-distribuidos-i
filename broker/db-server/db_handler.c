@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
 
     db_msg_t msg;
     log_info("Waiting for messages from client...");
-    int res = socket_receive(client_socket, &msg);
+    int res = socket_receive_db(client_socket, &msg);
     if(graceful_quit) {
         safe_exit(client_socket, -1);
     }

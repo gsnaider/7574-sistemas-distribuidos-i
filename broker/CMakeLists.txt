@@ -22,8 +22,7 @@ set(DB_DEPENDENCIES
         db-server/db_server.h
         db-server/db.h
         db-server/db.c
-        db-server/db_message.h
-        db-server/db_handler.c)
+        db-server/db_message.h)
 
 set(COMMON_DEPENDENCIES
         client/broker.h
@@ -60,3 +59,4 @@ add_executable(resp_handler server/resp_handler.c ${COMMON_DEPENDENCIES} ${SERVE
 add_executable(worker server/worker.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
 
 add_executable(db_server db-server/db_server.c ${COMMON_DEPENDENCIES} ${DB_DEPENDENCIES})
+add_executable(db_handler db-server/db_handler.c ${COMMON_DEPENDENCIES} ${DB_DEPENDENCIES})

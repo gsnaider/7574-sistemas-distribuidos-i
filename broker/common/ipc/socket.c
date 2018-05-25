@@ -115,3 +115,41 @@ int socket_receive(int socket, msg_t *msg) {
     *msg = *((msg_t*) buffer);
     return bytes_read;
 }
+
+
+int socket_send_db(int socket, db_msg_t *msg) {
+    char buffer[sizeof(db_msg_t) / sizeof(char)];
+    memcpy(buffer, msg, sizeof(db_msg_t));
+    int bytes_sent = 0;
+    while (bytes_sent < sizeof(db_msg_t)) {
+        int bytes = write(socket, buffer + bytes_sent, sizeof(db_msg_t) - bytes_sent);
+        if (bytes < 0) {
+            log_error("Error writing to socket.");
+            return -1;
+        } else if (bytes == 0) {
+            log_error("Lost connection.");
+            return 0;
+        }
+        bytes_sent += bytes;
+    }
+
+    return bytes_sent;
+}
+
+int socket_receive_db(int socket, db_msg_t *msg) {
+    char buffer[sizeof(db_msg_t) / sizeof(char)];
+    int bytes_read = 0;
+    while (bytes_read < sizeof(db_msg_t)) {
+        int bytes = read(socket, buffer + bytes_read, sizeof(db_msg_t) - bytes_read);
+        if (bytes < 0) {
+            log_error("Error reading from socket.");
+            return -1;
+        } else if (bytes == 0) {
+            log_error("Lost connection.");
+            return 0;
+        }
+        bytes_read += bytes;
+    }
+    *msg = *((db_msg_t*) buffer);
+    return bytes_read;
+}
