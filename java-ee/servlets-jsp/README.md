@@ -1,37 +1,37 @@
 # Java EE: Servlets & JSP
-En este documento se explica como implementar una aplicacion web utilizando las herramientas que provee Java EE, en particular con Servlets y JSPs.
+En este documento se explica como implementar una aplicación web utilizando las herramientas que provee Java EE, en particular con Servlets y JSPs.
 
 ## Requerimientos
 Se requiere tener instalado:
  - [Java 8 SE](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
  - [Tomcat 9](https://tomcat.apache.org/download-90.cgi)
- - No es un requisito, pero en este documento se explcaran los pasos utilizando el IDE [IntelliJ IDEA](https://www.jetbrains.com/idea/)
+ - No es un requisito, pero en este documento se explcarán los pasos utilizando el IDE [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 
 ## 1. Crear el proyecto
 
-En IntelliJ, ir a **_File->New->Proyect_** y elegir la opcion **_Java Enterprise_**.
+En IntelliJ, ir a **_File->New->Proyect_** y elegir la opción **_Java Enterprise_**.
 
 <img src="./images/new-project-1.png" alt="New project 1">
 
 
-Seleccionar el SDK 1.8, Java EE 8, y Tomcat 9. No es necesario ningun framework o libreria adicional.
+Seleccionar el SDK 1.8, Java EE 8, y Tomcat 9. No es necesario ningún framework o librería adicional.
 
-En caso de no tener el SDK configurado, hacer click en **_New_** y elegir el directorio donde esta instalado Java.
+En caso de no tener el SDK configurado, hacer click en **_New_** y elegir el directorio donde está instalado Java.
 
 <img src="./images/sdk-config.png" alt="SDK config">
 
 
-En caso de no tener el Application Server configurado, hacer click en **_New->Tomcat Server_**,  y elegir tanto para **_Tomcat HOME_** como para **_Tomcat base directory_** el directorio donde esta instalado Tomcat.
+En caso de no tener el Application Server configurado, hacer click en **_New->Tomcat Server_**,  y elegir tanto para **_Tomcat HOME_** como para **_Tomcat base directory_** el directorio donde está instalado Tomcat.
 
 <img src="./images/tomcat-config.png" alt="Tomcat config">
 
 
-Hacer click en **_Next_**, y en la siguiente pantalla tildar la opcion **_Create project from template_**, y elegir **_Java Web Module_**.
+Hacer click en **_Next_**, y en la siguiente pantalla tildar la opción **_Create project from template_**, y elegir **_Java Web Module_**.
 
 <img src="./images/new-project-2.png" alt="New project 2">
 
 
-Hacer click en next **_Next_**, elegir un nombre y una ubicacion para el proyecto. Dejar los demas parametros por default, y hacer click en **_Finish_**
+Hacer click en next **_Next_**, elegir un nombre y una ubicación para el proyecto. Dejar los demas parámetros por default, y hacer click en **_Finish_**
 
 <img src="./images/new-project-3.png" alt="New project 3">
 
@@ -41,7 +41,7 @@ Finalmente, deberiamos tener un proyecto creado con la siguiente estructura:
 <img src="./images/project-created.png" alt="Project created">
 
 ## 2. Crear el modelo
-El primer paso sera crear nuestro modelo de datos. Para esto, crear un nuevo paquete en el directorio `src` con el nombre `com.example.model`, y dentro de este paquete crear una clase java con nombre `Greeting`. Esta clase tendra un unico atributo `message` de tipo `String`. Ademas, agregamos un constructor que reciba dicho parametro, y un getter.
+El primer paso será crear nuestro modelo de datos. Para esto, crear un nuevo paquete en el directorio `src` con el nombre `com.example.model`, y dentro de este paquete crear una clase Java con nombre `Greeting`. Esta clase tendrá un único atributo `message` de tipo `String`. Además, agregamos un constructor que reciba dicho parámetro, y un getter.
 ```java
 package com.example.model;
 
@@ -59,7 +59,7 @@ public class Greeting {
 ```
 
 ## 3. Crear un Servlet
-El siguiente paso sera crear un servlet para recibir un request HTTP GET. Primero, crear un nuevo paquete `com.example.servlet` (tambien dentro del directorio `src`), y dentro de este paquete crear una clase Java llamada `HelloWorldServlet`.
+El siguiente paso será crear un servlet para recibir un request HTTP GET. Primero, crear un nuevo paquete `com.example.servlet` (también dentro del directorio `src`), y dentro de este paquete crear una clase Java llamada `HelloWorldServlet`.
 Para facilitar el desarrollo, agregar los siguientes imports a la clase:
 ```java
 import com.example.model.Greeting;
@@ -87,35 +87,35 @@ view.forward(req, resp);
 ```
 Esto crea un objeto `Greeting` con el mensaje **_Hello World!_**, y seteamos este objeto como un atributo dentro del request, con la clave **_greeting_**. Luego, obtenemos del request un `RequestDispatcher` que representa la vista a la cual enviaremos el request, y luego llamamos a `view.forward` para redirigir el request a la vista.
 
-Por último, debemos configurar la URL sobre la que estara escuchando el Servlet. Para eso, agregamos la siguiente Annotation sobre la cabecera de la clase:
+Por último, debemos configurar la URL sobre la que estará escuchando el Servlet. Para eso, agregamos la siguiente Annotation sobre la cabecera de la clase:
 ```java
 @WebServlet(urlPatterns = "/hello")
 public class HelloWorldServlet extends HttpServlet {
 ...
 }
 ```
-De esta forma, el Servlet quedara escuchando en la direccion `/hello` del servidor.
+De esta forma, el Servlet quedará escuchando en la dirección `/hello` del servidor.
 
 ## 4. Crear la JSP
-El ultimo paso sera crear la vista para poder mostrar nuestro mensaje. En el directorio `web`, crear un nuevo directorio `view`, y dentro de este directorio crear un archivo JSP con nombre `hello-world.jsp`. Este archivo simplemente debe contener lo siguiente:
+El último paso será crear la vista para poder mostrar nuestro mensaje. En el directorio `web`, crear un nuevo directorio `view`, y dentro de este directorio crear un archivo JSP con nombre `hello-world.jsp`. Este archivo simplemente debe contener lo siguiente:
 ```html
 <html>
 <head>
-    <title>Hello World</title>
+    <title>Hello</title>
 </head>
 <body>
     ${requestScope.greeting.message}
 </body>
 </html>
 ```
-Lo que hacemos es obtener el atributo **_greeting_** que guardamos previamente en el request, y mostramos el mensaje del objeto.
+Lo que hacemos es obtener el atributo **_greeting_** que guardamos previamente en el request, y mostramos el mensaje del objeto `Greeting`.
 
-La estructura del proyecto deberia haber quedado de la siguiente forma:
+La estructura del proyecto debería haber quedado de la siguiente forma:
 
 <img src="./images/project-structure.png" alt="Project structure">
 
 ## 5. Ejecutar
-Para ejecutar la aplicacion, simplemente hacer click en **_Run->Run 'Tomcat 9.0.8'_** (ya deberia estar creada la configuracion de ejecucion, la version puede no ser exactamente la misma). Una vez que levanto la aplicacion, en un explorador vamos a **_http://localhost:8080/hello_**, deberiamos ver nuestro mensaje **Hello World!**
+Para ejecutar la aplicación, simplemente hacer click en **_Run->Run 'Tomcat 9.0.8'_** (ya debería estar creada la configuración de ejecución 'Tomcat 9.0.8', aunque la versión puede no ser exactamente la misma). Una vez que levantó la aplicación, en un explorador vamos a **_http://localhost:8080/hello_**, y deberíamos ver nuestro mensaje **Hello World!**
 
 <img src="./images/hello-world.png" alt="Hello World">
 
