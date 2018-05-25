@@ -8,6 +8,10 @@
 #include "../common/ds/data-structures/list.h"
 #include "../common/ds/data-structures/vector.h"
 
+#define DB_IP "127.0.0.1"
+#define DB_PORT 3306
+
+
 int db_connect();
 
 int db_add_user(int db_socket);
