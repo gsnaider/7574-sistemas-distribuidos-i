@@ -11,7 +11,7 @@
 #include "../common/ipc/sig.h"
 #include "../common/message.h"
 #include "global_id.h"
-#include "db.h"
+#include "db-connection.h"
 
 
 bool graceful_quit = false;

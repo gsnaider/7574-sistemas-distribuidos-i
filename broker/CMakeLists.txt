@@ -14,8 +14,8 @@ set(CLIENT_DEPENDENCIES
 set(SERVER_DEPENDENCIES
         server/global_id.h
         server/global_id.c
-        server/db.h
-        server/db.c
+        server/db-connection.h
+        server/db-connection.c
         server/server.h)
 
 set(DB_DEPENDENCIES
