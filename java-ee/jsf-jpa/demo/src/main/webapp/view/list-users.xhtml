@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Demo</title>
+</h:head>
+<h:body>
+    <h1>Usuarios</h1>
+
+    <p:dataTable var="user" value="#{listUsersView.users}">
+        <p:column headerText="Id">
+            <h:outputText value="#{user.id}"/>
+        </p:column>
+
+        <p:column headerText="Username">
+            <h:outputText value="#{user.username}"/>
+        </p:column>
+
+        <p:column headerText="Nombre">
+            <h:outputText value="#{user.firstName}"/>
+        </p:column>
+
+        <p:column headerText="Apellido">
+            <h:outputText value="#{user.lastName}"/>
+        </p:column>
+    </p:dataTable>
+
+</h:body>
+</html>

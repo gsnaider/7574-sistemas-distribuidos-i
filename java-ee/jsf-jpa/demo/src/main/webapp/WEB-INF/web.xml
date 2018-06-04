@@ -1,0 +1,35 @@
+<!DOCTYPE web-app PUBLIC
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <display-name>My App</display-name>
+
+    <!--Parametro para que los comentarios en los .xhtml no afecten el display de la pagina-->
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <!--En web.xml solamente declaramos el Servlet interno de JSF para que maneje todos los requests de nuestra App.
+        Este Servlet se encarga de setear los parametros correspondientes del requests en los ManagedBeans que correspondan.
+        La creacion de los ManagedBeans, manejo de sesiones, etc. tambien son manejadas internamente por JSF.-->
+    <servlet>
+        <servlet-name>faces</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!--Todos los requests que se hagan contra una pagina *.xhtml van a parar al Servlet de JSF-->
+    <servlet-mapping>
+        <servlet-name>faces</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+
+</web-app>
+
+

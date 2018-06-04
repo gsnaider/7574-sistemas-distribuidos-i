@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<!--Pagina del formulario para registrar un usuario. Notar que en casi toda la pagina usamos los custom tags de JSF (h: y f:)
+    y los de la libreria de componentes PrimeFaces (p:). Estas tres dependencias estan declaradas en el pom.xml -->
+<h:head>
+    <title>Demo</title>
+</h:head>
+<h:body>
+    <h1>Registrarse</h1>
+
+    <h:form>
+
+        <!--Con el tag messages se muestran los mensajes de error que ocurran cuando el usuario complete el formulario-->
+        <p:messages/>
+
+        <h2>Datos de usuario</h2>
+
+        <!--panelGrid es simplemente para que los componentes se vean alineados en formato de 2 columnas.-->
+        <h:panelGrid columns="2" cellpadding="5">
+
+            <!--Label para el componente con id=username-->
+            <p:outputLabel for="username" value="Nombre de usuario: "/>
+
+            <!--Campo para ingresar el username. Cuando el usuario complete el formulario, este dato va a ir a parar
+                a la clase RegisterView (declarada como ManagedBean), al campo username del atributo user de dicha clase.
+                Ademas, podemos declarar este campo como requerido, y agregarle una validacion de longitud. Si alguna
+                de estas cosas no se cumple, se mostraran los mensajes customizados declarados abajo.-->
+            <p:inputText id="username"
+                         value="#{registerView.user.username}"
+                         required="true"
+                         validatorMessage="Nombre de usuario debe tener al menos 6 caracteres."
+                         requiredMessage="Nombre de usuario es obligatorio.">
+                <f:validateLength minimum="6"/>
+            </p:inputText>
+            <p:outputLabel for="password" value="Password: "/>
+
+            <!--Campo para ingresar la password. Similar al inputText, pero ademas de ocultar el input, podemos agregarle
+                funcionalidades como que se vaya mostrando que tan segura es la password (feedback="true"), y obligar a
+                que esta password sea igual a la del campo "password2" (match="password2"). Todo esto lo hace
+                automaticamente PrimeFaces, nosotros simplemente tenemos que declarar estos atributos.-->
+            <p:password id="password" value="#{registerView.user.password}" feedback="true"
+                        required="true"
+                        match="password2"
+                        validatorMessage="Passwords no coinciden."
+                        requiredMessage="Password es obligatoria."/>
+            <p:outputLabel for="password2" value="Reingrese password: "/>
+            <p:password id="password2"
+                        required="true"
+                        requiredMessage="Debe reingresar la password."/>
+        </h:panelGrid>
+        <h2>Datos personales</h2>
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="firstName" value="Nombre: "/>
+            <p:inputText id="firstName" value="#{registerView.user.firstName}"/>
+            <p:outputLabel for="lastName" value="Apellido: "/>
+            <p:inputText id="lastName" value="#{registerView.user.lastName}"/>
+            <p:outputLabel for="birthDate" value="Fecha de nacimiento: "/>
+
+            <!--Para la fecha de nacimiento usamos el componente calendar de PrimeFaces para poder elegir la fecha
+                en un calendario popup.-->
+            <p:calendar id="birthDate"
+                        value="#{registerView.user.birthDate}"
+                        navigator="true"
+                        yearRange="c-100:c"
+                        pattern="yyyy-MMM-dd"
+                        required="true"
+                        requiredMessage="Fecha de nacimiento es obligatoria."/>
+        </h:panelGrid>
+        <h2>Direccion</h2>
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="street" value="Calle: "/>
+            <p:inputText id="street" value="#{registerView.user.address.street}"/>
+            <p:outputLabel for="addressNumber" value="Número: "/>
+            <p:inputText id="addressNumber" value="#{registerView.user.address.number}"
+                         converterMessage="Numero invalido"/>
+            <p:outputLabel for="apartment" value="Departamento: "/>
+            <p:inputText id="apartment" value="#{registerView.user.address.apartment}"/>
+        </h:panelGrid>
+        <h2>Telefonos</h2>
+        <h3>Celular</h3>
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="cellCountryCode" value="Código país: "/>
+            <p:inputText id="cellCountryCode" value="#{registerView.user.phones[0].countryCode}"/>
+            <p:outputLabel for="cellAreaCode" value="Código área: "/>
+            <p:inputText id="cellAreaCode" value="#{registerView.user.phones[0].areaCode}"/>
+            <p:outputLabel for="cellPhoneNumber" value="Teléfono: "/>
+            <p:inputText id="cellPhoneNumber" value="#{registerView.user.phones[0].phoneNumber}"/>
+        </h:panelGrid>
+        <h3>Fijo</h3>
+        <h:panelGrid columns="2" cellpadding="5">
+            <p:outputLabel for="landlineCountryCode" value="Código país: "/>
+            <p:inputText id="landlineCountryCode" value="#{registerView.user.phones[1].countryCode}"/>
+            <p:outputLabel for="landlineAreaCode" value="Código área: "/>
+            <p:inputText id="landlineAreaCode" value="#{registerView.user.phones[1].areaCode}"/>
+            <p:outputLabel for="landlinePhoneNumber" value="Teléfono: "/>
+            <p:inputText id="landlinePhoneNumber" value="#{registerView.user.phones[1].phoneNumber}"/>
+        </h:panelGrid>
+        <br/>
+        <br/>
+
+        <!--Cuando el usuario clickee en "Registrarse", si no hay errores, todos los datos ingresados iran a parar al
+            ManagedBean correspondiente (en este caso todos van a los atributos de RegisterView.user).-->
+        <p:commandButton value="Registrarse" ajax="false" id="registerButton"
+                         action="#{registerView.register}" styleClass="ui-priority-primary"/>
+
+    </h:form>
+
+</h:body>
+</html>
