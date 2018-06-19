@@ -48,7 +48,17 @@ void process_create(int socket, db_msg_t *msg) {
 }
 
 void process_subscribe(int socket, db_msg_t *msg) {
-//TODO
+    if (db_subscribe(msg->global_id, msg->topic) < 0) {
+        log_error("Error subscribing user %d to topic %s", msg->global_id, msg->topic);
+        msg->type = DB_ERROR;
+    } else {
+        log_info("User %d subscribed to topic %s", msg->global_id, msg->topic);
+        msg->type = DB_OK;
+    }
+    if (socket_send_db(socket, msg) < 0) {
+        log_error("Error sending response to client.");
+    }
+
 }
 
 void process_get_subscribed(int socket, db_msg_t *msg) {
