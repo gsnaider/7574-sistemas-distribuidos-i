@@ -42,6 +42,7 @@ int create_client_socket(char* server_ip, int server_port) {
 }
 
 int create_server_socket(int port) {
+    log_debug("Creating socket on port %d", port);
     int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_fd < 0) {
         log_error("Error creating server socket.");
