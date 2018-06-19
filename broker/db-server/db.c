@@ -200,6 +200,7 @@ int db_subscribe(int id, char *topic) {
     return 0;
 }
 
+// TODO check bug when getting subs from empty topic. Maybe delete empty topics when deleting users.
 int db_get_subscribed(char *topic, vector *subscribed) {
     log_debug("Getting subscribed users to topic '%s'.", topic);
 
