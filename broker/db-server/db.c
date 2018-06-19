@@ -10,14 +10,14 @@
 #include <unistd.h>
 #include "db.h"
 #include "../common/log/log.h"
+#include "../common/ipc/semaphore.h"
+#include "db_server.h"
 
 #define BASE_DB_DIR "../db/"
 #define USERS_DIR "../db/users/"
 #define TOPICS_DIR "../db/topics/"
 #define TMP_FILE "../db/topics/topic_tmp"
 #define INT_MAX_LENGTH 12
-
-//TODO use semaphore for managing DB.
 
 static bool file_exists(char *path) {
     return (access(path, F_OK) != -1);
@@ -147,13 +147,25 @@ static int get_next_id() {
 
 int db_add_user() {
     log_info("Adding user to DB.");
+
+    log_debug("Obtaining DB sem.");
+    int sem = getsem(DB_SEM);
+    if (sem < 0) {
+        log_error("Error getting DB sem.");
+        return -1;
+    }
+
+    p(sem);
+
     if (create_users_dir_if_not_exists() < 0) {
+        v(sem);
         return -1;
     }
 
     int id = get_next_id();
     if (id < 0) {
         log_error("Error generating new user id.");
+        v(sem);
         return -1;
     }
     log_info("New user id: '%d'", id);
@@ -161,15 +173,30 @@ int db_add_user() {
     char path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, path);
     if (create_file(path) < 0) {
+        v(sem);
         return -1;
     }
+
+    v(sem);
+
     log_debug("User '%d' added to DB.", id);
     return id;
 }
 
 int db_subscribe(int id, char *topic) {
     log_info("Subscribing user '%d' to topic '%s'.", id, topic);
+
+    log_debug("Obtaining DB sem.");
+    int sem = getsem(DB_SEM);
+    if (sem < 0) {
+        log_error("Error getting DB sem.");
+        return -1;
+    }
+
+    p(sem);
+
     if (create_topics_dir_if_not_exists() < 0) {
+        v(sem);
         return -1;
     }
 
@@ -177,12 +204,14 @@ int db_subscribe(int id, char *topic) {
     get_user_path(id, user_path);
     if (!file_exists(user_path)) {
         log_error("User file '%s' does not exist.", user_path);
+        v(sem);
         return -1;
     }
 
     char topic_path[strlen(TOPICS_DIR) + strlen(topic) + 1];
     get_topic_path(topic, topic_path);
     if (create_file_if_not_exists(topic_path) < 0) {
+        v(sem);
         return -1;
     }
 
@@ -190,11 +219,15 @@ int db_subscribe(int id, char *topic) {
     snprintf(id_str, INT_MAX_LENGTH, "%d", id);
 
     if (append_to_file(user_path, topic) < 0) {
+        v(sem);
         return -1;
     }
     if (append_to_file(topic_path, id_str) < 0) {
+        v(sem);
         return -1;
     }
+
+    v(sem);
 
     log_debug("User '%d' subscribed to topic '%s'.", id, topic);
     return 0;
@@ -204,10 +237,21 @@ int db_subscribe(int id, char *topic) {
 int db_get_subscribed(char *topic, vector *subscribed) {
     log_debug("Getting subscribed users to topic '%s'.", topic);
 
+    log_debug("Obtaining DB sem.");
+    int sem = getsem(DB_SEM);
+    if (sem < 0) {
+        log_error("Error getting DB sem.");
+        return -1;
+    }
+
+    p(sem);
+
+
     char topic_path[strlen(TOPICS_DIR) + strlen(topic) + 1];
     get_topic_path(topic, topic_path);
     if (!file_exists(topic_path)) {
         log_info("No subscribed users for topic '%s'.", topic);
+        v(sem);
         return 0;
     }
 
@@ -215,6 +259,7 @@ int db_get_subscribed(char *topic, vector *subscribed) {
     FILE* file = fopen(topic_path, "r");
     if (file == NULL) {
         log_error("Error opening file '%s' for reading.", topic_path);
+        v(sem);
         return -1;
     }
 
@@ -231,10 +276,12 @@ int db_get_subscribed(char *topic, vector *subscribed) {
         free(line);
     }
 
+    v(sem);
+
     return 0;
 }
 
-int unsubscribe(int id, char *topic) {
+static int unsubscribe(int id, char *topic) {
     log_info("Unsubscribing user '%d' from topic '%s'", id, topic);
 
     char topic_path[strlen(TOPICS_DIR) + strlen(topic) + 1];
@@ -291,10 +338,21 @@ int unsubscribe(int id, char *topic) {
 
 int db_delete(int id) {
     log_info("Deleting user '%d' from DB.", id);
+
+    log_debug("Obtaining DB sem.");
+    int sem = getsem(DB_SEM);
+    if (sem < 0) {
+        log_error("Error getting DB sem.");
+        return -1;
+    }
+
+    p(sem);
+
     char user_path[strlen(USERS_DIR) + INT_MAX_LENGTH];
     get_user_path(id, user_path);
     if (!file_exists(user_path)) {
         log_error("User file '%s' does not exist.", user_path);
+        v(sem);
         return -1;
     }
 
@@ -302,6 +360,7 @@ int db_delete(int id) {
     FILE* file = fopen(user_path, "r");
     if (file == NULL) {
         log_error("Error opening file '%s' for reading.", user_path);
+        v(sem);
         return -1;
     }
 
@@ -315,6 +374,7 @@ int db_delete(int id) {
         }
         if (unsubscribe(id, topic) < 0) {
             log_error("Error unsubscribing user '%d' from topic '%s'", id, topic);
+            v(sem);
             return -1;
         }
     }
@@ -326,8 +386,11 @@ int db_delete(int id) {
     log_debug("Deleting file '%s'", user_path);
     if (unlink(user_path) < 0) {
         log_error("Error deleting file '%s'", user_path);
+        v(sem);
         return -1;
     }
+
+    v(sem);
 
     return 0;
 }

@@ -7,4 +7,6 @@
 
 #define DB_PORT 3307
 
+#define DB_SEM 42
+
 #endif //BROKER_DB_SERVER_H

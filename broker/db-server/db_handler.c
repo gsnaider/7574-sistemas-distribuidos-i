@@ -32,7 +32,6 @@ void safe_exit(int client_socket, int error) {
 }
 
 void process_create(db_msg_t *msg) {
-    //TODO create in db and send response to client
     int global_id = db_add_user();
     if (global_id < 0) {
         log_error("Error creating user on DB.");

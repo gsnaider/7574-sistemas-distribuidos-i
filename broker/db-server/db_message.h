@@ -20,7 +20,7 @@ typedef struct db_msg_t {
     int type;
     char topic[MAX_TOPIC_LENGTH];
 
-    //TODO find a way to reply with a dynamic amount of ids (for the get_subscribed operation)
+    //TODO (optional) find a way to reply with a dynamic amount of ids (for the get_subscribed operation)
     int sub_count;
     int sub_ids[MAX_CLIENTS];
 } db_msg_t;

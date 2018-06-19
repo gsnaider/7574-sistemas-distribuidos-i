@@ -5,11 +5,13 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <wait.h>
+#include <stdlib.h>
 #include "../common/ipc/sig.h"
 #include "../common/log/log.h"
 #include "../common/ds/data-structures/list.h"
 #include "../common/ipc/socket.h"
 #include "db_server.h"
+#include "../common/ipc/semaphore.h"
 
 
 bool graceful_quit = false;
@@ -40,7 +42,7 @@ void kill_childs() {
     list_for_each(&childs, kill_child);
 }
 
-void safe_exit(int socket) {
+void safe_exit(int socket, int sem, int error) {
     log_info("Stopping server.");
 
     kill_childs();
@@ -51,7 +53,16 @@ void safe_exit(int socket) {
     log_debug("Closing socket.");
     if(close(socket) < 0) {
         log_error("Error closing db socket.");
+        error = -1;
     }
+
+    log_debug("Closing DB sem.");
+    if (delsem(sem) < 0) {
+        log_error("Error deleting DB sem.");
+        error = -1;
+    }
+
+    exit(error);
 }
 
 int main(int argc, char* argv[]) {
@@ -59,11 +70,18 @@ int main(int argc, char* argv[]) {
 
     log_info("Starting Database.");
 
+    int sem = creasem(DB_SEM);
+    if (sem < 0) {
+        log_error("Error creating DB sem.");
+        exit(-1);
+    }
+    inisem(sem, 1);
+
     list_new(&childs, sizeof(pid_t), NULL);
 
     int socket = create_server_socket(DB_PORT);
     if (socket < 0) {
-        safe_exit(socket);
+        safe_exit(socket, sem, -1);
     }
 
     while (!graceful_quit) {
@@ -76,7 +94,7 @@ int main(int argc, char* argv[]) {
         pid_t handler = fork();
         if (handler < 0) {
             log_error("Error forking DB handler.");
-            safe_exit(socket);
+            safe_exit(socket, sem, -1);
         }
         if (handler == 0) {
             if (close(socket) < 0) {
@@ -86,7 +104,7 @@ int main(int argc, char* argv[]) {
             snprintf(client_socket_str, 3, "%d", client_socket);
             execl("./db_handler", "./db_handler", client_socket_str, (char*)NULL);
             log_error("Error executing DB handler.");
-            safe_exit(socket);
+            safe_exit(socket, sem, -1);
         }
         list_append(&childs, &handler);
         if (close(client_socket) < 0) {
@@ -94,7 +112,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    safe_exit(socket);
+    safe_exit(socket, sem, 0);
 
 
 }

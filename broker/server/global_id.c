@@ -50,6 +50,7 @@ int add_global_id(int global_ids, int global_id, int mtype) {
 
     if (ids->count >= MAX_CLIENTS) {
         log_warn("Global clients capacity reached. Can't add more clients.");
+        v(sem);
         return -1;
     }
 
