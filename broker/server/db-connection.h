@@ -9,7 +9,7 @@
 #include "../common/ds/data-structures/vector.h"
 
 #define DB_IP "127.0.0.1"
-#define DB_PORT 3306
+#define DB_PORT 3307
 
 
 int db_connect();

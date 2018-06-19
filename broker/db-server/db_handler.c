@@ -30,9 +30,35 @@ void safe_exit(int client_socket, int error) {
     exit(error);
 }
 
-void process_message(db_msg_t *msg) {
+void process_create(int socket, db_msg_t *msg) {
+    //TODO create in db and send response to client
+}
+
+void process_subscribe(int socket, db_msg_t *msg) {
+//TODO
+}
+
+void process_get_subscribed(int socket, db_msg_t *msg) {
+//TODO
+}
+
+void process_delete(int socket, db_msg_t *msg) {
+//TODO
+}
+
+void process_message(int client_socket, db_msg_t *msg) {
     log_info("Received type: %d", msg->type);
-    //TODO check message type and call db.operation.
+    if (msg->type == DB_CREATE) {
+        process_create(client_socket, msg);
+    } else if (msg->type == DB_SUBSCRIBE) {
+        process_subscribe(client_socket, msg);
+    } else if (msg->type == DB_GET_SUBSCRIBED) {
+        process_get_subscribed(client_socket, msg);
+    } else if (msg->type == DB_DELETE) {
+        process_delete(client_socket, msg);
+    } else {
+        log_warn("Unexpected msg type received %d", msg->type);
+    }
 }
 
 int main(int argc, char* argv[]) {
@@ -60,5 +86,5 @@ int main(int argc, char* argv[]) {
         safe_exit(client_socket, -1);
     }
 
-    process_message(&msg);
+    process_message(client_socket, &msg);
 }

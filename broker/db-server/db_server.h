@@ -5,6 +5,6 @@
 #ifndef BROKER_DB_SERVER_H
 #define BROKER_DB_SERVER_H
 
-#define PORT 3306
+#define DB_PORT 3307
 
 #endif //BROKER_DB_SERVER_H

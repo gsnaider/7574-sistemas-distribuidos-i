@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 
     list_new(&childs, sizeof(pid_t), NULL);
 
-    int socket = create_server_socket(PORT);
+    int socket = create_server_socket(DB_PORT);
     if (socket < 0) {
         safe_exit(socket);
     }
