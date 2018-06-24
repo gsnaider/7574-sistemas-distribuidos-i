@@ -175,20 +175,6 @@ int wait_ring_connection(int socket) {
 
 }
 
-int fork_ring_connection_proc() {
-    pid_t ring_connection = fork();
-    if (ring_connection < 0) {
-        log_error("Error forking handler.");
-        return -1;
-    }
-    if (ring_connection == 0) {
-        execl("./ring_connection", "./ring_connection", (char*)NULL);
-        log_error("Error executing ring connection process.");
-        return -1;
-    }
-    return ring_connection;
-}
-
 int main(int argc, char* argv[]) {
 
     register_handler(SIGINT_handler);
@@ -205,11 +191,6 @@ int main(int argc, char* argv[]) {
     if (socket < 0) {
         safe_exit(socket, -1);
     }
-    int ring_connection_pid = fork_ring_connection_proc();
-    if (ring_connection_pid < 0){
-        log_error("Error forking ring connection process.");
-        safe_exit(socket, -1);
-    }
 
     // First connection will always be from ring server.
     int previous_server_socket = wait_ring_connection(socket);
@@ -220,10 +201,7 @@ int main(int argc, char* argv[]) {
     // TODO (optional) see if this extra resp handler can be avoided. (maybe creating both req and resp within the server).
     fork_req_handler(socket, previous_server_socket);
 
-    waitpid(ring_connection_pid, (int*) NULL, 0);
-
     int ring_connection_setup_queue = getmsg(RING_CONNECTION_SETUP_QUEUE);
-    log_debug("Ring queue %d got.", ring_connection_setup_queue);
 
     ring_setup_msg_t msg;
     rcvmsg(ring_connection_setup_queue, &msg, sizeof(ring_setup_msg_t), 0);

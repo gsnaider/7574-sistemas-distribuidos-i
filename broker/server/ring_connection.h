@@ -10,9 +10,11 @@
 
 #define NEXT_SERVER_GLOBAL_ID 0
 
-#endif //BROKER_RING_CONNECTION_H
 
 typedef struct ring_setup_msg_t {
     long mtype;
     pid_t resp_handler_pid;
 } ring_setup_msg_t;
+
+
+#endif //BROKER_RING_CONNECTION_H
