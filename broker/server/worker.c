@@ -115,6 +115,7 @@ bool process_publish(int db_connection, int global_ids, int resp_queue, msg_t *m
 
     log_info("Message received: %s : %s", msg->payload.topic, msg->payload.msg);
 
+    bool send_ack = true;
     if (msg->broker_id == BROKER_ID) {
         log_debug("Ring message back to original broker. Discarding...");
         return false;
@@ -123,6 +124,7 @@ bool process_publish(int db_connection, int global_ids, int resp_queue, msg_t *m
         msg->broker_id = BROKER_ID;
     } else {
         log_debug("Received publish from previous ring server.");
+        send_ack = false;
     }
 
     msg->global_id = msg->mtype;
@@ -130,18 +132,18 @@ bool process_publish(int db_connection, int global_ids, int resp_queue, msg_t *m
     if (msg->mtype < 0) {
         log_error("Error getting mtype for global id %d.", msg->global_id);
         msg->type = ACK_ERROR;
-        return true;
+        return send_ack;
     }
 
     // We send the msg (not a pointer) so as to not modify this one, which already has the global id of the sender.
     if (send_to_subs(db_connection, global_ids, resp_queue, *msg) < 0) {
         log_error("Error sending message to subscribers.");
         msg->type = ACK_ERROR;
-        return true;
+    } else {
+        msg->type = ACK_OK;
     }
 
-    msg->type = ACK_OK;
-    return true;
+    return send_ack;
 }
 
 void process_destroy(int db_connection, int global_ids, msg_t *msg) {
