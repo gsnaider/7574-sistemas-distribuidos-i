@@ -92,6 +92,7 @@ int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
         vector_item_at(&subscribed, i, &sub_id);
         msg.global_id = sub_id;
         msg.mtype = get_mtype(global_ids, sub_id);
+        // TODO si no encuentro mtype, puede ser que sea de otro worker. Reenviar a siguiente worker.
         if (msg.mtype < 0) {
             log_error("Error getting mtype for global id %d.", sub_id);
             res = -1;
@@ -109,26 +110,38 @@ int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
 
 }
 
-void process_publish(int db_connection, int global_ids, int resp_queue, msg_t *msg) {
+// Returns if the response message should be sent to the resp handler.
+bool process_publish(int db_connection, int global_ids, int resp_queue, msg_t *msg) {
 
     log_info("Message received: %s : %s", msg->payload.topic, msg->payload.msg);
+
+    if (msg->broker_id == BROKER_ID) {
+        log_debug("Ring message back to original broker. Discarding...");
+        return false;
+    } else if (msg->broker_id == 0) {
+        log_debug("Received publish for first time.");
+        msg->broker_id = BROKER_ID;
+    } else {
+        log_debug("Received publish from previous ring server.");
+    }
 
     msg->global_id = msg->mtype;
     msg->mtype = get_mtype(global_ids, msg->global_id);
     if (msg->mtype < 0) {
         log_error("Error getting mtype for global id %d.", msg->global_id);
         msg->type = ACK_ERROR;
-        return;
+        return true;
     }
 
     // We send the msg (not a pointer) so as to not modify this one, which already has the global id of the sender.
     if (send_to_subs(db_connection, global_ids, resp_queue, *msg) < 0) {
         log_error("Error sending message to subscribers.");
         msg->type = ACK_ERROR;
-        return;
+        return true;
     }
 
     msg->type = ACK_OK;
+    return true;
 }
 
 void process_destroy(int db_connection, int global_ids, msg_t *msg) {
@@ -155,12 +168,13 @@ void process_destroy(int db_connection, int global_ids, msg_t *msg) {
 
 void process_msg(int db_connection, int global_ids, int resp_queue, msg_t *msg) {
     log_info("Message received of type %d", msg->type);
+    bool send_response = true;
     if (msg->type == CREATE) {
         process_create(db_connection, global_ids, msg);
     } else if (msg->type == SUBSCRIBE) {
         process_subscribe(db_connection, global_ids, msg);
     } else if (msg->type == PUBLISH) {
-        process_publish(db_connection, global_ids, resp_queue, msg);
+        send_response = process_publish(db_connection, global_ids, resp_queue, msg);
     } else if (msg->type == DESTROY) {
         process_destroy(db_connection, global_ids, msg);
     } else {
@@ -168,10 +182,13 @@ void process_msg(int db_connection, int global_ids, int resp_queue, msg_t *msg) 
         msg->type = ACK_ERROR;
     }
 
-    log_info("Sending response message to response handler.");
-    if (sendmsg(resp_queue, msg, sizeof(msg_t)) < 0) {
-        log_error("Error sending response message.");
+    if (send_response) {
+        log_info("Sending response message to response handler.");
+        if (sendmsg(resp_queue, msg, sizeof(msg_t)) < 0) {
+            log_error("Error sending response message.");
+        }
     }
+
 }
 
 int main(int argc, char* argv[]) {

@@ -7,6 +7,7 @@
 #include "../common/ipc/semaphore.h"
 #include "../common/log/log.h"
 #include "../common/ipc/shm.h"
+#include "ring_connection.h"
 
 #define GLOBAL_IDS_SHM 8
 #define GLOBAL_IDS_SEM 10
@@ -95,8 +96,10 @@ int get_mtype(int global_ids, int global_id) {
     shm_unmap(ids);
 
     if (found_mtype < 0) {
-        log_error("No mtype found for global_id %d.", global_id);
-        return -1;
+        log_info("No mtype found for global_id %d.", global_id);
+        log_info("Returning next ring server mtype.");
+        // This mtype should already have been added by ring connection config.
+        return get_mtype(global_ids, NEXT_SERVER_GLOBAL_ID);
     } else {
         log_debug("mtype %d found for global id %d", found_mtype, global_id);
         return found_mtype;

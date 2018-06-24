@@ -13,6 +13,7 @@
 #include "../common/ipc/msg_queue.h"
 #include "../common/ds/data-structures/list.h"
 #include "global_id.h"
+#include "ring_connection.h"
 
 bool graceful_quit = false;
 
@@ -47,6 +48,13 @@ void create_queues() {
         log_error("Error creating response queue.");
         exit(-1);
     }
+
+    int ring_connection_setup_queue = creamsg(RING_CONNECTION_SETUP_QUEUE);
+    log_debug("Ring queue %d created", ring_connection_setup_queue);
+    if (ring_connection_setup_queue < 0) {
+        log_error("Error creating ring connection setup queue.");
+        exit(-1);
+    }
 }
 
 void destroy_global_ids() {
@@ -70,6 +78,13 @@ void destroy_queues() {
         log_error("Error getting resp queue for deletion.");
     } else {
         delmsg(resp_queue);
+    }
+
+    int ring_connection_setup_queue = getmsg(RING_CONNECTION_SETUP_QUEUE);
+    if (ring_connection_setup_queue < 0) {
+        log_error("Error getting ring_connection_setup_queue for deletion.");
+    } else {
+        delmsg(ring_connection_setup_queue);
     }
 }
 
@@ -126,6 +141,54 @@ void safe_exit(int socket, int error) {
     exit(error);
 }
 
+void fork_req_handler(int server_socket, int client_socket) {
+    pid_t handler = fork();
+    if (handler < 0) {
+        log_error("Error forking handler.");
+        safe_exit(server_socket, -1);
+    }
+    if (handler == 0) {
+        if (close(server_socket) < 0) {
+            log_error("Error closing server socket.");
+        }
+        char client_socket_str[3];
+        snprintf(client_socket_str, 3, "%d", client_socket);
+        execl("./req_handler", "./req_handler", client_socket_str, (char*)NULL);
+        log_error("Error executing request handler.");
+        safe_exit(server_socket, -1);
+    }
+    list_append(&childs, &handler);
+    if (close(client_socket) < 0) {
+        log_error("Error closing client socket.");
+    }
+}
+
+int wait_ring_connection(int socket) {
+    log_info("Waiting ring connection.");
+    int previous_server_socket = accept_client(socket);
+    if (previous_server_socket < 0) {
+        log_error("Error receiving ring connection.");
+        safe_exit(socket, -1);
+    }
+    log_info("Ring connection received.");
+    return previous_server_socket;
+
+}
+
+int fork_ring_connection_proc() {
+    pid_t ring_connection = fork();
+    if (ring_connection < 0) {
+        log_error("Error forking handler.");
+        return -1;
+    }
+    if (ring_connection == 0) {
+        execl("./ring_connection", "./ring_connection", (char*)NULL);
+        log_error("Error executing ring connection process.");
+        return -1;
+    }
+    return ring_connection;
+}
+
 int main(int argc, char* argv[]) {
 
     register_handler(SIGINT_handler);
@@ -142,6 +205,32 @@ int main(int argc, char* argv[]) {
     if (socket < 0) {
         safe_exit(socket, -1);
     }
+    int ring_connection_pid = fork_ring_connection_proc();
+    if (ring_connection_pid < 0){
+        log_error("Error forking ring connection process.");
+        safe_exit(socket, -1);
+    }
+
+    // First connection will always be from ring server.
+    int previous_server_socket = wait_ring_connection(socket);
+
+    // For now, an extra resp handler will be created within this req_handler, but it will never be called.
+    // This req_handler will only receive redirected PUBLISH msgs form other servers, and never a CREATE message.
+    // Thus, the resp handler will never be added to the global ids table.
+    // TODO (optional) see if this extra resp handler can be avoided. (maybe creating both req and resp within the server).
+    fork_req_handler(socket, previous_server_socket);
+
+    waitpid(ring_connection_pid, (int*) NULL, 0);
+
+    int ring_connection_setup_queue = getmsg(RING_CONNECTION_SETUP_QUEUE);
+    log_debug("Ring queue %d got.", ring_connection_setup_queue);
+
+    ring_setup_msg_t msg;
+    rcvmsg(ring_connection_setup_queue, &msg, sizeof(ring_setup_msg_t), 0);
+
+    log_info("Resp handler '%d' created by ring connection.", msg.resp_handler_pid);
+    list_append(&childs, &msg.resp_handler_pid);
+
 
     while (!graceful_quit) {
         log_info("Waiting connections.");
@@ -150,25 +239,7 @@ int main(int argc, char* argv[]) {
             break;
         }
         log_info("Client connected.");
-        pid_t handler = fork();
-        if (handler < 0) {
-            log_error("Error forking handler.");
-            safe_exit(socket, -1);
-        }
-        if (handler == 0) {
-            if (close(socket) < 0) {
-                log_error("Error closing server socket.");
-            }
-            char client_socket_str[3];
-            snprintf(client_socket_str, 3, "%d", client_socket);
-            execl("./req_handler", "./req_handler", client_socket_str, (char*)NULL);
-            log_error("Error executing request handler.");
-            safe_exit(socket, -1);
-        }
-        list_append(&childs, &handler);
-        if (close(client_socket) < 0) {
-            log_error("Error closing client socket.");
-        }
+        fork_req_handler(socket, client_socket);
     }
 
     safe_exit(socket, 0);

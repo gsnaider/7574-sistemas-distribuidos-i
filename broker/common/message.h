@@ -30,6 +30,8 @@ typedef struct msg_t {
 
     int type;
     payload_t payload;
+
+    int broker_id;
 } msg_t;
 
 #endif

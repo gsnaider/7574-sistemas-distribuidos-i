@@ -57,6 +57,7 @@ add_executable(server server/server.c server/server.h ${COMMON_DEPENDENCIES} ${S
 add_executable(req_handler server/req_handler.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
 add_executable(resp_handler server/resp_handler.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
 add_executable(worker server/worker.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
+add_executable(ring_connection server/ring_connection.c ${COMMON_DEPENDENCIES} ${SERVER_DEPENDENCIES})
 
 add_executable(db_server db-server/db_server.c ${COMMON_DEPENDENCIES} ${DB_DEPENDENCIES})
 add_executable(db_handler db-server/db_handler.c ${COMMON_DEPENDENCIES} ${DB_DEPENDENCIES})
