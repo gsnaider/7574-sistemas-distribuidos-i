@@ -92,12 +92,12 @@ int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
         vector_item_at(&subscribed, i, &sub_id);
         msg.global_id = sub_id;
         msg.mtype = get_mtype(global_ids, sub_id);
-        // TODO si no encuentro mtype, puede ser que sea de otro worker. Reenviar a siguiente worker.
         if (msg.mtype < 0) {
             log_error("Error getting mtype for global id %d.", sub_id);
             res = -1;
             break;
         }
+        // TODO change to say if we are sending to next server instead
         log_info("Sending message to subscribed user %d", sub_id);
         if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
             log_error("Error sending message to subscribed id %d", sub_id);

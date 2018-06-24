@@ -57,6 +57,7 @@ int publish(int id, char *message, char *topic) {
     msg_t msg;
     msg.mtype = id;
     msg.type = PUBLISH;
+    msg.broker_id = 0;
 
     strncpy(msg.payload.msg, message, MAX_MSG_LENGTH - 1);
     msg.payload.msg[MAX_MSG_LENGTH - 1] = 0; //Add null pointer terminator.
