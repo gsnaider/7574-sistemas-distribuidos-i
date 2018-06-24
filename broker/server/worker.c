@@ -98,6 +98,7 @@ int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
             break;
         }
         // TODO change to say if we are sending to next server instead
+        // TODO fix bug: if at least one user is unknown, we should only send once to the next server.
         log_info("Sending message to subscribed user %d", sub_id);
         if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
             log_error("Error sending message to subscribed id %d", sub_id);
