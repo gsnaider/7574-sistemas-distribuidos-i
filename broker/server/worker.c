@@ -94,28 +94,31 @@ int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
         vector_item_at(&subscribed, i, &sub_id);
         msg.global_id = sub_id;
         msg.mtype = get_mtype(global_ids, sub_id);
-        if (!already_sent_to_next_server && msg.mtype == NO_MTYPE_FOUND_CODE) {
-            int next_server_mtype = get_mtype(global_ids, NEXT_SERVER_GLOBAL_ID);
-            msg.mtype = next_server_mtype;
-            log_info("Sending message to next ring server");
-            if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
-                log_error("Error sending message to next ring server");
-                res = -1;
-                break;
-            }
-            // Only send once to next server.
-            already_sent_to_next_server = true;
-        }
-        else if (msg.mtype < 0) {
+        if (msg.mtype < 0 && msg.mtype != NO_MTYPE_FOUND_CODE) {
             log_error("Error getting mtype for global id %d.", sub_id);
             res = -1;
             break;
         }
-        log_info("Sending message to subscribed user %d", sub_id);
-        if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
-            log_error("Error sending message to subscribed id %d", sub_id);
-            res = -1;
-            break;
+        if (msg.mtype == NO_MTYPE_FOUND_CODE) {
+            if (!already_sent_to_next_server) {
+                int next_server_mtype = get_mtype(global_ids, NEXT_SERVER_GLOBAL_ID);
+                msg.mtype = next_server_mtype;
+                log_info("Sending message to next ring server");
+                if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
+                    log_error("Error sending message to next ring server");
+                    res = -1;
+                    break;
+                }
+                // Only send once to next server.
+                already_sent_to_next_server = true;
+            }
+        } else {
+            log_info("Sending message to subscribed user %d", sub_id);
+            if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
+                log_error("Error sending message to subscribed id %d", sub_id);
+                res = -1;
+                break;
+            }
         }
     }
     vector_destroy(&subscribed);
