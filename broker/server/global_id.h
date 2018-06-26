@@ -7,6 +7,7 @@
 
 #include "server.h"
 
+#define NO_MTYPE_FOUND_CODE -2
 
 typedef struct global_id {
     int mtype;

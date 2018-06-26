@@ -12,6 +12,7 @@
 #include "../common/message.h"
 #include "global_id.h"
 #include "db-connection.h"
+#include "ring_connection.h"
 
 
 bool graceful_quit = false;
@@ -87,18 +88,29 @@ int send_to_subs(int db_connection, int global_ids, int resp_queue, msg_t msg) {
         log_error("Error getting subscribed users to topic '%s'.", msg.payload.topic);
         return -1;
     }
+    bool already_sent_to_next_server = false;
     for (int i = 0; i < vector_size(&subscribed); i++) {
         int sub_id;
         vector_item_at(&subscribed, i, &sub_id);
         msg.global_id = sub_id;
         msg.mtype = get_mtype(global_ids, sub_id);
-        if (msg.mtype < 0) {
+        if (!already_sent_to_next_server && msg.mtype == NO_MTYPE_FOUND_CODE) {
+            int next_server_mtype = get_mtype(global_ids, NEXT_SERVER_GLOBAL_ID);
+            msg.mtype = next_server_mtype;
+            log_info("Sending message to next ring server");
+            if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
+                log_error("Error sending message to next ring server");
+                res = -1;
+                break;
+            }
+            // Only send once to next server.
+            already_sent_to_next_server = true;
+        }
+        else if (msg.mtype < 0) {
             log_error("Error getting mtype for global id %d.", sub_id);
             res = -1;
             break;
         }
-        // TODO change to say if we are sending to next server instead
-        // TODO fix bug: if at least one user is unknown, we should only send once to the next server.
         log_info("Sending message to subscribed user %d", sub_id);
         if (sendmsg(resp_queue, &msg, sizeof(msg_t)) < 0) {
             log_error("Error sending message to subscribed id %d", sub_id);
