@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
 
     int ring_connection_setup_queue = getmsg(RING_CONNECTION_SETUP_QUEUE);
     ring_setup_msg_t msg;
+    msg.mtype = 1;
     msg.resp_handler_pid = resp_handler_pid;
     sendmsg(ring_connection_setup_queue, &msg, sizeof(ring_setup_msg_t));
     return 0;
