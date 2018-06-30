@@ -1,5 +1,10 @@
 # MOM distribuido
-En este documento se detallan las decisiones de diseño tomadas para el desarrollo del sistema MOM de forma distribuida.
+En este documento se detallan las decisiones de diseño tomadas para el desarrollo del sistema MOM de forma distribuida. La arquitectura desarrollada se puede ver en la siguiente imágen:
+
+<img src="./doc/distributed-mom.png" alt="New project 1">
+
+A continuación se describen las características de la arquitectura.
+
 ## DB centralizada
 Se decidió mantener la base de datos de forma centralizada por varias razones:
 - Todas las instancias de los brokers van a ver siempre la misma información. 
