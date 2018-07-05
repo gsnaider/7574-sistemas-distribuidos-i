@@ -11,7 +11,7 @@ public class FileUploadForm {
 
     public String upload() {
         System.out.println(String.format("Received: %s", file));
-        return "index?faces-redirect=true";
+        return "/index?faces-redirect=true";
     }
 
     public String getFile() {

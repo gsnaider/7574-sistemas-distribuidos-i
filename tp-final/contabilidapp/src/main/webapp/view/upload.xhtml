@@ -23,9 +23,13 @@
 
     </h:panelGrid>
 
-    <p:commandButton id="registerButton" value="Cargar" ajax="false"
+    <p:commandButton id="uploadButton" value="Cargar" ajax="false"
                      action="#{fileUploadForm.upload}" styleClass="ui-priority-primary"/>
 
 </h:form>
+
+<br/>
+<h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>
+
 </body>
 </html>
