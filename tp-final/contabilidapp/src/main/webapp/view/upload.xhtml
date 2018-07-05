@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Contabilidapp</title>
+</h:head>
+<body>
+<h1>Cargar archivos</h1>
+<h:form>
+
+    <h:panelGrid columns="2" cellpadding="5">
+
+        <p:outputLabel for="file" value="Archivo"/>
+        <!--TODO change to file input-->
+        <p:inputText id="file"
+                     value="#{fileUploadForm.file}"
+                     required="true"/>
+
+    </h:panelGrid>
+
+    <p:commandButton id="registerButton" value="Cargar" ajax="false"
+                     action="#{fileUploadForm.upload}" styleClass="ui-priority-primary"/>
+
+</h:form>
+</body>
+</html>
