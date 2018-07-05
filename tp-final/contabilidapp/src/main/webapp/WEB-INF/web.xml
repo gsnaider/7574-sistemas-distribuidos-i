@@ -6,14 +6,23 @@
 
     <display-name>Contabilidapp</display-name>
 
+    <filter>
+        <filter-name>primeFacesFileUploadFilter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>primeFacesFileUploadFilter</filter-name>
+        <servlet-name>facesServlet</servlet-name>
+    </filter-mapping>
+
     <servlet>
-        <servlet-name>faces</servlet-name>
+        <servlet-name>facesServlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>faces</servlet-name>
+        <servlet-name>facesServlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
