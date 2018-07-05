@@ -15,16 +15,14 @@
 
     <h:panelGrid columns="2" cellpadding="5">
 
-        <p:outputLabel for="file" value="Archivo"/>
-        <!--TODO change to file input-->
-        <p:inputText id="file"
-                     value="#{fileUploadForm.file}"
-                     required="true"/>
+        <p:outputLabel for="files" value="Archivos"/>
+        <p:fileUpload id="files" fileUploadListener="#{fileUploadForm.handleFileUpload}" mode="advanced"
+                      dragDropSupport="false"
+                      multiple="true" update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(txt)$/"/>
+
+        <p:growl id="messages" showDetail="true"/>
 
     </h:panelGrid>
-
-    <p:commandButton id="uploadButton" value="Cargar" ajax="false"
-                     action="#{fileUploadForm.upload}" styleClass="ui-priority-primary"/>
 
 </h:form>
 
