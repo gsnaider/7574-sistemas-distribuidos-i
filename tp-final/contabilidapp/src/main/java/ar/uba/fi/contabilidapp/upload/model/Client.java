@@ -1,4 +1,4 @@
-package ar.uba.fi.contabilidapp.model.upload;
+package ar.uba.fi.contabilidapp.upload.model;
 
 import com.google.gson.Gson;
 

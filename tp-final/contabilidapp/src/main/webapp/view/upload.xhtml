@@ -23,6 +23,11 @@
         <p:growl id="messages" showDetail="true"/>
 
     </h:panelGrid>
+    <h:panelGrid columns="2" cellpadding="5">
+        <p:commandButton value="Finalizar carga" ajax="false" id="endUploadButton"
+                         action="#{fileUploadForm.endUpload}" styleClass="ui-priority-primary"/>
+
+    </h:panelGrid>
 
 </h:form>
 
