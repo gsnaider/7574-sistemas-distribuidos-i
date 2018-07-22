@@ -11,14 +11,18 @@ import java.util.Objects;
 public class Transaction {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
 
     @Column(name = "AMOUNT")
     private BigDecimal amount;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Client client;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private InputFile inputFile;
 
     public long getId() {
         return id;

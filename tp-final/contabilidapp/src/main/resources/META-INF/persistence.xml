@@ -3,23 +3,25 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
 
-    <!--Archivo de configuracion de JPA-->
-
     <persistence-unit name="contabilidapp-unit" transaction-type="RESOURCE_LOCAL">
 
-        <!--Proveedor que utilizamos como implementacion de JPA (en este caso Hibernate)-->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <!--Clases (Entities) que forman parte de esta persistence unit-->
         <class>ar.uba.fi.contabilidapp.upload.model.Client</class>
         <class>ar.uba.fi.contabilidapp.upload.model.Transaction</class>
+        <class>ar.uba.fi.contabilidapp.upload.model.InputFile</class>
+        <class>ar.uba.fi.contabilidapp.upload.model.Upload</class>
 
-        <!--Configuraciones de conexion con la DB-->
         <properties>
             <property name="javax.persistence.jdbc.user" value="root"/>
             <property name="javax.persistence.jdbc.password" value="mysql"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/contabilidapp"/>
+
+            <!--TODO: setting timezone to UTC since system time might not be compatible with MySQL (ie PDT).
+            See if there's a better workaround. Maybe configure timezone manually in MySQL. -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/contabilidapp?serverTimezone=UTC"/>
+
             <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.show_sql" value="true"/>

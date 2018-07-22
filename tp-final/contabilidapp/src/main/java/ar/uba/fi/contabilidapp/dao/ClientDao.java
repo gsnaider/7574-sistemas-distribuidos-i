@@ -3,24 +3,17 @@ package ar.uba.fi.contabilidapp.dao;
 import ar.uba.fi.contabilidapp.upload.model.Client;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
-// TODO
-public class ClientDao {
 
-    private final EntityManagerFactory entityManagerFactory;
-    private final EntityManager em;
+final class ClientDao extends AbstractDao<Client> {
 
-    public ClientDao() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("demo-unit");
-        em = entityManagerFactory.createEntityManager();
+    ClientDao(EntityManager entityManager) {
+        super(entityManager);
     }
 
-    public void add(Client client) {
-        em.getTransaction().begin();
-        em.persist(client);
-        em.getTransaction().commit();
+    @Override
+    public Client find(long id) {
+        return find(id, Client.class);
     }
 
 }

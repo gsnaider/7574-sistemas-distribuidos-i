@@ -14,11 +14,12 @@ public class InputFile {
     private static final int MAX_BYTES = 100000;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
 
-    @Column(name = "UPLOAD_ID")
-    private long uploadId;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Upload upload;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Transaction> transactions;
@@ -32,12 +33,12 @@ public class InputFile {
         return id;
     }
 
-    public long getUploadId() {
-        return uploadId;
+    public Upload getUpload() {
+        return upload;
     }
 
-    public void setUploadId(long uploadId) {
-        this.uploadId = uploadId;
+    public void setUpload(Upload upload) {
+        this.upload = upload;
     }
 
     public List<Transaction> getTransactions() {
@@ -67,7 +68,7 @@ public class InputFile {
         if (o == null || getClass() != o.getClass()) return false;
         InputFile inputFile = (InputFile) o;
         return id == inputFile.id &&
-                uploadId == inputFile.uploadId &&
+                Objects.equals(upload, inputFile.upload) &&
                 Objects.equals(transactions, inputFile.transactions) &&
                 Arrays.equals(fileData, inputFile.fileData);
     }
@@ -75,9 +76,8 @@ public class InputFile {
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(id, uploadId, transactions);
+        int result = Objects.hash(id, upload, transactions);
         result = 31 * result + Arrays.hashCode(fileData);
         return result;
     }
-
 }
