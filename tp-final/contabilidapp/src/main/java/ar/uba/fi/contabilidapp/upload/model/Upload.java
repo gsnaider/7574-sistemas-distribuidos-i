@@ -15,7 +15,6 @@ public class Upload {
     @Column(name = "ID")
     private long id;
 
-    // TODO Check if BLOB column ok.
     @Lob
     @Column(name = "CONGLOMERATE_FILE_DATA")
     private byte[] conglomerateFileData;

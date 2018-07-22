@@ -4,11 +4,10 @@ import org.pmw.tinylog.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 
 abstract class AbstractDao<T> implements Dao<T> {
 
-    private final EntityManagerFactory entityManagerFactory;
+    final EntityManagerFactory entityManagerFactory;
 
     AbstractDao(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;

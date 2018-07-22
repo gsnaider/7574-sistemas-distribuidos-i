@@ -25,7 +25,6 @@ public class InputFile {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Transaction> transactions;
 
-    // TODO Check if BLOB column ok.
     @Lob
     @Column(name = "FILE_DATA", length=MAX_BYTES)
     private byte[] fileData;

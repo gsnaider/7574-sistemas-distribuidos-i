@@ -4,7 +4,7 @@ import ar.uba.fi.contabilidapp.upload.model.Upload;
 
 import javax.persistence.EntityManagerFactory;
 
-public class UploadDao extends AbstractDao<Upload> {
+public final class UploadDao extends AbstractDao<Upload> {
 
     UploadDao(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory);

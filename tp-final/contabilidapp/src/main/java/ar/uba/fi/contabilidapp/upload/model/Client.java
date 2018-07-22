@@ -1,13 +1,13 @@
 package ar.uba.fi.contabilidapp.upload.model;
 
-import com.google.gson.Gson;
-
 import javax.persistence.*;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "CLIENTS")
+@NamedQueries(value = {
+        @NamedQuery(name = "Clients.findByClientCode", query = "SELECT c FROM Client c WHERE c.clientCode = :clientCode")
+})
 public class Client {
 
     @Id
@@ -17,9 +17,6 @@ public class Client {
 
     @Column(name = "CLIENT_CODE")
     private String clientCode;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
 
     @Column(name = "PREFIX_CODE")
     private String prefixCode;
@@ -40,14 +37,6 @@ public class Client {
 
     public void setClientCode(String clientCode) {
         this.clientCode = clientCode;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
     }
 
     public String getPrefixCode() {
@@ -79,7 +68,6 @@ public class Client {
         return "Client{" +
                 "id=" + id +
                 ", clientCode='" + clientCode + '\'' +
-                ", transactions=" + transactions +
                 ", prefixCode='" + prefixCode + '\'' +
                 ", middleCode='" + middleCode + '\'' +
                 ", suffixCode='" + suffixCode + '\'' +
@@ -93,7 +81,6 @@ public class Client {
         Client client = (Client) o;
         return id == client.id &&
                 Objects.equals(clientCode, client.clientCode) &&
-                Objects.equals(transactions, client.transactions) &&
                 Objects.equals(prefixCode, client.prefixCode) &&
                 Objects.equals(middleCode, client.middleCode) &&
                 Objects.equals(suffixCode, client.suffixCode);
@@ -101,6 +88,6 @@ public class Client {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clientCode, transactions, prefixCode, middleCode, suffixCode);
+        return Objects.hash(id, clientCode, prefixCode, middleCode, suffixCode);
     }
 }

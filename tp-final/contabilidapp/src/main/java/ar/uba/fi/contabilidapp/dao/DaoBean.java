@@ -24,10 +24,10 @@ public class DaoBean {
 
     private final EntityManagerFactory entityManagerFactory;
 
-    private final Dao<Client> clientDao;
-    private final Dao<Transaction> transactionDao;
-    private final Dao<InputFile> inputFileDao;
-    private final Dao<Upload> uploadDao;
+    private final ClientDao clientDao;
+    private final TransactionDao transactionDao;
+    private final InputFileDao inputFileDao;
+    private final UploadDao uploadDao;
 
     public DaoBean() {
         entityManagerFactory = Persistence.createEntityManagerFactory("contabilidapp-unit");
@@ -38,19 +38,19 @@ public class DaoBean {
         uploadDao = new UploadDao(entityManagerFactory);
     }
 
-    public Dao<Client> getClientDao() {
+    public ClientDao getClientDao() {
         return clientDao;
     }
 
-    public Dao<Transaction> getTransactionDao() {
+    public TransactionDao getTransactionDao() {
         return transactionDao;
     }
 
-    public Dao<InputFile> getInputFileDao() {
+    public InputFileDao getInputFileDao() {
         return inputFileDao;
     }
 
-    public Dao<Upload> getUploadDao() {
+    public UploadDao getUploadDao() {
         return uploadDao;
     }
 

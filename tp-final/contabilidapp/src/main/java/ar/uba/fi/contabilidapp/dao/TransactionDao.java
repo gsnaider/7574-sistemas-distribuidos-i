@@ -4,7 +4,7 @@ import ar.uba.fi.contabilidapp.upload.model.Transaction;
 
 import javax.persistence.EntityManagerFactory;
 
-class TransactionDao extends AbstractDao<Transaction> {
+public final class TransactionDao extends AbstractDao<Transaction> {
 
     TransactionDao(EntityManagerFactory entityManagerFactory) {
         super(entityManagerFactory);

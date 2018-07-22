@@ -11,6 +11,7 @@
 </h:head>
 <body>
 <h1>Cargar archivos</h1>
+<!-- TODO add step for starting an upload (create Upload entity). -->
 <h:form enctype="multipart/form-data">
 
     <h:panelGrid columns="2" cellpadding="5">
@@ -18,7 +19,7 @@
         <p:outputLabel for="files" value="Archivos"/>
         <p:fileUpload id="files" fileUploadListener="#{fileUploadForm.handleFileUpload}" mode="advanced"
                       dragDropSupport="false"
-                      multiple="true" update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(txt)$/"/>
+                      multiple="true" update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
 
         <p:growl id="messages" showDetail="true"/>
 
