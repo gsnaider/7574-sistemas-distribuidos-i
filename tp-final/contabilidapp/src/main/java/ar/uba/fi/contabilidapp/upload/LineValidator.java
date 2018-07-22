@@ -1,6 +1,5 @@
 package ar.uba.fi.contabilidapp.upload;
 
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static ar.uba.fi.contabilidapp.upload.LineParser.AMOUNT_LENGTH;

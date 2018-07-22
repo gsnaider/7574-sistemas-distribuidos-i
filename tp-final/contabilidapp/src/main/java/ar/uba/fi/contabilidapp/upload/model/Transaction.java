@@ -46,6 +46,14 @@ public class Transaction {
         this.client = client;
     }
 
+    public InputFile getInputFile() {
+        return inputFile;
+    }
+
+    public void setInputFile(InputFile inputFile) {
+        this.inputFile = inputFile;
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);

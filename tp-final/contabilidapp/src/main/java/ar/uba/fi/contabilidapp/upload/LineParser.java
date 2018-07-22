@@ -16,7 +16,14 @@ public class LineParser {
     static final int AMOUNT_LENGTH = 11;
     private static final int AMOUNT_END_POSITION = AMOUNT_POSITION + AMOUNT_LENGTH;
 
-    public static Transaction parseLine(String inputLine) {
+    /**
+     * Parses a line from an input file to a {@link Transaction}.
+     * @param inputLine The line to be parsed. Should have a valid transaction format. A valid format consists of a line
+     *                  that matches the following regex: "^.{23}\d{11}.{47}$".
+     * @return A new transaction with the amount and client information from the inputLine.
+     * @throws IllegalArgumentException if inputLine does not have a valid transaction format.
+     */
+    public static Transaction parseLine(String inputLine) throws IllegalArgumentException {
         if (!LineValidator.isValid(inputLine)) {
             throw new IllegalArgumentException(String.format("Invalid line format: '%s'", inputLine));
         }

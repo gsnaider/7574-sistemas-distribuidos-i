@@ -12,6 +12,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import org.pmw.tinylog.Logger;
 
@@ -29,24 +31,26 @@ public class FileUploadForm {
         Logger.info("File received: {}", file.getFileName());
 
         byte[] fileData = file.getContents();
-        persistInputFile(fileData);
+        InputFile inputFile = persistInputFile(fileData);
 
         InputStream is = new ByteArrayInputStream(fileData);
         Scanner scanner = new Scanner(is);
         while (scanner.hasNextLine()) {
             Transaction transaction = LineParser.parseLine(scanner.nextLine());
+            transaction.setInputFile(inputFile);
 
+            daoBean.getTransactionDao().add(transaction);
             // TODO Store User and transaction in DB.
             // Check if user already exists in DB, if not create it.
         }
 
     }
 
-    private void persistInputFile(byte[] fileData) {
+    private InputFile persistInputFile(byte[] fileData) {
         InputFile inputFile = new InputFile();
         inputFile.setFileData(fileData);
         // TODO set current uploadId
-        daoBean.getInputFileDao().add(inputFile);
+        return daoBean.getInputFileDao().add(inputFile);
     }
 
 
