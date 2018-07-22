@@ -19,6 +19,7 @@ public class InputFile {
     private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "UPLOAD_ID")
     private Upload upload;
 
     @OneToMany(cascade = CascadeType.ALL)

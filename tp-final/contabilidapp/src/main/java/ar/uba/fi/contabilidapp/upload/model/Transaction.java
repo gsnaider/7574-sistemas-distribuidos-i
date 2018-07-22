@@ -19,9 +19,11 @@ public class Transaction {
     private BigDecimal amount;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "CLIENT_ID")
     private Client client;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "INPUT_FILE_ID")
     private InputFile inputFile;
 
     public long getId() {

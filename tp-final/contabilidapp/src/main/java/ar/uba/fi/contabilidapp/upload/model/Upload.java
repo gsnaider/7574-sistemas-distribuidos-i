@@ -20,7 +20,6 @@ public class Upload {
     @Column(name = "CONGLOMERATE_FILE_DATA")
     private byte[] conglomerateFileData;
 
-
     public long getId() {
         return id;
     }

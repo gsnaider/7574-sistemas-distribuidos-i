@@ -15,8 +15,8 @@ public class Client {
     @Column(name = "ID")
     private long id;
 
-    @Column(name = "CLIENT_ID")
-    private String clientId;
+    @Column(name = "CLIENT_CODE")
+    private String clientCode;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Transaction> transactions;
@@ -34,12 +34,12 @@ public class Client {
         return id;
     }
 
-    public String getClientId() {
-        return clientId;
+    public String getClientCode() {
+        return clientCode;
     }
 
-    public void setClientId(String clientId) {
-        this.clientId = clientId;
+    public void setClientCode(String clientCode) {
+        this.clientCode = clientCode;
     }
 
     public List<Transaction> getTransactions() {
@@ -85,7 +85,7 @@ public class Client {
         if (o == null || getClass() != o.getClass()) return false;
         Client client = (Client) o;
         return id == client.id &&
-                Objects.equals(clientId, client.clientId) &&
+                Objects.equals(clientCode, client.clientCode) &&
                 Objects.equals(transactions, client.transactions) &&
                 Objects.equals(prefixCode, client.prefixCode) &&
                 Objects.equals(middleCode, client.middleCode) &&
@@ -94,6 +94,6 @@ public class Client {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, clientId, transactions, prefixCode, middleCode, suffixCode);
+        return Objects.hash(id, clientCode, transactions, prefixCode, middleCode, suffixCode);
     }
 }
