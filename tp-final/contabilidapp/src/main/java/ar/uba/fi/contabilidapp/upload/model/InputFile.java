@@ -60,7 +60,12 @@ public class InputFile {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return "InputFile{" +
+                "id=" + id +
+                ", upload=" + upload +
+                ", transactions=" + transactions +
+                ", fileData=" + Arrays.toString(fileData) +
+                '}';
     }
 
     @Override

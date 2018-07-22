@@ -56,7 +56,11 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return "Transaction{" +
+                "id=" + id +
+                ", amount=" + amount +
+                ", client=" + client +
+                '}';
     }
 
     @Override

@@ -4,6 +4,7 @@ import ar.uba.fi.contabilidapp.dao.DaoBean;
 import ar.uba.fi.contabilidapp.upload.LineParser;
 import ar.uba.fi.contabilidapp.upload.model.InputFile;
 import ar.uba.fi.contabilidapp.upload.model.Transaction;
+import org.pmw.tinylog.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
@@ -15,7 +16,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import org.pmw.tinylog.Logger;
 
 @ManagedBean
 @RequestScoped
@@ -30,26 +30,25 @@ public class FileUploadForm {
         UploadedFile file = event.getFile();
         Logger.info("File received: {}", file.getFileName());
 
-        byte[] fileData = file.getContents();
-        InputFile inputFile = persistInputFile(fileData);
+        List<Transaction> transactions = new ArrayList<>();
 
+        byte[] fileData = file.getContents();
         InputStream is = new ByteArrayInputStream(fileData);
         Scanner scanner = new Scanner(is);
         while (scanner.hasNextLine()) {
             Transaction transaction = LineParser.parseLine(scanner.nextLine());
-            transaction.setInputFile(inputFile);
-
-            daoBean.getTransactionDao().add(transaction);
-            // TODO Store User and transaction in DB.
-            // Check if user already exists in DB, if not create it.
+            transactions.add(transaction);
         }
 
+        InputFile inputFile = persistInputFile(fileData, transactions);
     }
 
-    private InputFile persistInputFile(byte[] fileData) {
+    private InputFile persistInputFile(byte[] fileData, List<Transaction> transactions) {
         InputFile inputFile = new InputFile();
         inputFile.setFileData(fileData);
+        inputFile.setTransactions(transactions);
         // TODO set current uploadId
+        // TODO check if clients already exist.
         return daoBean.getInputFileDao().add(inputFile);
     }
 

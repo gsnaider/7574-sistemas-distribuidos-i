@@ -34,7 +34,10 @@ public class Upload {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return "Upload{" +
+                "id=" + id +
+                ", conglomerateFileData=" + Arrays.toString(conglomerateFileData) +
+                '}';
     }
 
     @Override

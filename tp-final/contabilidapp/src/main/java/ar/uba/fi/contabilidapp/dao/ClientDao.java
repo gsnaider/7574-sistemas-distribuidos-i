@@ -2,13 +2,13 @@ package ar.uba.fi.contabilidapp.dao;
 
 import ar.uba.fi.contabilidapp.upload.model.Client;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 
 final class ClientDao extends AbstractDao<Client> {
 
-    ClientDao(EntityManager entityManager) {
-        super(entityManager);
+    ClientDao(EntityManagerFactory entityManagerFactory) {
+        super(entityManagerFactory);
     }
 
     @Override

@@ -5,11 +5,11 @@ import ar.uba.fi.contabilidapp.upload.model.Client;
 import ar.uba.fi.contabilidapp.upload.model.InputFile;
 import ar.uba.fi.contabilidapp.upload.model.Transaction;
 import ar.uba.fi.contabilidapp.upload.model.Upload;
+import org.pmw.tinylog.Logger;
 
 import javax.annotation.PreDestroy;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -23,7 +23,6 @@ import javax.persistence.Persistence;
 public class DaoBean {
 
     private final EntityManagerFactory entityManagerFactory;
-    private final EntityManager entityManager;
 
     private final Dao<Client> clientDao;
     private final Dao<Transaction> transactionDao;
@@ -32,12 +31,11 @@ public class DaoBean {
 
     public DaoBean() {
         entityManagerFactory = Persistence.createEntityManagerFactory("contabilidapp-unit");
-        entityManager = entityManagerFactory.createEntityManager();
 
-        clientDao = new ClientDao(entityManager);
-        transactionDao = new TransactionDao(entityManager);
-        inputFileDao = new InputFileDao(entityManager);
-        uploadDao = new UploadDao(entityManager);
+        clientDao = new ClientDao(entityManagerFactory);
+        transactionDao = new TransactionDao(entityManagerFactory);
+        inputFileDao = new InputFileDao(entityManagerFactory);
+        uploadDao = new UploadDao(entityManagerFactory);
     }
 
     public Dao<Client> getClientDao() {
@@ -58,7 +56,7 @@ public class DaoBean {
 
     @PreDestroy
     public void tearUp() {
-        entityManager.close();
+        Logger.info("Closing entity manager factory.");
         entityManagerFactory.close();
     }
 

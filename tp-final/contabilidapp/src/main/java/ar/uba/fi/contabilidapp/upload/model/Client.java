@@ -76,7 +76,14 @@ public class Client {
 
     @Override
     public String toString() {
-        return new Gson().toJson(this);
+        return "Client{" +
+                "id=" + id +
+                ", clientCode='" + clientCode + '\'' +
+                ", transactions=" + transactions +
+                ", prefixCode='" + prefixCode + '\'' +
+                ", middleCode='" + middleCode + '\'' +
+                ", suffixCode='" + suffixCode + '\'' +
+                '}';
     }
 
     @Override

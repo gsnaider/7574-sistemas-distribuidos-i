@@ -2,12 +2,12 @@ package ar.uba.fi.contabilidapp.dao;
 
 import ar.uba.fi.contabilidapp.upload.model.Transaction;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 class TransactionDao extends AbstractDao<Transaction> {
 
-    TransactionDao(EntityManager entityManager) {
-        super(entityManager);
+    TransactionDao(EntityManagerFactory entityManagerFactory) {
+        super(entityManagerFactory);
     }
 
     @Override

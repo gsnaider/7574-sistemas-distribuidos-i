@@ -2,12 +2,12 @@ package ar.uba.fi.contabilidapp.dao;
 
 import ar.uba.fi.contabilidapp.upload.model.InputFile;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 public class InputFileDao extends AbstractDao<InputFile> {
 
-    InputFileDao(EntityManager entityManager) {
-        super(entityManager);
+    InputFileDao(EntityManagerFactory entityManagerFactory) {
+        super(entityManagerFactory);
     }
 
     @Override
