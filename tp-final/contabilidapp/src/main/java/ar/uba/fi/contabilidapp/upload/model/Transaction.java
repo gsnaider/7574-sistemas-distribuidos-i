@@ -18,7 +18,7 @@ public class Transaction {
     @Column(name = "AMOUNT")
     private BigDecimal amount;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "CLIENT_ID")
     private Client client;
 

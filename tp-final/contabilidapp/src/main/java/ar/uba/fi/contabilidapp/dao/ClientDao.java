@@ -30,7 +30,7 @@ public final class ClientDao extends AbstractDao<Client> {
             Logger.info("No client found for clientCode {}", clientCode);
             return null;
         } catch (NonUniqueResultException e) {
-            Logger.warn("Multiple clients found for clientCode {}", clientCode);
+            Logger.error("Multiple clients found for clientCode {}", clientCode);
             return null;
         } finally {
             entityManager.close();
@@ -39,4 +39,29 @@ public final class ClientDao extends AbstractDao<Client> {
     }
 
 
+    public Client addIfNotPresent(Client client) {
+        Logger.info("Adding client if not present: {}", client);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+
+        Query query = entityManager.createNamedQuery("Clients.findByClientCode");
+        String clientCode = client.getClientCode();
+        query.setParameter("clientCode", clientCode);
+        try {
+            Client searchedClient = (Client) query.getSingleResult();
+            Logger.info("Client already exists for clientCode {}, not adding.", clientCode, client);
+            return searchedClient;
+        } catch (NoResultException e) {
+            Logger.info("No client found for clientCode {}, adding client.", clientCode);
+            entityManager.persist(client);
+            return client;
+        } catch (NonUniqueResultException e) {
+            Logger.error("Multiple clients found for clientCode {}", clientCode);
+            return null;
+        } finally {
+            entityManager.getTransaction().commit();
+            entityManager.close();
+        }
+
+    }
 }

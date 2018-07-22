@@ -2,6 +2,7 @@ package ar.uba.fi.contabilidapp.form;
 
 import ar.uba.fi.contabilidapp.dao.DaoBean;
 import ar.uba.fi.contabilidapp.upload.LineParser;
+import ar.uba.fi.contabilidapp.upload.model.Client;
 import ar.uba.fi.contabilidapp.upload.model.InputFile;
 import ar.uba.fi.contabilidapp.upload.model.Transaction;
 import org.pmw.tinylog.Logger;
@@ -44,6 +45,10 @@ public class FileUploadForm {
     }
 
     private InputFile persistInputFile(byte[] fileData, List<Transaction> transactions) {
+        for (Transaction transaction : transactions) {
+            Client client = daoBean.getClientDao().addIfNotPresent(transaction.getClient());
+            transaction.setClient(client);
+        }
         InputFile inputFile = new InputFile();
         inputFile.setFileData(fileData);
         inputFile.setTransactions(transactions);
