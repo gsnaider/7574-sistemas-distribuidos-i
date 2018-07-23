@@ -1,5 +1,7 @@
 package ar.uba.fi.contabilidapp.model;
 
+import ar.uba.fi.contabilidapp.entities.ControlResults;
+
 import java.util.List;
 
 // TODO separar vista de model/DB en otro tomcat, y llamar por web service.
@@ -19,5 +21,7 @@ public interface Model {
 
     void closePeriod(long uploadId) throws ContabilidappException;
 
-    String controlPeriod(byte[] fileData, long uploadId) throws ContabilidappException;
+    ControlResults controlPeriod(byte[] fileData, long uploadId) throws ContabilidappException;
+
+
 }

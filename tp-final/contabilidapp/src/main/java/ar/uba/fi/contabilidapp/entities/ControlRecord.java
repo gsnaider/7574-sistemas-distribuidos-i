@@ -11,15 +11,17 @@ public class ControlRecord {
 
     private String middleCode;
 
-    private BigDecimal amount;
+    private BigDecimal controlAmount;
+
+    private BigDecimal transactionsAmount;
 
     private String suffixCode;
 
-    public ControlRecord(String clientCode, String clientName, String middleCode, BigDecimal amount, String suffixCode) {
+    public ControlRecord(String clientCode, String clientName, String middleCode, BigDecimal controlAmount, String suffixCode) {
         this.clientCode = clientCode;
         this.clientName = clientName;
         this.middleCode = middleCode;
-        this.amount = amount;
+        this.controlAmount = controlAmount;
         this.suffixCode = suffixCode;
     }
 
@@ -47,12 +49,12 @@ public class ControlRecord {
         this.middleCode = middleCode;
     }
 
-    public BigDecimal getAmount() {
-        return amount;
+    public BigDecimal getControlAmount() {
+        return controlAmount;
     }
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
+    public void setControlAmount(BigDecimal controlAmount) {
+        this.controlAmount = controlAmount;
     }
 
     public String getSuffixCode() {
@@ -63,6 +65,14 @@ public class ControlRecord {
         this.suffixCode = suffixCode;
     }
 
+    public BigDecimal getTransactionsAmount() {
+        return transactionsAmount;
+    }
+
+    public void setTransactionsAmount(BigDecimal transactionsAmount) {
+        this.transactionsAmount = transactionsAmount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -71,13 +81,17 @@ public class ControlRecord {
         return Objects.equals(clientCode, that.clientCode) &&
                 Objects.equals(clientName, that.clientName) &&
                 Objects.equals(middleCode, that.middleCode) &&
-                Objects.equals(amount, that.amount) &&
+                Objects.equals(controlAmount, that.controlAmount) &&
                 Objects.equals(suffixCode, that.suffixCode);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(clientCode, clientName, middleCode, amount, suffixCode);
+        return Objects.hash(clientCode, clientName, middleCode, controlAmount, suffixCode);
+    }
+
+    public boolean amountsMatch() {
+        return transactionsAmount != null && transactionsAmount.equals(controlAmount);
     }
 }

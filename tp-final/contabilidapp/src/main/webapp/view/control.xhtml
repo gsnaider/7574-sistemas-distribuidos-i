@@ -34,6 +34,11 @@
 </h:form>
 
 <h:form>
+    <p:commandButton value="Descargar archivos" ajax="false" icon="ui-icon-arrowthick-1-s" disabled="#{!controlView.hasSplitFiles()}">
+        <p:fileDownload value="#{controlView.splitFiles}" />
+    </p:commandButton>
+    <br/>
+
     <p:commandButton value="Descargar errores" ajax="false" icon="ui-icon-arrowthick-1-s" disabled="#{!controlView.hasErrorsFile()}">
         <p:fileDownload value="#{controlView.errorsFile}" />
     </p:commandButton>

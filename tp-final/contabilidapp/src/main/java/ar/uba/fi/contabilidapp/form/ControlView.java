@@ -1,5 +1,6 @@
 package ar.uba.fi.contabilidapp.form;
 
+import ar.uba.fi.contabilidapp.entities.ControlResults;
 import ar.uba.fi.contabilidapp.model.ContabilidappException;
 import ar.uba.fi.contabilidapp.model.Model;
 import ar.uba.fi.contabilidapp.model.ModelProvider;
@@ -33,7 +34,7 @@ public class ControlView {
 
     private UploadedFile file;
 
-    private String errorsFile;
+    private ControlResults controlResults;
 
     @PostConstruct
     public void init() {
@@ -47,8 +48,8 @@ public class ControlView {
             byte[] fileData = file.getContents();
 
             try {
-                errorsFile = model.controlPeriod(fileData, uploadId);
-                if (errorsFile.isEmpty()) {
+                controlResults = model.controlPeriod(fileData, uploadId);
+                if (controlResults.getErrorsFile().isEmpty()) {
                     FacesMessage message = new FacesMessage("Control finalizado sin errores.");
                     FacesContext.getCurrentInstance().addMessage(null, message);
                 } else {
@@ -73,8 +74,13 @@ public class ControlView {
         return idStrings;
     }
 
+    public StreamedContent getSplitFiles() {
+        InputStream stream = new ByteArrayInputStream(controlResults.getZipFiles());
+        return  new DefaultStreamedContent(stream, "application/zip", "split-files.zip");
+    }
+
     public StreamedContent getErrorsFile() {
-        InputStream stream = new ByteArrayInputStream(errorsFile.getBytes());
+        InputStream stream = new ByteArrayInputStream(controlResults.getErrorsFile().getBytes());
         return  new DefaultStreamedContent(stream, "text/plain", "errors.txt");
     }
 
@@ -86,8 +92,12 @@ public class ControlView {
         this.uploadId = uploadId;
     }
 
+    public boolean hasSplitFiles() {
+        return controlResults != null && controlResults.hasSplitFiles();
+    }
+
     public boolean hasErrorsFile() {
-        return errorsFile != null && !errorsFile.isEmpty();
+        return controlResults != null && controlResults.hasErrorFiles();
     }
 
     public UploadedFile getFile() {

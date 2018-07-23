@@ -1,6 +1,7 @@
 package ar.uba.fi.contabilidapp.dao;
 
 
+import ar.uba.fi.contabilidapp.entities.Transaction;
 import org.pmw.tinylog.Logger;
 
 import javax.annotation.PreDestroy;
@@ -48,6 +49,30 @@ public class DaoManager {
         }
 
         return result;
+    }
+
+    public List<Transaction> getTransactionsFromPeriod(long uploadId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        String queryStrng =
+                "SELECT t " +
+                        "FROM Transaction t " +
+                        "INNER JOIN t.inputFile f " +
+                        "WHERE f.uploadPeriod.id = :uploadId " +
+                        "ORDER BY f.id, t.id";
+        Query query = entityManager.createQuery(
+                queryStrng)
+                .setParameter("uploadId", uploadId);
+        List<Transaction> result = null;
+        try {
+            result = query.getResultList();
+        } catch (Exception e) {
+            Logger.error("Error getting transactions from period.", e);
+        } finally {
+            entityManager.close();
+        }
+
+        return result;
+
     }
 
     public ClientDao getClientDao() {

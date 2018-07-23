@@ -38,6 +38,8 @@ public class ModelImpl implements Model {
     private static final Pattern CONTROL_PATTERN = Pattern.compile(CONTROL_LINE_REGEX);
     private static final String NO_AMOUNT = "---";
 
+    private static final String SPLIT_FILE_NAME = "file%d.txt";
+
 
     private final DaoManager daoManager;
 
@@ -105,13 +107,14 @@ public class ModelImpl implements Model {
         daoManager.getUploadDao().closePeriod(uploadId);
     }
 
-    List<ControlRecord> parseControlFile(byte[] fileData) throws ContabilidappException {
-        List<ControlRecord> records = new ArrayList<>();
+    Map<String, ControlRecord> parseControlFile(byte[] fileData) throws ContabilidappException {
+        Map<String, ControlRecord> records = new HashMap<>();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileData)))) {
             String line = reader.readLine();
             while (line != null) {
-                records.add(parseControlLine(line));
+                ControlRecord controlRecord = parseControlLine(line);
+                records.put(controlRecord.getClientCode(), controlRecord);
                 line = reader.readLine();
             }
         } catch (IOException e) {
@@ -124,12 +127,11 @@ public class ModelImpl implements Model {
         StringBuilder errorsTable = new StringBuilder();
         Formatter lineFormatter = new Formatter(errorsTable);
 
+        DecimalFormat df = new DecimalFormat("0000000.00");
         for (ControlErrorRecord errorRecord : errors) {
 
             BigDecimal transactionAmount = errorRecord.getTransactionAmount();
             BigDecimal controlAmount = errorRecord.getControlAmount();
-
-            DecimalFormat df = new DecimalFormat("0000000.00");
 
             String formattedTransactionAmount = transactionAmount == null ? NO_AMOUNT : df.format(transactionAmount);
             String formattedControlAmount = controlAmount == null ? NO_AMOUNT : df.format(controlAmount);
@@ -145,8 +147,8 @@ public class ModelImpl implements Model {
     }
 
     @Override
-    public String controlPeriod(byte[] fileData, long uploadId) throws ContabilidappException {
-        List<ControlRecord> controlRecords = parseControlFile(fileData);
+    public ControlResults controlPeriod(byte[] fileData, long uploadId) throws ContabilidappException {
+        Map<String, ControlRecord> controlRecords = parseControlFile(fileData);
 
         Map<String, BigDecimal> transactionAmounts = new HashMap<>();
         Set<String> transactionClients = new HashSet<>();
@@ -160,12 +162,13 @@ public class ModelImpl implements Model {
 
         List<ControlErrorRecord> errors = new ArrayList<>();
 
-        for (ControlRecord controlRecord : controlRecords) {
+        for (ControlRecord controlRecord : controlRecords.values()) {
             String clientCode = controlRecord.getClientCode();
             BigDecimal transactionAmount = transactionAmounts.get(clientCode);
-            BigDecimal controlAmount = controlRecord.getAmount();
+            BigDecimal controlAmount = controlRecord.getControlAmount();
 
-            if (transactionAmount == null || !controlAmount.equals(transactionAmount)) {
+            controlRecord.setTransactionsAmount(transactionAmount);
+            if (!controlRecord.amountsMatch()) {
                 errors.add(new ControlErrorRecord(clientCode, transactionAmount, controlAmount));
             } else if (transactionAmount != null) {
                 transactionClients.remove(clientCode);
@@ -177,7 +180,53 @@ public class ModelImpl implements Model {
             errors.add(new ControlErrorRecord(clientCode, transactionAmount, null));
         }
 
-        return generateErrorFile(errors);
+        byte[] splitTransactionZipFiles = getSplitFiles(uploadId, controlRecords);
+
+        return new ControlResults(generateErrorFile(errors), splitTransactionZipFiles);
+    }
+
+    private byte[] getSplitFiles(long uploadId, Map<String, ControlRecord> controlRecords) throws ContabilidappException {
+        try {
+            List<Transaction> transactions = daoManager.getTransactionsFromPeriod(uploadId);
+            if (transactions.isEmpty()) {
+                Logger.warn("No transactions found for period {}", uploadId);
+                return new byte[0];
+            }
+
+            ZipBuilder zipBuilder = new ZipBuilder();
+            int currentSplitFileId = 1;
+            long currentInputFileId = transactions.get(0).getInputFile().getId();
+            DecimalFormat df = new DecimalFormat("0000000.00");
+            StringBuilder stringBuilder = new StringBuilder();
+            Formatter lineFormatter = new Formatter(stringBuilder);
+            for (Transaction transaction : transactions) {
+                ControlRecord controlRecord = controlRecords.get(transaction.getClient().getClientCode());
+                if (controlRecord != null && controlRecord.amountsMatch()) {
+                    long inputFileId = transaction.getInputFile().getId();
+                    if (inputFileId != currentInputFileId) {
+                        zipBuilder.addToZip(String.format(SPLIT_FILE_NAME, currentSplitFileId), stringBuilder.toString());
+                        stringBuilder = new StringBuilder();
+                        lineFormatter = new Formatter(stringBuilder);
+                        currentInputFileId = inputFileId;
+                        currentSplitFileId++;
+                    }
+                    lineFormatter.format(
+                            "%s%s%s%s%s\n",
+                            controlRecord.getClientCode(),
+                            controlRecord.getClientName(),
+                            controlRecord.getMiddleCode(),
+                            df.format(transaction.getAmount()),
+                            controlRecord.getSuffixCode());
+                }
+
+
+            }
+            zipBuilder.addToZip(String.format(SPLIT_FILE_NAME, currentSplitFileId), stringBuilder.toString());
+            return zipBuilder.getZip();
+        } catch (IOException e) {
+            throw new ContabilidappException("Error generating split zip file.", e);
+        }
+
     }
 
     private InputFile persistInputFile(byte[] fileData, List<Transaction> transactions, long uploadId) throws ContabilidappException {
