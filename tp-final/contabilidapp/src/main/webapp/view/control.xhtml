@@ -4,16 +4,39 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Controlar</h1>
+<h1>Controlar periodo</h1>
+<h:form enctype="multipart/form-data">
+
+    <h:panelGrid columns="2" cellpadding="5">
+        <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
+        <p:selectOneMenu id="uploadPeriodId" value="#{controlView.uploadId}" style="width:150px" required="true">
+            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
+            <f:selectItems value="#{controlView.closedUploadIds}" />
+        </p:selectOneMenu>
+
+        <p:outputLabel for="fileUpload" value="Archivo de control"/>
+        <p:fileUpload id="fileUpload" value="#{controlView.file}" mode="simple" skinSimple="true"
+                      sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
+
+        <p:commandButton value="Controlar" ajax="false" actionListener="#{controlView.control}" />
+
+        <p:growl id="messages" showDetail="true"/>
+
+    </h:panelGrid>
+
+</h:form>
+
 <h:form>
-
-
+    <p:commandButton value="Descargar errores" ajax="false" icon="ui-icon-arrowthick-1-s" disabled="#{!controlView.hasErrorsFile()}">
+        <p:fileDownload value="#{controlView.errorsFile}" />
+    </p:commandButton>
 </h:form>
 
 <br/>

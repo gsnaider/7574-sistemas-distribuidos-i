@@ -1,15 +1,23 @@
 package ar.uba.fi.contabilidapp.model;
 
-import java.io.InputStream;
 import java.util.List;
+
+// TODO separar vista de model/DB en otro tomcat, y llamar por web service.
+// hacer otra implementacion del modelo en la vista (ModelFacade), que redirija el mensaje al otro server.
 
 public interface Model {
 
-    public long startUploadPeriod();
+    long startUploadPeriod();
 
-    public void handleFileUpload(byte[] fileData, long uploadId) throws ContabilidappException;
+    void handleFileUpload(byte[] fileData, long uploadId) throws ContabilidappException;
 
-    public String getAggregatedDataFile(long uploadId);
+    String getAggregatedDataFile(long uploadId);
 
     List<Long> getOpenUploadPeriodsIds();
+
+    List<Long> getClosedUploadPeriodsIds();
+
+    void closePeriod(long uploadId) throws ContabilidappException;
+
+    String controlPeriod(byte[] fileData, long uploadId) throws ContabilidappException;
 }

@@ -12,7 +12,7 @@ public class InputFile {
     private static final int MAX_BYTES = 100000;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")
     private long id;
 

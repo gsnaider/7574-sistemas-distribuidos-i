@@ -4,33 +4,34 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
+<!--TODO seleccionar el uploadId, y cerrarlo (agregar mensaje) -->
+<!--TODO cerrar en un primer paso, y despues seleccionar uploadId cerrado, y imprimir informe. (en otro paso)-->
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
 <h1>Cerrar carga</h1>
 
-<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
-    <p:graphicImage name="/AjaxLoading.gif" />
-</p:dialog>
-
 <h:form>
-    <p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
-        <p:fileDownload value="#{closeUploadView.file}" />
-    </p:commandButton>
+    <h:panelGrid columns="2" cellpadding="5">
+        <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
+        <p:selectOneMenu id="uploadPeriodId" value="#{closeUploadView.uploadId}" style="width:150px" required="true">
+            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
+            <f:selectItems value="#{closeUploadView.openUploadIds}" />
+        </p:selectOneMenu>
+
+        <p:commandButton value="Cerrar periodo" ajax="false" actionListener="#{closeUploadView.closePeriod}" />
+
+        <p:growl id="messages" showDetail="true"/>
+
+    </h:panelGrid>
 </h:form>
 
-<script type="text/javascript">
-    function start() {
-        PF('statusDialog').show();
-    }
-
-    function stop() {
-        PF('statusDialog').hide();
-    }
-</script>
+<br/>
+<h:button value="Descargar" outcome="/view/download-aggregated.xhtml" styleClass="ui-priority-primary"/>
 
 <br/>
 <h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>

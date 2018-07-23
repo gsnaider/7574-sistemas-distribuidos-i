@@ -4,7 +4,8 @@ import ar.uba.fi.contabilidapp.model.ContabilidappException;
 import ar.uba.fi.contabilidapp.model.Model;
 import ar.uba.fi.contabilidapp.model.ModelProvider;
 import org.pmw.tinylog.Logger;
-import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 import javax.annotation.PostConstruct;
@@ -12,13 +13,16 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 @ManagedBean
-@RequestScoped
-public class FileUploadForm {
+@SessionScoped
+public class ControlView {
 
     @ManagedProperty(value = "#{modelProvider}")
     private ModelProvider modelProvider;
@@ -29,39 +33,49 @@ public class FileUploadForm {
 
     private UploadedFile file;
 
+    private String errorsFile;
 
     @PostConstruct
     public void init() {
         this.model = modelProvider.getModel();
     }
 
-    public void upload() {
-        if(file != null) {
-            FacesMessage message = new FacesMessage("Archivo ", file.getFileName() + " fue cargado con éxito.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
+    public void control() {
+        if (file != null) {
             Logger.info("File received: {}", file.getFileName());
 
             byte[] fileData = file.getContents();
 
             try {
-                model.handleFileUpload(fileData, uploadId);
+                errorsFile = model.controlPeriod(fileData, uploadId);
+                if (errorsFile.isEmpty()) {
+                    FacesMessage message = new FacesMessage("Control finalizado sin errores.");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                } else {
+                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, "Control finalizado con errores.", "");
+                    FacesContext.getCurrentInstance().addMessage(null, message);
+                }
+
             } catch (ContabilidappException e) {
-                Logger.warn("Error uploading file", e);
+                Logger.warn("Error contorlling period.", e);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());
                 FacesContext.getCurrentInstance().addMessage(null, msg);
             }
-
         }
     }
 
-    public Map<String, Long> getOpenUploadIds() {
-        Logger.info("Searching for open period lists.");
+    public Map<String, Long> getClosedUploadIds() {
+        Logger.info("Searching for closed period lists.");
         Map<String, Long> idStrings = new HashMap<>();
-        for (Long id : model.getOpenUploadPeriodsIds()) {
+        for (Long id : model.getClosedUploadPeriodsIds()) {
             idStrings.put(id.toString(), id);
         }
         return idStrings;
+    }
+
+    public StreamedContent getErrorsFile() {
+        InputStream stream = new ByteArrayInputStream(errorsFile.getBytes());
+        return  new DefaultStreamedContent(stream, "text/plain", "errors.txt");
     }
 
     public long getUploadId() {
@@ -70,6 +84,10 @@ public class FileUploadForm {
 
     public void setUploadId(long uploadId) {
         this.uploadId = uploadId;
+    }
+
+    public boolean hasErrorsFile() {
+        return errorsFile != null && !errorsFile.isEmpty();
     }
 
     public UploadedFile getFile() {
@@ -83,4 +101,5 @@ public class FileUploadForm {
     public void setModelProvider(ModelProvider modelProvider) {
         this.modelProvider = modelProvider;
     }
+
 }

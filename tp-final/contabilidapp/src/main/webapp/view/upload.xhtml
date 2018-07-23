@@ -12,21 +12,20 @@
 </h:head>
 <body>
 <h1>Cargar archivos</h1>
-<!-- TODO add step for starting an model (create UploadPeriod entity). -->
 <h:form enctype="multipart/form-data">
 
     <h:panelGrid columns="2" cellpadding="5">
         <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
-        <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadForm.uploadId}" style="width:150px" required="true">
+        <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadView.uploadId}" style="width:150px" required="true">
             <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
-            <f:selectItems value="#{fileUploadForm.openUploadIds}" />
+            <f:selectItems value="#{fileUploadView.openUploadIds}" />
         </p:selectOneMenu>
 
         <p:outputLabel for="fileUpload" value="Archivo"/>
-        <p:fileUpload id="fileUpload" value="#{fileUploadForm.file}" mode="simple" skinSimple="true"
+        <p:fileUpload id="fileUpload" value="#{fileUploadView.file}" mode="simple" skinSimple="true"
                       sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
 
-        <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadForm.upload}" />
+        <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadView.upload}" />
 
         <p:growl id="messages" showDetail="true"/>
 

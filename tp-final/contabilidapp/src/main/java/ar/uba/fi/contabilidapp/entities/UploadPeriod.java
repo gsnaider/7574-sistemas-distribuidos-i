@@ -7,12 +7,12 @@ import java.util.Objects;
 @Entity
 @Table(name = "UPLOAD_PERIODS")
 @NamedQueries(value = {
-        @NamedQuery(name = "UploadPeriods.findOpenPeriodsIds", query = "SELECT p.id FROM UploadPeriod p WHERE p.open = true")
+        @NamedQuery(name = "UploadPeriods.findPeriodsIdsByState", query = "SELECT p.id FROM UploadPeriod p WHERE p.open = :open")
 })
 public class UploadPeriod {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")
     private long id;
 

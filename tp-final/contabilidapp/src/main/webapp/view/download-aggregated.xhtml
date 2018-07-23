@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<!--TODO seleccionar el uploadId, y cerrarlo (agregar mensaje) -->
+<!--TODO cerrar en un primer paso, y despues seleccionar uploadId cerrado, y imprimir informe. (en otro paso)-->
+<h:head>
+    <title>Contabilidapp</title>
+</h:head>
+<body>
+<h1>Descargar archivo conglomerado</h1>
+
+<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+    <p:graphicImage name="/AjaxLoading.gif" />
+</p:dialog>
+
+<h:form>
+
+    <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
+    <p:selectOneMenu id="uploadPeriodId" value="#{downloadAggregatedView.uploadId}" style="width:150px" required="true">
+        <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
+        <f:selectItems value="#{downloadAggregatedView.closedUploadIds}" />
+    </p:selectOneMenu>
+
+    <br/>
+    <p:commandButton value="Download" ajax="false" icon="ui-icon-arrowthick-1-s">
+        <p:fileDownload value="#{downloadAggregatedView.file}" />
+    </p:commandButton>
+</h:form>
+
+<script type="text/javascript">
+    function start() {
+        PF('statusDialog').show();
+    }
+
+    function stop() {
+        PF('statusDialog').hide();
+    }
+</script>
+
+<br/>
+<h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>
+
+</body>
+</html>
