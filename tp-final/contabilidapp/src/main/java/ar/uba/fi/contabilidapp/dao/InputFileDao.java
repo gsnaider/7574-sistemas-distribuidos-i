@@ -1,6 +1,6 @@
 package ar.uba.fi.contabilidapp.dao;
 
-import ar.uba.fi.contabilidapp.upload.model.InputFile;
+import ar.uba.fi.contabilidapp.entities.InputFile;
 
 import javax.persistence.EntityManagerFactory;
 

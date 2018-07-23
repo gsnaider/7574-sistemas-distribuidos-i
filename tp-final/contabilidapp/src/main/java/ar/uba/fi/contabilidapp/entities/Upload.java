@@ -1,10 +1,10 @@
-package ar.uba.fi.contabilidapp.upload.model;
-
-import com.google.gson.Gson;
+package ar.uba.fi.contabilidapp.entities;
 
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
+
+// TODO
 
 @Entity
 @Table(name = "UPLOADS")

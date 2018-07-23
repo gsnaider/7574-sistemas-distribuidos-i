@@ -1,26 +1,16 @@
 package ar.uba.fi.contabilidapp.dao;
 
 
-import ar.uba.fi.contabilidapp.upload.model.Client;
-import ar.uba.fi.contabilidapp.upload.model.InputFile;
-import ar.uba.fi.contabilidapp.upload.model.Transaction;
-import ar.uba.fi.contabilidapp.upload.model.Upload;
 import org.pmw.tinylog.Logger;
 
 import javax.annotation.PreDestroy;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+import java.util.List;
 
-/**
- * Application Bean for holding the DAOs.
- * <p>It creates the EntityManager and DAOs when the application starts,
- * and closes the EntityManager when the application stops.
- */
-@ManagedBean(name = "daoBean")
-@ApplicationScoped
-public class DaoBean {
+public class DaoManager {
 
     private final EntityManagerFactory entityManagerFactory;
 
@@ -29,13 +19,32 @@ public class DaoBean {
     private final InputFileDao inputFileDao;
     private final UploadDao uploadDao;
 
-    public DaoBean() {
+    public DaoManager() {
         entityManagerFactory = Persistence.createEntityManagerFactory("contabilidapp-unit");
-
         clientDao = new ClientDao(entityManagerFactory);
         transactionDao = new TransactionDao(entityManagerFactory);
         inputFileDao = new InputFileDao(entityManagerFactory);
         uploadDao = new UploadDao(entityManagerFactory);
+    }
+
+    public List<Object[]> getAggregatedInputData(long uploadId) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        // TODO change > to =
+        String queryStrng =
+                "SELECT c, SUM(t.amount) FROM Transaction t INNER JOIN t.client c WHERE t.inputFile.upload.id > :uploadId GROUP BY c.id";
+        Query query = entityManager.createQuery(
+                queryStrng)
+                .setParameter("uploadId", uploadId);
+        List<Object[]> result = null;
+        try {
+            result = query.getResultList();
+        } catch (Exception e) {
+            Logger.error("Error getting aggregated data", e);
+        } finally {
+            entityManager.close();
+        }
+
+        return result;
     }
 
     public ClientDao getClientDao() {

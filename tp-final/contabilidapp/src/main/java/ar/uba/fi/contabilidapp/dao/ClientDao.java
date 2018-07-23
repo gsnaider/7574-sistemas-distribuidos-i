@@ -1,6 +1,6 @@
 package ar.uba.fi.contabilidapp.dao;
 
-import ar.uba.fi.contabilidapp.upload.model.Client;
+import ar.uba.fi.contabilidapp.entities.Client;
 import org.pmw.tinylog.Logger;
 
 import javax.persistence.*;

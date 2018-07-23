@@ -7,10 +7,10 @@
 
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>ar.uba.fi.contabilidapp.upload.model.Client</class>
-        <class>ar.uba.fi.contabilidapp.upload.model.Transaction</class>
-        <class>ar.uba.fi.contabilidapp.upload.model.InputFile</class>
-        <class>ar.uba.fi.contabilidapp.upload.model.Upload</class>
+        <class>ar.uba.fi.contabilidapp.entities.Client</class>
+        <class>ar.uba.fi.contabilidapp.entities.Transaction</class>
+        <class>ar.uba.fi.contabilidapp.entities.InputFile</class>
+        <class>ar.uba.fi.contabilidapp.entities.Upload</class>
 
         <properties>
             <property name="javax.persistence.jdbc.user" value="root"/>

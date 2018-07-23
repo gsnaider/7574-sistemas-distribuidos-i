@@ -1,4 +1,4 @@
-package ar.uba.fi.contabilidapp.upload.model;
+package ar.uba.fi.contabilidapp.entities;
 
 import javax.persistence.*;
 import java.util.Objects;

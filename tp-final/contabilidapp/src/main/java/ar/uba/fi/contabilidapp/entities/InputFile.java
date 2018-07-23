@@ -1,6 +1,4 @@
-package ar.uba.fi.contabilidapp.upload.model;
-
-import com.google.gson.Gson;
+package ar.uba.fi.contabilidapp.entities;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -61,7 +59,7 @@ public class InputFile {
     public String toString() {
         return "InputFile{" +
                 "id=" + id +
-                ", upload=" + upload +
+                ", model=" + upload +
                 ", transactions=" + transactions +
                 ", fileData=" + Arrays.toString(fileData) +
                 '}';

@@ -1,6 +1,4 @@
-package ar.uba.fi.contabilidapp.upload.model;
-
-import com.google.gson.Gson;
+package ar.uba.fi.contabilidapp.entities;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

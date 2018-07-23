@@ -1,4 +1,4 @@
-package ar.uba.fi.contabilidapp.upload;
+package ar.uba.fi.contabilidapp.model;
 
 import com.google.common.collect.ImmutableList;
 

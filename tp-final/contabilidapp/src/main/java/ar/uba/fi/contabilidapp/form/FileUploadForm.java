@@ -1,65 +1,42 @@
 package ar.uba.fi.contabilidapp.form;
 
-import ar.uba.fi.contabilidapp.dao.DaoBean;
-import ar.uba.fi.contabilidapp.upload.LineParser;
-import ar.uba.fi.contabilidapp.upload.model.Client;
-import ar.uba.fi.contabilidapp.upload.model.InputFile;
-import ar.uba.fi.contabilidapp.upload.model.Transaction;
+import ar.uba.fi.contabilidapp.model.Model;
+import ar.uba.fi.contabilidapp.model.ModelProvider;
 import org.pmw.tinylog.Logger;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 
 @ManagedBean
 @RequestScoped
 public class FileUploadForm {
 
-    @ManagedProperty(value = "#{daoBean}")
-    private DaoBean daoBean;
+    @ManagedProperty(value = "#{modelProvider}")
+    private ModelProvider modelProvider;
+
+    private Model model;
 
     private String file;
+
+    @PostConstruct
+    public void init() {
+        this.model = modelProvider.getModel();
+    }
 
     public void handleFileUpload(FileUploadEvent event) {
         UploadedFile file = event.getFile();
         Logger.info("File received: {}", file.getFileName());
-
-        List<Transaction> transactions = new ArrayList<>();
-
         byte[] fileData = file.getContents();
-        InputStream is = new ByteArrayInputStream(fileData);
-        Scanner scanner = new Scanner(is);
-        while (scanner.hasNextLine()) {
-            Transaction transaction = LineParser.parseLine(scanner.nextLine());
-            transactions.add(transaction);
-        }
-
-        InputFile inputFile = persistInputFile(fileData, transactions);
+        // TODO check and show errors.
+        model.handleFileUpload(fileData);
     }
-
-    private InputFile persistInputFile(byte[] fileData, List<Transaction> transactions) {
-        for (Transaction transaction : transactions) {
-            Client client = daoBean.getClientDao().addIfNotPresent(transaction.getClient());
-            transaction.setClient(client);
-        }
-        InputFile inputFile = new InputFile();
-        inputFile.setFileData(fileData);
-        inputFile.setTransactions(transactions);
-        // TODO set current uploadId
-        // TODO check if clients already exist.
-        return daoBean.getInputFileDao().add(inputFile);
-    }
-
 
     public String endUpload() {
-        Logger.info("Ending upload of files.");
+        Logger.info("Ending model of files.");
         return "/index?faces-redirect=true";
     }
 
@@ -71,7 +48,7 @@ public class FileUploadForm {
         this.file = file;
     }
 
-    public void setDaoBean(DaoBean daoBean) {
-        this.daoBean = daoBean;
+    public void setModelProvider(ModelProvider modelProvider) {
+        this.modelProvider = modelProvider;
     }
 }
