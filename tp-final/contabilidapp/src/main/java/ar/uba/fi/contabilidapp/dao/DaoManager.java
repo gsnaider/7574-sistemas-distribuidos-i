@@ -11,6 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.List;
 
+// TODO add error checking in all DB operations.
 public class DaoManager {
 
     private final EntityManagerFactory entityManagerFactory;
