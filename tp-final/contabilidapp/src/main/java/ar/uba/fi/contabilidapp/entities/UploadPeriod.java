@@ -4,16 +4,20 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
-// TODO
-
 @Entity
-@Table(name = "UPLOADS")
-public class Upload {
+@Table(name = "UPLOAD_PERIODS")
+@NamedQueries(value = {
+        @NamedQuery(name = "UploadPeriods.findOpenPeriodsIds", query = "SELECT p.id FROM UploadPeriod p WHERE p.open = true")
+})
+public class UploadPeriod {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     private long id;
+
+    @Column(name = "OPEN")
+    private boolean open;
 
     @Lob
     @Column(name = "CONGLOMERATE_FILE_DATA")
@@ -21,6 +25,14 @@ public class Upload {
 
     public long getId() {
         return id;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 
     public byte[] getConglomerateFileData() {
@@ -33,8 +45,9 @@ public class Upload {
 
     @Override
     public String toString() {
-        return "Upload{" +
+        return "UploadPeriod{" +
                 "id=" + id +
+                "open=" + open +
                 ", conglomerateFileData=" + Arrays.toString(conglomerateFileData) +
                 '}';
     }
@@ -43,9 +56,9 @@ public class Upload {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Upload upload = (Upload) o;
-        return id == upload.id &&
-                Arrays.equals(conglomerateFileData, upload.conglomerateFileData);
+        UploadPeriod uploadPeriod = (UploadPeriod) o;
+        return id == uploadPeriod.id && open == uploadPeriod.open &&
+                Arrays.equals(conglomerateFileData, uploadPeriod.conglomerateFileData);
     }
 
     @Override

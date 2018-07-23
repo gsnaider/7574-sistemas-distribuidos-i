@@ -10,7 +10,7 @@
         <class>ar.uba.fi.contabilidapp.entities.Client</class>
         <class>ar.uba.fi.contabilidapp.entities.Transaction</class>
         <class>ar.uba.fi.contabilidapp.entities.InputFile</class>
-        <class>ar.uba.fi.contabilidapp.entities.Upload</class>
+        <class>ar.uba.fi.contabilidapp.entities.UploadPeriod</class>
 
         <properties>
             <property name="javax.persistence.jdbc.user" value="root"/>

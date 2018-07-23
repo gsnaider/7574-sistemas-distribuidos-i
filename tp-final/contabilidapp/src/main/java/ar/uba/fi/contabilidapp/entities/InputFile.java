@@ -17,8 +17,8 @@ public class InputFile {
     private long id;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UPLOAD_ID")
-    private Upload upload;
+    @JoinColumn(name = "UPLOAD_PERIOD_ID")
+    private UploadPeriod uploadPeriod;
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Transaction> transactions;
@@ -31,12 +31,12 @@ public class InputFile {
         return id;
     }
 
-    public Upload getUpload() {
-        return upload;
+    public UploadPeriod getUploadPeriod() {
+        return uploadPeriod;
     }
 
-    public void setUpload(Upload upload) {
-        this.upload = upload;
+    public void setUploadPeriod(UploadPeriod uploadPeriod) {
+        this.uploadPeriod = uploadPeriod;
     }
 
     public List<Transaction> getTransactions() {
@@ -59,7 +59,7 @@ public class InputFile {
     public String toString() {
         return "InputFile{" +
                 "id=" + id +
-                ", model=" + upload +
+                ", model=" + uploadPeriod +
                 ", transactions=" + transactions +
                 ", fileData=" + Arrays.toString(fileData) +
                 '}';
@@ -71,7 +71,7 @@ public class InputFile {
         if (o == null || getClass() != o.getClass()) return false;
         InputFile inputFile = (InputFile) o;
         return id == inputFile.id &&
-                Objects.equals(upload, inputFile.upload) &&
+                Objects.equals(uploadPeriod, inputFile.uploadPeriod) &&
                 Objects.equals(transactions, inputFile.transactions) &&
                 Arrays.equals(fileData, inputFile.fileData);
     }
@@ -79,7 +79,7 @@ public class InputFile {
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(id, upload, transactions);
+        int result = Objects.hash(id, uploadPeriod, transactions);
         result = 31 * result + Arrays.hashCode(fileData);
         return result;
     }

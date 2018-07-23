@@ -4,29 +4,31 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
 <h1>Cargar archivos</h1>
-<!-- TODO add step for starting an model (create Upload entity). -->
+<!-- TODO add step for starting an model (create UploadPeriod entity). -->
 <h:form enctype="multipart/form-data">
 
     <h:panelGrid columns="2" cellpadding="5">
+        <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
+        <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadForm.uploadId}" style="width:150px" required="true">
+            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
+            <f:selectItems value="#{fileUploadForm.openUploadIds}" />
+        </p:selectOneMenu>
 
-        <p:outputLabel for="files" value="Archivos"/>
-        <p:fileUpload id="files" fileUploadListener="#{fileUploadForm.handleFileUpload}" mode="advanced"
-                      dragDropSupport="false"
-                      multiple="true" update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
+        <p:outputLabel for="fileUpload" value="Archivo"/>
+        <p:fileUpload id="fileUpload" value="#{fileUploadForm.file}" mode="simple" skinSimple="true"
+                      sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
+
+        <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadForm.upload}" />
 
         <p:growl id="messages" showDetail="true"/>
-
-    </h:panelGrid>
-    <h:panelGrid columns="2" cellpadding="5">
-        <p:commandButton value="Finalizar carga" ajax="false" id="endUploadButton"
-                         action="#{fileUploadForm.endUpload}" styleClass="ui-priority-primary"/>
 
     </h:panelGrid>
 

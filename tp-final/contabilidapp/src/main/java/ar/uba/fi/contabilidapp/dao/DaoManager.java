@@ -31,7 +31,7 @@ public class DaoManager {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         // TODO change > to =
         String queryStrng =
-                "SELECT c, SUM(t.amount) FROM Transaction t INNER JOIN t.client c WHERE t.inputFile.upload.id > :uploadId GROUP BY c.id";
+                "SELECT c, SUM(t.amount) FROM Transaction t INNER JOIN t.client c WHERE t.inputFile.uploadPeriod.id > :uploadId GROUP BY c.id";
         Query query = entityManager.createQuery(
                 queryStrng)
                 .setParameter("uploadId", uploadId);

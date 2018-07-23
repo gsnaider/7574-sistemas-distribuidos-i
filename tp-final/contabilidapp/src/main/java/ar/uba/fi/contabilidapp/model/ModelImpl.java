@@ -4,7 +4,7 @@ import ar.uba.fi.contabilidapp.dao.DaoManager;
 import ar.uba.fi.contabilidapp.entities.Client;
 import ar.uba.fi.contabilidapp.entities.InputFile;
 import ar.uba.fi.contabilidapp.entities.Transaction;
-import ar.uba.fi.contabilidapp.entities.Upload;
+import ar.uba.fi.contabilidapp.entities.UploadPeriod;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -36,7 +36,16 @@ public class ModelImpl implements Model {
         this.daoManager = daoManager;
     }
 
-    public void handleFileUpload(byte[] fileData) {
+    @Override
+    public long startUploadPeriod() {
+        UploadPeriod uploadPeriod = new UploadPeriod();
+        uploadPeriod.setOpen(true);
+        uploadPeriod = daoManager.getUploadDao().add(uploadPeriod);
+        return uploadPeriod.getId();
+    }
+
+    @Override
+    public void handleFileUpload(byte[] fileData, long uploadId) throws ContabilidappException {
         List<Transaction> transactions = new ArrayList<>();
         InputStream is = new ByteArrayInputStream(fileData);
         Scanner scanner = new Scanner(is);
@@ -45,7 +54,7 @@ public class ModelImpl implements Model {
             transactions.add(transaction);
         }
 
-        InputFile inputFile = persistInputFile(fileData, transactions);
+        InputFile inputFile = persistInputFile(fileData, transactions, uploadId);
     }
 
     @Override
@@ -73,9 +82,12 @@ public class ModelImpl implements Model {
         return aggregatedTable.toString();
     }
 
-    private InputFile persistInputFile(byte[] fileData, List<Transaction> transactions) {
-        // TODO checkear que el upload este abierto para cargar (hacer dentro de misma transaccion de persist).
+    @Override
+    public List<Long> getOpenUploadPeriodsIds() {
+        return daoManager.getUploadDao().findOpenUploadPeriodsIds();
+    }
 
+    private InputFile persistInputFile(byte[] fileData, List<Transaction> transactions, long uploadId) throws ContabilidappException {
         InputFile inputFile = new InputFile();
         inputFile.setFileData(fileData);
         for (Transaction transaction : transactions) {
@@ -84,11 +96,15 @@ public class ModelImpl implements Model {
             transaction.setInputFile(inputFile);
         }
         inputFile.setTransactions(transactions);
-        // TODO set current uploadId
-        // TODO check if clients already exist.
 
-        Upload upload = new Upload();
-        inputFile.setUpload(upload);
+        UploadPeriod period = daoManager.getUploadDao().find(uploadId);
+        if (!period.isOpen()) {
+            throw new ContabilidappException("Trying to add file to closed period.");
+        }
+        inputFile.setUploadPeriod(period);
+
+        UploadPeriod uploadPeriod = new UploadPeriod();
+        inputFile.setUploadPeriod(uploadPeriod);
 
         return daoManager.getInputFileDao().add(inputFile);
     }
