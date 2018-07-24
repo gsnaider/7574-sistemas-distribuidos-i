@@ -11,16 +11,23 @@
 </h:head>
 <body>
 <h1>Abrir periodo de carga</h1>
-Este proceso iniciará un nuevo periodo de carga de archivos. <br/>
-Para cargar archivos en este periodo, se deberá utilizar el ID generado.
+
+Este proceso abrirá un nuevo periodo de carga de archivos.
+<br/>
+Una vez abierto el periodo, se podrán cargar archivos de transacciones para dicho periodo.
+<br/>
+Para cargar archivos en este periodo, se deberá utilizar el ID del periodo generado.
+<br/>
+<br/>
 
 <h:form>
-    <p:commandButton value="Iniciar periodo" ajax="false" id="startPeriodButton"
+    <p:commandButton value="Abrir periodo" ajax="false" id="startPeriodButton"
                      action="#{startUploadPeriodView.startUploadPeriod}" styleClass="ui-priority-primary" />
 </h:form>
 
-<br/>
-<h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>
+<h3>
+    <a href="../index.xhtml">Volver</a>
+</h3>
 
 </body>
 </html>

@@ -12,20 +12,37 @@
 </h:head>
 <body>
 <h1>Controlar periodo</h1>
+Aqui se puede realizar un control sobre un periodo cerrado.
+<br/>
+Luego de elegir un periodo, y cargar un archivo de control (en formato .txt),
+<br/>
+se puede iniciar el proceso de control con el botón 'Controlar'.
+<br/>
+<br/>
+
 <h:form enctype="multipart/form-data">
 
     <h:panelGrid columns="2" cellpadding="5">
-        <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
-        <p:selectOneMenu id="uploadPeriodId" value="#{controlView.uploadId}" style="width:150px" required="true">
-            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
-            <f:selectItems value="#{controlView.closedUploadIds}" />
+        <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
+        <p:selectOneMenu id="uploadPeriodId" value="#{controlView.uploadId}" style="width:150px"
+                         required="true"
+                         requiredMessage="Debe elegir un periodo">
+            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true"/>
+            <f:selectItems value="#{controlView.closedUploadIds}"/>
         </p:selectOneMenu>
 
-        <p:outputLabel for="fileUpload" value="Archivo de control"/>
+        <p:outputLabel value="Archivo de control:" indicateRequired="false"/>
         <p:fileUpload id="fileUpload" value="#{controlView.file}" mode="simple" skinSimple="true"
+                      label="Elegir"
+                      required="true"
+                      requiredMessage="Debe cargar un archivo de control"
                       sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
 
-        <p:commandButton value="Controlar" ajax="false" actionListener="#{controlView.control}" />
+        <br/>
+        <br/>
+        <br/>
+
+        <p:commandButton value="Controlar" ajax="false" actionListener="#{controlView.control}"/>
 
         <p:growl id="messages" showDetail="true"/>
 
@@ -33,19 +50,33 @@
 
 </h:form>
 
-<h:form>
-    <p:commandButton value="Descargar archivos" ajax="false" icon="ui-icon-arrowthick-1-s" disabled="#{!controlView.hasSplitFiles()}">
-        <p:fileDownload value="#{controlView.splitFiles}" />
-    </p:commandButton>
-    <br/>
+<h1>Resultados</h1>
 
-    <p:commandButton value="Descargar errores" ajax="false" icon="ui-icon-arrowthick-1-s" disabled="#{!controlView.hasErrorsFile()}">
-        <p:fileDownload value="#{controlView.errorsFile}" />
+Una vez finalizado el control, se podrán descargar los archivos de transacciones
+<br/>
+desglosadas para el periodo elegido, y un archivo de errores en caso de haber errores en el control.
+<br/>
+<br/>
+
+<h:form>
+    <h:panelGrid columns="2" cellpadding="5">
+    <p:outputLabel for="downloadSplitButton" value="Transacciones desglosadas:"/>
+    <p:commandButton id="downloadSplitButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s"
+                     disabled="#{!controlView.hasSplitFiles()}">
+        <p:fileDownload value="#{controlView.splitFiles}"/>
     </p:commandButton>
+
+    <p:outputLabel for="downloadErrorsButton" value="Errores:"/>
+    <p:commandButton id="downloadErrorsButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s"
+                     disabled="#{!controlView.hasErrorsFile()}">
+        <p:fileDownload value="#{controlView.errorsFile}"/>
+    </p:commandButton>
+    </h:panelGrid>
 </h:form>
 
-<br/>
-<h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>
+<h3>
+    <a href="../index.xhtml">Volver</a>
+</h3>
 
 </body>
 </html>

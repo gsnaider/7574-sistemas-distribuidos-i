@@ -37,15 +37,14 @@ public class FileUploadView {
 
     public void upload() {
         if(file != null) {
-            FacesMessage message = new FacesMessage("Archivo ", file.getFileName() + " fue cargado con éxito.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-
             Logger.info("File received: {}", file.getFileName());
 
             byte[] fileData = file.getContents();
 
             try {
                 model.handleFileUpload(fileData, uploadId);
+                FacesMessage message = new FacesMessage("Archivo ", file.getFileName() + " fue cargado con éxito.");
+                FacesContext.getCurrentInstance().addMessage(null, message);
             } catch (ContabilidappException e) {
                 Logger.warn("Error uploading file", e);
                 FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", e.getMessage());

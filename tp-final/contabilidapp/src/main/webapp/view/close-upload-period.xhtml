@@ -11,28 +11,44 @@
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Cerrar carga</h1>
+<h1>Cerrar periodo de carga</h1>
+
+Aquí se puede elegir un periodo de carga abierto y cerrarlo.
+<br/>
+<br/>
+Esto impedirá que se carguen nuevos archivos para este periodo, y habilitará
+<br/>
+la descarga de las transacciones conglomeradas para dicho periodo.
+<br/>
+<br/>
+Luego de cerrar un periodo, también se podrá realizar el proceso de control para dicho periodo.
+<br/>
+<br/>
 
 <h:form>
     <h:panelGrid columns="2" cellpadding="5">
-        <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
-        <p:selectOneMenu id="uploadPeriodId" value="#{closeUploadView.uploadId}" style="width:150px" required="true">
-            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
-            <f:selectItems value="#{closeUploadView.openUploadIds}" />
+        <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
+        <p:selectOneMenu id="uploadPeriodId" value="#{closeUploadView.uploadId}" style="width:150px"
+                         required="true"
+                         requiredMessage="Debe elegir un periodo">
+            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true"/>
+            <f:selectItems value="#{closeUploadView.openUploadIds}"/>
         </p:selectOneMenu>
 
-        <p:commandButton value="Cerrar periodo" ajax="false" actionListener="#{closeUploadView.closePeriod}" />
+        <br/>
+        <p:commandButton value="Cerrar periodo" ajax="false" actionListener="#{closeUploadView.closePeriod}"/>
 
         <p:growl id="messages" showDetail="true"/>
 
     </h:panelGrid>
 </h:form>
 
-<br/>
-<h:button value="Descargar" outcome="/view/download-aggregated.xhtml" styleClass="ui-priority-primary"/>
-
-<br/>
-<h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>
-
+<!--TODO maybe remove download link from here and access from index-->
+<!--<h3>-->
+    <!--<a href="download-aggregated.xhtml">Descargar transacciones conglomeradas</a>-->
+<!--</h3>-->
+<h3>
+    <a href="../index.xhtml">Volver</a>
+</h3>
 </body>
 </html>

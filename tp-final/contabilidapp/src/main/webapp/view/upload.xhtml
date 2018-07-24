@@ -12,29 +12,52 @@
 </h:head>
 <body>
 <h1>Cargar archivos</h1>
+En este proceso, debe elegir el periodo para el cual se cargarán los archivos.
+<br/>
+Luego, puede subir un archivo .txt con transacciones de dicho periodo.
+<br/>
+Al hacer click en 'Subir', se cargará el archivo en el sistema.
+<br/>
+<br/>
+
+<!--TODO see why allowTypes doesnt work sometimes. Maybe add validation in backend based on filename-->
+
 <h:form enctype="multipart/form-data">
 
     <h:panelGrid columns="2" cellpadding="5">
-        <p:outputLabel for="uploadPeriodId" value="ID de periodo: " />
-        <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadView.uploadId}" style="width:150px" required="true">
-            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
-            <f:selectItems value="#{fileUploadView.openUploadIds}" />
+        <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
+        <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadView.uploadId}" style="width:150px"
+                         required="true"
+                         requiredMessage="Debe elegir un periodo">
+            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true"/>
+            <f:selectItems value="#{fileUploadView.openUploadIds}"/>
         </p:selectOneMenu>
 
-        <p:outputLabel for="fileUpload" value="Archivo"/>
-        <p:fileUpload id="fileUpload" value="#{fileUploadView.file}" mode="simple" skinSimple="true"
-                      sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"/>
+        <p:outputLabel value="Archivo de transacciones:" indicateRequired="false"/>
+        <p:fileUpload id="fileUpload"
+                      label="Elegir"
+                      value="#{fileUploadView.file}" mode="simple"
+                      required="true"
+                      requiredMessage="Debe cargar un archivo"
+                      skinSimple="true"
+                      sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"
+                      update="messages"/>
+        <br/>
+        <br/>
+        <br/>
 
-        <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadView.upload}" />
+        <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadView.upload}"/>
 
         <p:growl id="messages" showDetail="true"/>
 
     </h:panelGrid>
 
+
 </h:form>
 
-<br/>
-<h:button value="Volver" outcome="/index.xhtml" styleClass="ui-priority-primary"/>
+<h3>
+    <a href="../index.xhtml">Volver</a>
+</h3>
 
 </body>
 </html>
