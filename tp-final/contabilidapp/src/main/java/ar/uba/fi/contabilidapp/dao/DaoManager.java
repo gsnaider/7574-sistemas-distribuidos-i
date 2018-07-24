@@ -11,6 +11,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.List;
 
+// TODO arreglar para IDs autoincrementales.
+
 public class DaoManager {
 
     private final EntityManagerFactory entityManagerFactory;
