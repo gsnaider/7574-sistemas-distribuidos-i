@@ -5,59 +5,65 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Cargar archivos</h1>
-En este proceso, debe elegir el periodo para el cual se cargarán los archivos.
-<br/>
-Luego, puede subir un archivo .txt con transacciones de dicho periodo.
-<br/>
-Al hacer click en 'Subir', se cargará el archivo en el sistema.
-<br/>
-<br/>
+<ui:composition template="/view/templates/common.xhtml">
+    <ui:define name="content">
 
-<!--TODO see why allowTypes doesnt work sometimes. Maybe add validation in backend based on filename-->
-
-<h:form enctype="multipart/form-data">
-
-    <h:panelGrid columns="2" cellpadding="5">
-        <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
-        <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadView.uploadId}" style="width:150px"
-                         required="true"
-                         requiredMessage="Debe elegir un periodo">
-            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true"/>
-            <f:selectItems value="#{fileUploadView.openUploadIds}"/>
-        </p:selectOneMenu>
-
-        <p:outputLabel value="Archivo de transacciones:" indicateRequired="false"/>
-        <p:fileUpload id="fileUpload"
-                      label="Elegir"
-                      value="#{fileUploadView.file}" mode="simple"
-                      required="true"
-                      requiredMessage="Debe cargar un archivo"
-                      skinSimple="true"
-                      sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"
-                      update="messages"/>
+        <h1>Cargar archivos</h1>
+        En este proceso, debe elegir el periodo para el cual se cargarán los archivos.
         <br/>
+        Luego, puede subir un archivo .txt con transacciones de dicho periodo.
+        <br/>
+        Al hacer click en 'Subir', se cargará el archivo en el sistema.
         <br/>
         <br/>
 
-        <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadView.upload}"/>
+        <!--TODO see why allowTypes doesnt work sometimes. Maybe add validation in backend based on filename-->
 
-        <p:growl id="messages" showDetail="true"/>
+        <h:form enctype="multipart/form-data">
 
-    </h:panelGrid>
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
+                <p:selectOneMenu id="uploadPeriodId" value="#{fileUploadView.uploadId}" style="width:150px"
+                                 required="true"
+                                 requiredMessage="Debe elegir un periodo">
+                    <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true"/>
+                    <f:selectItems value="#{fileUploadView.openUploadIds}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="Archivo de transacciones:" indicateRequired="false"/>
+                <p:fileUpload id="fileUpload"
+                              label="Elegir"
+                              value="#{fileUploadView.file}" mode="simple"
+                              required="true"
+                              requiredMessage="Debe cargar un archivo"
+                              skinSimple="true"
+                              sizeLimit="100000" allowTypes="/(\.|\/)(txt)$/"
+                              update="messages"/>
+                <br/>
+                <br/>
+                <br/>
+
+                <p:commandButton value="Subir" ajax="false" actionListener="#{fileUploadView.upload}"/>
+
+                <p:growl id="messages" showDetail="true"/>
+
+            </h:panelGrid>
 
 
-</h:form>
+        </h:form>
 
-<h3>
-    <a href="../index.xhtml">Volver</a>
-</h3>
+        <h3>
+            <a href="../index.xhtml">Volver</a>
+        </h3>
 
+    </ui:define>
+</ui:composition>
 </body>
 </html>

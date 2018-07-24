@@ -4,20 +4,27 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Periodo de carga abierto</h1>
+<ui:composition template="/view/templates/common.xhtml">
+    <ui:define name="content">
 
-<h2>ID del periodo de carga: #{startUploadPeriodView.uploadPeriodId}</h2>
-Utilice este ID para cargar archivos correspondientes a este periodo.
+        <h1>Periodo de carga abierto</h1>
 
-<h3>
-    <a href="../index.xhtml">Volver</a>
-</h3>
+        <h2>ID del periodo de carga: #{startUploadPeriodView.uploadPeriodId}</h2>
+        Utilice este ID para cargar archivos correspondientes a este periodo.
+
+        <h3>
+            <a href="../index.xhtml">Volver</a>
+        </h3>
+
+    </ui:define>
+</ui:composition>
 
 </body>
 </html>

@@ -4,30 +4,36 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Abrir periodo de carga</h1>
+<ui:composition template="/view/templates/common.xhtml">
+    <ui:define name="content">
 
-Este proceso abrirá un nuevo periodo de carga de archivos.
-<br/>
-Una vez abierto el periodo, se podrán cargar archivos de transacciones para dicho periodo.
-<br/>
-Para cargar archivos en este periodo, se deberá utilizar el ID del periodo generado.
-<br/>
-<br/>
+        <h1>Abrir periodo de carga</h1>
 
-<h:form>
-    <p:commandButton value="Abrir periodo" ajax="false" id="startPeriodButton"
-                     action="#{startUploadPeriodView.startUploadPeriod}" styleClass="ui-priority-primary" />
-</h:form>
+        Este proceso abrirá un nuevo periodo de carga de archivos.
+        <br/>
+        Una vez abierto el periodo, se podrán cargar archivos de transacciones para dicho periodo.
+        <br/>
+        Para cargar archivos en este periodo, se deberá utilizar el ID del periodo generado.
+        <br/>
+        <br/>
 
-<h3>
-    <a href="../index.xhtml">Volver</a>
-</h3>
+        <h:form>
+            <p:commandButton value="Abrir periodo" ajax="false" id="startPeriodButton"
+                             action="#{startUploadPeriodView.startUploadPeriod}" styleClass="ui-priority-primary"/>
+        </h:form>
 
+        <h3>
+            <a href="../index.xhtml">Volver</a>
+        </h3>
+
+    </ui:define>
+</ui:composition>
 </body>
 </html>

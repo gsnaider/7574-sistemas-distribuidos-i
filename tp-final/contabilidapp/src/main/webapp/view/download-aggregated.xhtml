@@ -5,57 +5,65 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Descargar transacciones conglomeradas</h1>
-Aquí se puede descargar el archivo de transacciones conglomeradas para un periodo cerrado.
-<br/>
-Este archivo contiene en cada linea la suma de todas las transacciones de un determinado
-<br/>
-cliente para el periodo seleccionado.
-<br/>
-<br/>
+<ui:composition template="/view/templates/common.xhtml">
+    <ui:define name="content">
 
-<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
-    <p:graphicImage name="/AjaxLoading.gif" />
-</p:dialog>
+        <h1>Descargar transacciones conglomeradas</h1>
+        Aquí se puede descargar el archivo de transacciones conglomeradas para un periodo cerrado.
+        <br/>
+        Este archivo contiene en cada linea la suma de todas las transacciones de un determinado
+        <br/>
+        cliente para el periodo seleccionado.
+        <br/>
+        <br/>
 
-<h:form>
-    <h:panelGrid columns="2" cellpadding="5">
-        <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
-        <p:selectOneMenu id="uploadPeriodId" value="#{downloadAggregatedView.uploadId}" style="width:150px"
-                         required="true"
-                         requiredMessage="Debe elegir un periodo">
-            <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true" />
-            <f:selectItems value="#{downloadAggregatedView.closedUploadIds}" />
-        </p:selectOneMenu>
+        <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false"
+                  resizable="false">
+            <p:graphicImage name="/AjaxLoading.gif"/>
+        </p:dialog>
 
-        <p:outputLabel for="downloadButton" value="Transacciones conglomeradas:" />
-        <p:commandButton id="downloadButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s">
-            <p:fileDownload value="#{downloadAggregatedView.file}" />
-        </p:commandButton>
+        <h:form>
+            <h:panelGrid columns="2" cellpadding="5">
+                <p:outputLabel for="uploadPeriodId" value="ID de periodo:" indicateRequired="false"/>
+                <p:selectOneMenu id="uploadPeriodId" value="#{downloadAggregatedView.uploadId}" style="width:150px"
+                                 required="true"
+                                 requiredMessage="Debe elegir un periodo">
+                    <f:selectItem itemLabel="Elija un periodo" itemValue="" noSelectionOption="true"/>
+                    <f:selectItems value="#{downloadAggregatedView.closedUploadIds}"/>
+                </p:selectOneMenu>
 
-        <p:growl id="messages" showDetail="true"/>
-    </h:panelGrid>
-</h:form>
+                <p:outputLabel for="downloadButton" value="Transacciones conglomeradas:"/>
+                <p:commandButton id="downloadButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s">
+                    <p:fileDownload value="#{downloadAggregatedView.file}"/>
+                </p:commandButton>
 
-<script type="text/javascript">
-    function start() {
-        PF('statusDialog').show();
-    }
+                <p:growl id="messages" showDetail="true"/>
+            </h:panelGrid>
+        </h:form>
 
-    function stop() {
-        PF('statusDialog').hide();
-    }
-</script>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog').show();
+            }
 
-<h3>
-    <a href="../index.xhtml">Volver</a>
-</h3>
+            function stop() {
+                PF('statusDialog').hide();
+            }
+        </script>
+
+        <h3>
+            <a href="../index.xhtml">Volver</a>
+        </h3>
+
+    </ui:define>
+</ui:composition>
 
 </body>
 </html>

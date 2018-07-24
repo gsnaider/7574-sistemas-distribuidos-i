@@ -4,7 +4,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <!--TODO armar vista con menues. -->
 <!-- TODO agregar en vistas mensajes de instrucciones y errores. -->
@@ -14,42 +15,45 @@
     <title>Contabilidapp</title>
 </h:head>
 <body>
-<h1>Contabilidapp</h1>
+<ui:composition template="/view/templates/common.xhtml">
+    <ui:define name="content">
+        <h1>Contabilidapp</h1>
 
-<h2>
-    <a href="view/start-upload-period.xhtml">Abrir periodo de carga</a>
-</h2>
-Abrir un nuevo periodo de carga de archivos.
-<br/>
-<br/>
+        <h2>
+            <a href="view/start-upload-period.xhtml">Abrir periodo de carga</a>
+        </h2>
+        Abrir un nuevo periodo de carga de archivos.
+        <br/>
+        <br/>
 
-<h2>
-    <a href="view/upload.xhtml">Cargar archivos</a>
-</h2>
-Cargar archivos para un determinado periodo.
-<br/>
-<br/>
+        <h2>
+            <a href="view/upload.xhtml">Cargar archivos</a>
+        </h2>
+        Cargar archivos para un determinado periodo.
+        <br/>
+        <br/>
 
-<h2>
-    <a href="view/close-upload-period.xhtml">Cerrar periodo de carga</a>
-</h2>
-Cerrar un periodo de carga de archivos.
-<br/>
-<br/>
+        <h2>
+            <a href="view/close-upload-period.xhtml">Cerrar periodo de carga</a>
+        </h2>
+        Cerrar un periodo de carga de archivos.
+        <br/>
+        <br/>
 
-<h2>
-    <a href="view/download-aggregated.xhtml">Descargar transacciones conglomeradas</a>
-</h2>
-Descargar archivo de transacciones conglomeradas para un periodo cerrado.
-<br/>
-<br/>
+        <h2>
+            <a href="view/download-aggregated.xhtml">Descargar transacciones conglomeradas</a>
+        </h2>
+        Descargar archivo de transacciones conglomeradas para un periodo cerrado.
+        <br/>
+        <br/>
 
-<h2>
-    <a href="view/control.xhtml">Contorlar periodo</a>
-</h2>
-Subir archivo de control, y descargar transacciones desglosadas y errores.
-<br/>
-<br/>
-
+        <h2>
+            <a href="view/control.xhtml">Contorlar periodo</a>
+        </h2>
+        Subir archivo de control, y descargar transacciones desglosadas y errores.
+        <br/>
+        <br/>
+    </ui:define>
+</ui:composition>
 </body>
 </html>
