@@ -12,7 +12,7 @@ import javax.persistence.Query;
 import java.util.List;
 
 // TODO arreglar para IDs autoincrementales.
-
+// TODO add error checking in all DB operations.
 public class DaoManager {
 
     private final EntityManagerFactory entityManagerFactory;
