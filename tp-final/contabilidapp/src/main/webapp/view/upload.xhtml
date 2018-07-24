@@ -9,13 +9,15 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-    <title>Contabilidapp</title>
+    <title>ContabilidApp</title>
 </h:head>
 <body>
 <ui:composition template="/view/templates/common.xhtml">
-    <ui:define name="content">
-
+    <ui:define name="header">
         <h1>Cargar archivos</h1>
+    </ui:define>
+
+    <ui:define name="content">
         En este proceso, debe elegir el periodo para el cual se cargarán los archivos.
         <br/>
         Luego, puede subir un archivo .txt con transacciones de dicho periodo.

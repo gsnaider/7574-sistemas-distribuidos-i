@@ -9,13 +9,16 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-    <title>Contabilidapp</title>
+    <title>ContabilidApp</title>
 </h:head>
 <body>
 <ui:composition template="/view/templates/common.xhtml">
-    <ui:define name="content">
+    <ui:define name="header">
+        <h1>Controlar</h1>
+    </ui:define>
 
-        <h1>Controlar periodo</h1>
+    <ui:define name="content">
+        <h2>Controlar periodo</h2>
         Aqui se puede realizar un control sobre un periodo cerrado.
         <br/>
         Luego de elegir un periodo, y cargar un archivo de control (en formato .txt),
@@ -54,7 +57,7 @@
 
         </h:form>
 
-        <h1>Resultados</h1>
+        <h2>Resultados</h2>
 
         Una vez finalizado el control, se podrán descargar los archivos de transacciones
         <br/>
@@ -65,13 +68,15 @@
         <h:form>
             <h:panelGrid columns="2" cellpadding="5">
                 <p:outputLabel for="downloadSplitButton" value="Transacciones desglosadas:"/>
-                <p:commandButton id="downloadSplitButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s"
+                <p:commandButton id="downloadSplitButton" value="Descargar" ajax="false"
+                                 icon="ui-icon-arrowthick-1-s"
                                  disabled="#{!controlView.hasSplitFiles()}">
                     <p:fileDownload value="#{controlView.splitFiles}"/>
                 </p:commandButton>
 
                 <p:outputLabel for="downloadErrorsButton" value="Errores:"/>
-                <p:commandButton id="downloadErrorsButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s"
+                <p:commandButton id="downloadErrorsButton" value="Descargar" ajax="false"
+                                 icon="ui-icon-arrowthick-1-s"
                                  disabled="#{!controlView.hasErrorsFile()}">
                     <p:fileDownload value="#{controlView.errorsFile}"/>
                 </p:commandButton>

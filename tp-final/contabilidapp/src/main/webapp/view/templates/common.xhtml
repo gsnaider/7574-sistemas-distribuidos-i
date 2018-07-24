@@ -2,27 +2,33 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html xmlns = "http://www.w3.org/1999/xhtml"
-      xmlns:h = "http://java.sun.com/jsf/html"
-      xmlns:ui = "http://java.sun.com/jsf/facelets">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<h:head></h:head>
+<h:head>
+    <style type="text/css">
+        header {
+            background-color: #4885ed;
+            padding: 10px;
+            text-align: left;
+            font-size: 25px;
+            color: white;
+        }
+
+    </style>
+
+</h:head>
 <h:body>
-    <div style = "border-width:2px; border-color:green; border-style:solid;">
-        <ui:insert name = "header" >
-            <ui:include src = "/view/templates/header.xhtml" />
+    <header>
+        <ui:insert name="header">
+            <ui:include src="/view/templates/header.xhtml"/>
         </ui:insert>
-    </div>
+    </header>
     <br/>
 
     <ui:insert name="content"/>
     <br/>
-
-    <div style = "border-width:2px; border-color:red; border-style:solid;">
-        <ui:insert name = "footer" >
-            <ui:include src = "/view/templates/footer.xhtml" />
-        </ui:insert>
-    </div>
 
 </h:body>
 </html>

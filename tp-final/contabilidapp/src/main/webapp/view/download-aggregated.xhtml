@@ -9,13 +9,16 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-    <title>Contabilidapp</title>
+    <title>ContabilidApp</title>
 </h:head>
 <body>
 <ui:composition template="/view/templates/common.xhtml">
-    <ui:define name="content">
 
+    <ui:define name="header">
         <h1>Descargar transacciones conglomeradas</h1>
+    </ui:define>
+
+    <ui:define name="content">
         Aquí se puede descargar el archivo de transacciones conglomeradas para un periodo cerrado.
         <br/>
         Este archivo contiene en cada linea la suma de todas las transacciones de un determinado
@@ -23,11 +26,6 @@
         cliente para el periodo seleccionado.
         <br/>
         <br/>
-
-        <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false"
-                  resizable="false">
-            <p:graphicImage name="/AjaxLoading.gif"/>
-        </p:dialog>
 
         <h:form>
             <h:panelGrid columns="2" cellpadding="5">
@@ -40,23 +38,14 @@
                 </p:selectOneMenu>
 
                 <p:outputLabel for="downloadButton" value="Transacciones conglomeradas:"/>
-                <p:commandButton id="downloadButton" value="Descargar" ajax="false" icon="ui-icon-arrowthick-1-s">
+                <p:commandButton id="downloadButton" value="Descargar" ajax="false"
+                                 icon="ui-icon-arrowthick-1-s">
                     <p:fileDownload value="#{downloadAggregatedView.file}"/>
                 </p:commandButton>
 
                 <p:growl id="messages" showDetail="true"/>
             </h:panelGrid>
         </h:form>
-
-        <script type="text/javascript">
-            function start() {
-                PF('statusDialog').show();
-            }
-
-            function stop() {
-                PF('statusDialog').hide();
-            }
-        </script>
 
         <h3>
             <a href="../index.xhtml">Volver</a>
