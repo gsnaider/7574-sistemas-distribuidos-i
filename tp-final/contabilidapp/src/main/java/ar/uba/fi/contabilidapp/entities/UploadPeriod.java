@@ -19,6 +19,7 @@ public class UploadPeriod {
     @Column(name = "OPEN")
     private boolean open;
 
+    //TODO remove this column (not storing conglomerate file).
     @Lob
     @Column(name = "CONGLOMERATE_FILE_DATA")
     private byte[] conglomerateFileData;

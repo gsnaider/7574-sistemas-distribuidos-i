@@ -127,6 +127,13 @@ public class ModelImpl implements Model {
         StringBuilder errorsTable = new StringBuilder();
         Formatter lineFormatter = new Formatter(errorsTable);
 
+        // Add header.
+        lineFormatter.format(
+                "%s      %s    %s\n",
+                "Cliente",
+                "Monto de periodo",
+                "Monto de control");
+
         DecimalFormat df = new DecimalFormat("0000000.00");
         for (ControlErrorRecord errorRecord : errors) {
 
@@ -137,7 +144,7 @@ public class ModelImpl implements Model {
             String formattedControlAmount = controlAmount == null ? NO_AMOUNT : df.format(controlAmount);
 
             lineFormatter.format(
-                    "%s\t%s\t%s\n",
+                    "%s    %s          %s\n",
                     errorRecord.getClientCode(),
                     formattedTransactionAmount,
                     formattedControlAmount);

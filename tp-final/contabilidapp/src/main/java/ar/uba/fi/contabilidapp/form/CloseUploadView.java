@@ -47,7 +47,7 @@ public class CloseUploadView {
     public void closePeriod() {
         try {
             model.closePeriod(uploadId);
-            FacesMessage message = new FacesMessage("Periodo ", uploadId + " fue cerrado con éxito.");
+            FacesMessage message = new FacesMessage("Periodo " + uploadId + " cerrado con éxito.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         } catch (ContabilidappException e) {
             Logger.warn("Error closing period", e);
