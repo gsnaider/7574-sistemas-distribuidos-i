@@ -11,7 +11,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import java.util.List;
 
-// TODO arreglar para IDs autoincrementales.
+// TODO add index by en CLIENT CODE
 // TODO add error checking in all DB operations.
 public class DaoManager {
 
