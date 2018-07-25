@@ -1,0 +1,28 @@
+package ar.uba.fi.contabilidapp.model;
+
+import org.pmw.tinylog.Logger;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+@WebListener
+public class InitListener implements ServletContextListener {
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        Logger.info("Initializing context.");
+        ServletContext ctx = sce.getServletContext();
+        ModelProvider modelProvider = new ModelProvider();
+        ctx.setAttribute(ModelProvider.CTX_ATTRIBUTE, modelProvider);
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        Logger.info("Destroying context.");
+        ServletContext ctx = sce.getServletContext();
+        ModelProvider modelProvider = (ModelProvider) ctx.getAttribute(ModelProvider.CTX_ATTRIBUTE);
+        modelProvider.tearUp();
+    }
+}
