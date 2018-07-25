@@ -12,21 +12,18 @@ import org.primefaces.model.UploadedFile;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @ManagedBean
 @SessionScoped
 public class ControlView {
-
-    @ManagedProperty(value = "#{modelProvider}")
-    private ModelProvider modelProvider;
 
     private Model model;
 
@@ -38,7 +35,10 @@ public class ControlView {
 
     @PostConstruct
     public void init() {
-        this.model = modelProvider.getModel();
+        ServletContext servletContext = (ServletContext) FacesContext
+                .getCurrentInstance().getExternalContext().getContext();
+        ModelProvider modelProvider = (ModelProvider) servletContext.getAttribute(ModelProvider.CTX_ATTRIBUTE);
+        model = modelProvider.getModel();
     }
 
     public void control() {
@@ -68,7 +68,8 @@ public class ControlView {
     public Map<String, Long> getClosedUploadIds() {
         Logger.info("Searching for closed period lists.");
         Map<String, Long> idStrings = new HashMap<>();
-        for (Long id : model.getClosedUploadPeriodsIds()) {
+        List<Long> periodIds = model.getClosedUploadPeriodsIds();
+        for (Long id : periodIds) {
             idStrings.put(id.toString(), id);
         }
         return idStrings;
@@ -106,10 +107,6 @@ public class ControlView {
 
     public void setFile(UploadedFile file) {
         this.file = file;
-    }
-
-    public void setModelProvider(ModelProvider modelProvider) {
-        this.modelProvider = modelProvider;
     }
 
 }

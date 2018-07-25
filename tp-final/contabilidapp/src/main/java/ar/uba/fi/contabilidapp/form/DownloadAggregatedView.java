@@ -3,14 +3,14 @@ package ar.uba.fi.contabilidapp.form;
 import ar.uba.fi.contabilidapp.model.Model;
 import ar.uba.fi.contabilidapp.model.ModelProvider;
 import org.pmw.tinylog.Logger;
-import org.primefaces.application.resource.barcode.UPCAGenerator;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -20,17 +20,16 @@ import java.util.Map;
 @RequestScoped
 public class DownloadAggregatedView {
 
-
-    @ManagedProperty(value = "#{modelProvider}")
-    private ModelProvider modelProvider;
-
     private Model model;
 
     private long uploadId;
 
     @PostConstruct
     public void init() {
-        this.model = modelProvider.getModel();
+        ServletContext servletContext = (ServletContext) FacesContext
+                .getCurrentInstance().getExternalContext().getContext();
+        ModelProvider modelProvider = (ModelProvider) servletContext.getAttribute(ModelProvider.CTX_ATTRIBUTE);
+        model = modelProvider.getModel();
     }
 
     public Map<String, Long> getClosedUploadIds() {
@@ -55,10 +54,5 @@ public class DownloadAggregatedView {
     public void setUploadId(long uploadId) {
         this.uploadId = uploadId;
     }
-
-    public void setModelProvider(ModelProvider modelProvider) {
-        this.modelProvider = modelProvider;
-    }
-
 
 }

@@ -4,15 +4,14 @@ import ar.uba.fi.contabilidapp.model.ContabilidappException;
 import ar.uba.fi.contabilidapp.model.Model;
 import ar.uba.fi.contabilidapp.model.ModelProvider;
 import org.pmw.tinylog.Logger;
-import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,23 +19,22 @@ import java.util.Map;
 @RequestScoped
 public class FileUploadView {
 
-    @ManagedProperty(value = "#{modelProvider}")
-    private ModelProvider modelProvider;
-
     private Model model;
 
     private long uploadId;
 
     private UploadedFile file;
 
-
     @PostConstruct
     public void init() {
-        this.model = modelProvider.getModel();
+        ServletContext servletContext = (ServletContext) FacesContext
+                .getCurrentInstance().getExternalContext().getContext();
+        ModelProvider modelProvider = (ModelProvider) servletContext.getAttribute(ModelProvider.CTX_ATTRIBUTE);
+        model = modelProvider.getModel();
     }
 
     public void upload() {
-        if(file != null) {
+        if (file != null) {
             Logger.info("File received: {}", file.getFileName());
 
             byte[] fileData = file.getContents();
@@ -79,7 +77,4 @@ public class FileUploadView {
         this.file = file;
     }
 
-    public void setModelProvider(ModelProvider modelProvider) {
-        this.modelProvider = modelProvider;
-    }
 }
