@@ -12,17 +12,12 @@ import java.util.Objects;
 public class UploadPeriod {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private long id;
 
     @Column(name = "OPEN")
     private boolean open;
-
-    //TODO remove this column (not storing conglomerate file).
-    @Lob
-    @Column(name = "CONGLOMERATE_FILE_DATA")
-    private byte[] conglomerateFileData;
 
     public long getId() {
         return id;
@@ -36,20 +31,11 @@ public class UploadPeriod {
         this.open = open;
     }
 
-    public byte[] getConglomerateFileData() {
-        return conglomerateFileData;
-    }
-
-    public void setConglomerateFileData(byte[] conglomerateFileData) {
-        this.conglomerateFileData = conglomerateFileData;
-    }
-
     @Override
     public String toString() {
         return "UploadPeriod{" +
                 "id=" + id +
                 "open=" + open +
-                ", conglomerateFileData=" + Arrays.toString(conglomerateFileData) +
                 '}';
     }
 
@@ -58,15 +44,12 @@ public class UploadPeriod {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UploadPeriod uploadPeriod = (UploadPeriod) o;
-        return id == uploadPeriod.id && open == uploadPeriod.open &&
-                Arrays.equals(conglomerateFileData, uploadPeriod.conglomerateFileData);
+        return id == uploadPeriod.id && open == uploadPeriod.open;
     }
 
     @Override
     public int hashCode() {
 
-        int result = Objects.hash(id);
-        result = 31 * result + Arrays.hashCode(conglomerateFileData);
-        return result;
+        return Objects.hash(id, open);
     }
 }
