@@ -19,22 +19,12 @@
       <file leaf-file-name="ModelProvider.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+            <state relative-caret-position="266">
+              <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
               <folding>
                 <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CloseUploadView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/form/CloseUploadView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="456">
-              <caret line="36" column="36" selection-start-line="36" selection-start-column="36" selection-end-line="36" selection-end-column="36" />
-              <folding>
-                <element signature="imports" expanded="true" />
+                <element signature="e#457#458#0" expanded="true" />
+                <element signature="e#485#486#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -43,10 +33,12 @@
       <file leaf-file-name="ModelProxy.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProxy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="657">
-              <caret line="92" column="69" selection-start-line="92" selection-start-column="69" selection-end-line="92" selection-end-column="69" />
+            <state relative-caret-position="250">
+              <caret line="18" selection-start-line="18" selection-end-line="18" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#683#684#0" expanded="true" />
+                <element signature="e#726#727#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,17 +61,47 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ControlResults.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ControlResults.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/ControlResults.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="30" />
+            <state relative-caret-position="266">
+              <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
               <folding>
                 <element signature="e#314#315#0" expanded="true" />
                 <element signature="e#380#381#0" expanded="true" />
                 <element signature="e#417#418#0" expanded="true" />
                 <element signature="e#479#480#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InitListener.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/InitListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="18" column="49" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="web.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="persistence.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="17" column="63" selection-start-line="17" selection-start-column="63" selection-end-line="17" selection-end-column="123" />
             </state>
           </provider>
         </entry>
@@ -93,15 +115,6 @@
                 <element signature="e#577#578#0" expanded="true" />
                 <element signature="e#617#618#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1045">
-              <caret line="55" selection-start-line="55" selection-end-line="55" />
             </state>
           </provider>
         </entry>
@@ -123,18 +136,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="285">
               <caret line="17" column="15" selection-start-line="17" selection-start-column="15" selection-end-line="17" selection-end-column="15" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="StartUploadPeriodView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/form/StartUploadPeriodView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="29" selection-start-line="29" selection-end-line="29" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -190,8 +191,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/upload/model/InputFile.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/upload/model/Client.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/dao/TransactionDao.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/upload/model/Transaction.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/LineValidator.java" />
@@ -236,11 +235,13 @@
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/form/StartUploadPeriodView.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/form/ControlView.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/Model.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProvider.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/Result.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/PeriodFile.java" />
-        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProxy.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/ControlResults.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/InitListener.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProxy.java" />
+        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProvider.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
       </list>
     </option>
   </component>
@@ -356,6 +357,14 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="contabilidapp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="contabilidapp" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="contabilidapp" type="b2602c69:ProjectViewProjectNode" />
@@ -582,7 +591,7 @@
       <workItem from="1532425522254" duration="1314000" />
       <workItem from="1532482960018" duration="3943000" />
       <workItem from="1532497156015" duration="6555000" />
-      <workItem from="1532569740538" duration="522000" />
+      <workItem from="1532569740538" duration="1363000" />
     </task>
     <servers />
   </component>
@@ -619,10 +628,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="109795000" />
+    <option name="totallyTimeSpent" value="110636000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-1091" width="1857" height="1092" extended-state="6" />
+    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -680,13 +689,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/dao/EntityManagerProvider.java" />
     <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/LineParser.java" />
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="13" lean-forward="true" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/LineValidator.java" />
     <entry file="file://$PROJECT_DIR$/src/test/java/ar/uba/fi/contabilidapp/model/LineValidatorTest.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -865,13 +867,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" column="21" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/index.xhtml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -890,13 +885,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="14" column="48" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/InitListener.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="10" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -914,6 +905,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="239">
           <caret line="26" selection-start-line="26" selection-end-line="39" selection-end-column="9" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1531#1532#0" expanded="true" />
+            <element signature="e#1562#1563#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -942,16 +938,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1045">
           <caret line="55" selection-start-line="55" selection-end-line="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProvider.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="14" column="22" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1003,16 +989,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProxy.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="657">
-          <caret line="92" column="69" selection-start-line="92" selection-start-column="69" selection-end-line="92" selection-end-column="69" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/ControlRecord.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="910">
@@ -1030,14 +1006,62 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/ControlResults.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="8" selection-start-line="8" selection-end-line="8" selection-end-column="30" />
+        <state relative-caret-position="266">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
           <folding>
             <element signature="e#314#315#0" expanded="true" />
             <element signature="e#380#381#0" expanded="true" />
             <element signature="e#417#418#0" expanded="true" />
             <element signature="e#479#480#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="17" column="63" selection-start-line="17" selection-start-column="63" selection-end-line="17" selection-end-column="123" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/InitListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="18" column="49" selection-start-line="18" selection-start-column="49" selection-end-line="18" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProxy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#683#684#0" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="22" lean-forward="true" selection-start-line="14" selection-start-column="22" selection-end-line="14" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#457#458#0" expanded="true" />
+            <element signature="e#485#486#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
         </state>
       </provider>
     </entry>

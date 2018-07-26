@@ -6,6 +6,14 @@
 
     <display-name>Contabilidapp</display-name>
 
+    <!--local for running backend in this same server-->
+    <!--URL for connecting to remote backend server-->
+    <context-param>
+        <param-name>backend</param-name>
+        <!--<param-value>local</param-value>-->
+        <param-value>http://localhost:8080/contabilidapp-backend/service</param-value>
+    </context-param>
+
     <filter>
         <filter-name>primeFacesFileUploadFilter</filter-name>
         <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>

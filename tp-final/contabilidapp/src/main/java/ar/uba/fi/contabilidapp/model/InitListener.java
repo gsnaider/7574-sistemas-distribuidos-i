@@ -14,7 +14,11 @@ public class InitListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         Logger.info("Initializing context.");
         ServletContext ctx = sce.getServletContext();
-        ModelProvider modelProvider = new ModelProvider();
+
+        String backendLocation = ctx.getInitParameter("backend");
+        ModelProvider modelProvider = new ModelProvider(backendLocation);
+
+
         ctx.setAttribute(ModelProvider.CTX_ATTRIBUTE, modelProvider);
     }
 

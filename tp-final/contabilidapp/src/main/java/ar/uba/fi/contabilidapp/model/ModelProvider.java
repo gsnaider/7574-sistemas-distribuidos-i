@@ -10,9 +10,14 @@ public class ModelProvider {
     private final Model model;
     private final DaoManager daoManager;
 
-    public ModelProvider() {
-        daoManager = new DaoManager();
-        model = new ModelProxy(); // TODO use property for config.
+    public ModelProvider(String backendLocation) {
+        if (backendLocation.equals("local")) {
+            daoManager = new DaoManager();
+            model = new ModelImpl(daoManager);
+        } else {
+            daoManager = null;
+            model = new ModelProxy(backendLocation);
+        }
     }
 
     public Model getModel() {
@@ -20,8 +25,9 @@ public class ModelProvider {
     }
 
     public void tearUp() {
-        Logger.info("Closing DaoManager.");
-        daoManager.tearUp();
+        if (daoManager != null) {
+            Logger.info("Closing DaoManager.");
+            daoManager.tearUp();
+        }
     }
-
 }
