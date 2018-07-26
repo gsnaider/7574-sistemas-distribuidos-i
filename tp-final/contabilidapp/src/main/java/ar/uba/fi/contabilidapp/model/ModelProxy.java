@@ -36,7 +36,7 @@ public class ModelProxy implements Model {
         Response response = client.target(REST_URI)
                 .path("input-file")
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(new PeriodFile(uploadId, Arrays.toString(fileData)), MediaType.APPLICATION_JSON));
+                .post(Entity.entity(new PeriodFile(uploadId, fileData), MediaType.APPLICATION_JSON));
         Logger.info("Status {}", response.getStatus());
         Logger.info("Response {}", response);
 
@@ -90,7 +90,7 @@ public class ModelProxy implements Model {
         Response response = client.target(REST_URI)
                 .path("control")
                 .request(MediaType.APPLICATION_JSON)
-                .post(Entity.entity(new PeriodFile(uploadId, Arrays.toString(fileData)), MediaType.APPLICATION_JSON));
+                .post(Entity.entity(new PeriodFile(uploadId, fileData), MediaType.APPLICATION_JSON));
         if (response.getStatus() != Response.Status.OK.getStatusCode()) {
             throw new ContabilidappException("Remote error uploading file.");
         }

@@ -6,6 +6,8 @@ public class ControlResults {
 
     private byte[] zipFiles;
 
+    public ControlResults() {}
+
     public ControlResults(String errorsFile, byte[] zipFiles) {
         this.errorsFile = errorsFile;
         this.zipFiles = zipFiles;
