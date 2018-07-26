@@ -61,8 +61,11 @@ public class ModelImpl implements Model {
         InputStream is = new ByteArrayInputStream(fileData);
         Scanner scanner = new Scanner(is);
         while (scanner.hasNextLine()) {
-            Transaction transaction = parseTransactionLine(scanner.nextLine());
-            transactions.add(transaction);
+            String line = scanner.nextLine();
+            if (!line.isEmpty()) {
+                Transaction transaction = parseTransactionLine(line);
+                transactions.add(transaction);
+            }
         }
 
         InputFile inputFile = persistInputFile(fileData, transactions, uploadId);
@@ -113,8 +116,10 @@ public class ModelImpl implements Model {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(fileData)))) {
             String line = reader.readLine();
             while (line != null) {
-                ControlRecord controlRecord = parseControlLine(line);
-                records.put(controlRecord.getClientCode(), controlRecord);
+                if (!line.isEmpty()) {
+                    ControlRecord controlRecord = parseControlLine(line);
+                    records.put(controlRecord.getClientCode(), controlRecord);
+                }
                 line = reader.readLine();
             }
         } catch (IOException e) {

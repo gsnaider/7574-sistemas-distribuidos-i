@@ -88,11 +88,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="web.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="web.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
+            <state relative-caret-position="437">
+              <caret line="23" column="21" lean-forward="true" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModelImpl.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelImpl.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="624">
+              <caret line="306" column="15" lean-forward="true" selection-end-line="315" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#3766#3767#0" expanded="true" />
+                <element signature="e#3840#3841#0" expanded="true" />
+                <element signature="e#3907#3908#0" expanded="true" />
+                <element signature="e#3983#3984#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -114,18 +130,6 @@
               <folding>
                 <element signature="e#577#578#0" expanded="true" />
                 <element signature="e#617#618#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FileUploadView.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/form/FileUploadView.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="836">
-              <caret line="57" column="36" selection-start-line="57" selection-start-column="36" selection-end-line="57" selection-end-column="36" />
-              <folding>
-                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -156,25 +160,22 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>handl</find>
-      <find>files</find>
-      <find>upload</find>
       <find>results.</find>
       <find>param</find>
-      <find>NEW UPLO</find>
-      <find>new up</find>
+      <find />
+      <find />
       <find>parseLine</find>
       <find>byte[]</find>
       <find>11</find>
       <find>AMOUNT_POSITION</find>
       <find>GenerationType</find>
       <find>invalid</find>
-      <find>error rea</find>
+      <find />
       <find>stringb</find>
       <find>h:bu</find>
       <find>Ajaxlo</find>
       <find>suBIR</find>
-      <find>new FacesMessage</find>
+      <find />
       <find>cargado</find>
       <find>monto</find>
       <find>UPLOADS</find>
@@ -184,8 +185,11 @@
       <find>AUTO</find>
       <find>TODO</find>
       <find>ModelProvider</find>
-      <find>@ManagedProperty(value = &quot;#{modelProvider}&quot;)</find>
-      <find>Remote error uploading file</find>
+      <find />
+      <find />
+      <find>parseTransactionLine</find>
+      <find>parse</find>
+      <find>parseControlLine</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -218,7 +222,6 @@
         <option value="$PROJECT_DIR$/src/main/webapp/view/upload-period-started.xhtml" />
         <option value="$PROJECT_DIR$/src/main/webapp/view/upload.xhtml" />
         <option value="$PROJECT_DIR$/src/main/webapp/view/control.xhtml" />
-        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/Client.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/Transaction.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/entities/InputFile.java" />
@@ -242,6 +245,7 @@
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProxy.java" />
         <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelProvider.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml" />
+        <option value="$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelImpl.java" />
       </list>
     </option>
   </component>
@@ -262,7 +266,7 @@
     <packageJsonPaths />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1856" />
+    <option name="x" value="64" />
     <option name="y" value="-11" />
     <option name="width" value="1857" />
     <option name="height" value="1092" />
@@ -591,7 +595,7 @@
       <workItem from="1532425522254" duration="1314000" />
       <workItem from="1532482960018" duration="3943000" />
       <workItem from="1532497156015" duration="6555000" />
-      <workItem from="1532569740538" duration="1363000" />
+      <workItem from="1532569740538" duration="2122000" />
     </task>
     <servers />
   </component>
@@ -628,10 +632,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="110636000" />
+    <option name="totallyTimeSpent" value="111395000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="64" y="-11" width="1857" height="1092" extended-state="6" />
+    <frame x="64" y="-1091" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -751,6 +755,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="19" column="16" lean-forward="true" selection-start-line="19" selection-start-column="16" selection-end-line="19" selection-end-column="16" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#534#535#0" expanded="true" />
+            <element signature="e#585#586#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -885,16 +894,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="266">
           <caret line="14" column="48" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="48" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2848">
-          <caret line="246" column="30" selection-start-line="246" selection-start-column="30" selection-end-line="246" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1060,8 +1059,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/web.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
+        <state relative-caret-position="437">
+          <caret line="23" column="21" lean-forward="true" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/ar/uba/fi/contabilidapp/model/ModelImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="624">
+          <caret line="306" column="15" lean-forward="true" selection-end-line="315" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#3766#3767#0" expanded="true" />
+            <element signature="e#3840#3841#0" expanded="true" />
+            <element signature="e#3907#3908#0" expanded="true" />
+            <element signature="e#3983#3984#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
