@@ -15,6 +15,7 @@ ContabilidApp es una aplicación web que permite la carga de archivos de transac
 - [Manual de usuario](#user-manual)
 
 <a name="architecture"/>
+
 # Arquitectura
 La aplicación está desarrollada en Java EE, y utiliza Apache Tomcat como servidor web. La aplicación está distribuida en dos servidores: 
 1. Un servidor frontend que maneja la vista de la aplicación. Este servidor utiliza el Java Server Faces (JSF) y PrimeFaces como frameworks de frontend para Java EE.
