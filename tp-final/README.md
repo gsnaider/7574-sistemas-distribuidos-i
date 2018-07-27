@@ -117,4 +117,48 @@ Luego, hacemos click en **Start cluster**, y deberíamos obtener el siguiente me
 
 <img src="./doc/mysql-cluster-9.png" alt="MySQL Cluster 9">
 
-Una vez hecho esto, ya tenemos corriendo un MySQL Cluster en nuestra máquina.
+Una vez hecho esto, ya tenemos corriendo un MySQL Cluster en nuestra máquina. Para monitorear el cluster, podemos ejecutar desde `/usr/local/mysql/`:
+```sh
+$ bin/ndb_mgm -e show
+```
+Esto nos mostrará el estado de los distintos nodos corriendo en nuestro host. Deberíamos ver algo como esto:
+```sh
+Connected to Management Server at: localhost:1186
+Cluster Configuration
+---------------------
+[ndbd(NDB)]	2 node(s)
+id=1	@127.0.0.1  (mysql-5.7.22 ndb-7.6.6, Nodegroup: 0, *)
+id=2	@127.0.0.1  (mysql-5.7.22 ndb-7.6.6, Nodegroup: 0)
+
+[ndb_mgmd(MGM)]	1 node(s)
+id=49	@127.0.0.1  (mysql-5.7.22 ndb-7.6.6)
+
+[mysqld(API)]	5 node(s)
+id=53	@127.0.0.1  (mysql-5.7.22 ndb-7.6.6)
+id=54	@127.0.0.1  (mysql-5.7.22 ndb-7.6.6)
+id=231 (not connected, accepting connect from 127.0.0.1)
+id=232 (not connected, accepting connect from 127.0.0.1)
+id=233 (not connected, accepting connect from 127.0.0.1)
+```
+
+## Configuración de base de datos
+### Credenciales
+Una vez levantado el MySQL Cluster, debemos configurar el usuario y password que usaremos para conectarnos desde nuestra Web App. Para entrar a la base de datos, ejecutar desde `/usr/local/mysql/`:
+```sh
+$ bin/mysql -h 127.0.0.1 -P 3306 -u root
+```
+Una vez conectado a la base de datos, ejecutar:
+```sh
+mysql> use mysql;
+mysql> update user set authentication_string=password('mysql') where user='root';
+mysql> flush privileges;
+mysql> quit;
+```
+Esto setea la password 'mysql' para el usuario 'root', que son las credenciales que utilizaremos para conectarnos desde nuestra app. A partir de ahora, si queremos conectarnos a la base de datos, debemos ejecutar:
+```sh
+$ bin/mysql -h 127.0.0.1 -P 3306 -u root -p
+```
+y tipear la password 'mysql'.
+
+### Cargar schema
+Ahora cargaremos el schema de la base de datos que usaremos en nuestra aplicación. Para eso, 
