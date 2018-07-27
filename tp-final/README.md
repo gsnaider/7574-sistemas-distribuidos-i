@@ -1,7 +1,7 @@
 # ContabilidApp
 ContabilidApp es una aplicación web que permite la carga de archivos de transacciones de usuarios, la descarga de esta información, y realizar controles sobre la misma.
 
-## Arquitectura
+# Arquitectura
 La aplicación está desarrollada en Java EE, y utiliza Apache Tomcat como servidor web. La aplicación está distribuida en dos servidores: 
 1. Un servidor frontend que maneja la vista de la aplicación. Este servidor utiliza el Java Server Faces (JSF) y PrimeFaces como frameworks de frontend para Java EE.
 2. Un servidor backend que contiene la lógica de negocio y el modelo de datos. Este servidor utiliza Java Persistence API (JPA) y su implementación de Hibernate como frameworks para ORM (Object Relational Mapping).
@@ -13,3 +13,84 @@ Por último, como base de datos se utiliza MySQL Cluster, una base de datos dist
 A continuación se muestra un diagrama de la arquitectura completa del sistema.
 
 <img src="./doc/contabilidapp-architecture.png" alt="Arquitectura">
+
+# Instalación
+Las siguientes instrucciones describen como realizar la instalación del sistema sobre Linux.
+## Pre-requisitos
+### Java 8
+Para correr la aplicación, se debe tener instalado Java 8. Para instalarlo, simplemente ejecutar:
+```sh
+$ sudo apt-get install openjdk-8-jdk
+```
+Para verificar que Java 8 se instaló correctamente, ejecutar:
+```sh
+$ java -version
+```
+y se debería obtener un resultado similar al siguiente:
+```sh
+openjdk version "1.8.0_171"
+OpenJDK Runtime Environment (build 1.8.0_171-8u171-b11-0ubuntu0.16.04.1-b11)
+OpenJDK 64-Bit Server VM (build 25.171-b11, mixed mode)
+```
+### Apache Tomcat
+Tanto el servidor frontend como el backend corren sobre Apache Tomcat. En este caso, utilizamos la version 9.0.10 de Tomcat, la cual puede ser descargada directamente del siguiente link: http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.10/bin/apache-tomcat-9.0.10.tar.gz, o desde: https://tomcat.apache.org/download-90.cgi.
+Una vez realizada la descarga, extraer el contenido, crear un directorio en `/opt/tomcat` y mover el directorio `apache-tomcat-9.0.10` a este nuevo directorio:
+```sh
+$ tar -xvzf apache-tomcat-9.0.10.tar.gz
+$ sudo mkdir /opt/tomcat
+$ sudo mv apache-tomcat-9.0.10 /opt/tomcat/
+```
+### MySQL Cluster
+#### Pre-requisitos de MySQL Cluster
+Para poder instalar MySQL Cluster, previamente se deben instalar algunas dependencias. Para empezar, ejecutar:
+```sh
+$ sudo apt-get install libaio1
+```
+En caso de no tener Python instalado, ejecutar:
+```sh
+$ sudo apt-get install python2.7
+```
+Verificar la instalación de Python con:
+```sh
+$ python --version
+```
+Luego se deben instalar algunos paquetes de Python. En caso de no tener pip instalado, ejecutar:
+```sh
+$ sudo apt-get install python-pip
+```
+Y luego descargar los siguientes paquetes de Python con pip:
+```sh
+$ pip install paramiko
+$ pip install pycrypto
+```
+#### Instalación de MySQL Cluster
+(Las instrucciones oficiales pueden encontrarse en: https://downloads.mysql.com/tutorials/cluster/mysql_wp_cluster_quickstart.pdf y https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-install-auto-using.html)
+
+MySQL Cluster puede descargarse desde: https://dev.mysql.com/downloads/cluster/. Seleccionar la opción **Linux - Generic**, elegir la arquitectura del sistema, y hacer click en **Download**.
+
+<img src="./doc/mysql-cluster-download.png" alt="MySQL Cluster Download">
+
+Una vez descargado, extraer el directorio y moverlo a `/usr/local/mysql`
+```sh
+$ tar -xvzf mysql-cluster-gpl-7.6.6-linux-glibc2.12-x86_64.tar.gz
+$ mv mysql-cluster-gpl-7.6.6-linux-glibc2.12-x86_64 mysql
+$ sudo mv mysql /usr/local
+```
+Una vez hecho esto, ir al directorio `/usr/local/mysql` y ejecutar `bin/ndb_setup.py`:
+```sh
+$ cd /usr/local/mysql
+$ bin/ndb_setup.py
+```
+Esto abrirá en un browser la URL https://localhost:8081/welcome.html. En caso de no abrirse automáticamente, copiar la URL y abrirla manualmente desde un browser. Esto iniciará el Wizard para la instalación de MySQL Cluster.
+
+<img src="./doc/mysql-cluster-1.png" alt="MySQL Cluster 1">
+
+Aquí podemos crear una nueva configuración para nuestro cluster y deployarlo. Comenzamos seleccionando **NEW CONFIGURATION**, y seteando una Passphrase para nuestro cluster (por ejemplo: 'mysql'). Luego hacemos click en **Continue**.
+
+<img src="./doc/mysql-cluster-2.png" alt="MySQL Cluster 2">
+
+Ahora elegimos un nombre para nuestro cluster (por ejemplo: 'contabilidapp-cluster'), y hacemos click en **OK**.
+
+<img src="./doc/mysql-cluster-3.png" alt="MySQL Cluster 3">
+
+
