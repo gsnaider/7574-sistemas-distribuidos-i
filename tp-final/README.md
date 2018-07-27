@@ -30,6 +30,8 @@ A continuación se muestra un diagrama de la arquitectura completa del sistema.
 <img src="./doc/contabilidapp-architecture.png" alt="Arquitectura">
 
 
+<a name="instalation"/>
+
 # Instalación
 Las siguientes instrucciones describen como realizar la instalación del sistema sobre Linux. 
 
