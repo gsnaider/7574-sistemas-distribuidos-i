@@ -32,6 +32,10 @@ openjdk version "1.8.0_171"
 OpenJDK Runtime Environment (build 1.8.0_171-8u171-b11-0ubuntu0.16.04.1-b11)
 OpenJDK 64-Bit Server VM (build 25.171-b11, mixed mode)
 ```
+Por último, debemos configurar la variable de entorno `JAVA_HOME`. Para eso, podemos agregar en el archivo `/etc/environment` la linea `JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"`, y actualizamos las variables de entorno ejecutando:
+```sh
+$ source /etc/environment
+```
 ### Apache Tomcat
 Tanto el servidor frontend como el backend corren sobre Apache Tomcat. En este caso, utilizamos la version 9.0.10 de Tomcat, la cual puede ser descargada directamente del siguiente link: http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.10/bin/apache-tomcat-9.0.10.tar.gz, o desde: https://tomcat.apache.org/download-90.cgi.
 Una vez realizada la descarga, extraer el contenido, crear un directorio en `/opt/tomcat` y mover el directorio `apache-tomcat-9.0.10` a este nuevo directorio:
@@ -39,6 +43,23 @@ Una vez realizada la descarga, extraer el contenido, crear un directorio en `/op
 $ tar -xvzf apache-tomcat-9.0.10.tar.gz
 $ sudo mkdir /opt/tomcat
 $ sudo mv apache-tomcat-9.0.10 /opt/tomcat/
+```
+### Maven (opcional)
+Maven es requerido solo para poder compilar la aplicación desde el código fuente. En caso de que no se quiera hacer esto, se pueden directamente descargar los `.war` de los dos servidores ya compilados (más detalles sobre esto en la sección **Configuración del Web Server**). Estos `.war` están configurados para correr en una máquina local. Si se quiere distribuir el sistema en varias máquinas, se deberán cambiar las direcciones de los servidores y la DB en los parámetros de configuración de la app, y compilar nuevamente. 
+
+Maven puede descargarse de https://maven.apache.org/download.cgi. Una vez descargado, extraer el contenido y moverlo a `/opt/maven`:
+```sh
+$ tar zxvf apache-maven-3.x.y.tar.gz
+$ sudo mkdir /opt/maven
+$ sudo mv apache-maven-3.x.y /opt/maven
+```
+Agregar en el `PATH` la dirección `/opt/maven/apache-maven-3.x.y/bin`. Para esto, abrir el archivo `/etc/environment`, y agregar `:/opt/maven/apache-maven-3.x.y/bin` al final de la linea del `PATH`. Finalmente, actualizar las variables de entorno ejecutando:
+```sh
+$ source /etc/environment
+```
+Para verificar la instalación, ejecutar:
+```sh
+$ mvn --version
 ```
 ### MySQL Cluster
 #### Pre-requisitos de MySQL Cluster
@@ -141,7 +162,7 @@ id=232 (not connected, accepting connect from 127.0.0.1)
 id=233 (not connected, accepting connect from 127.0.0.1)
 ```
 
-## Configuración de base de datos
+## Configuración de la base de datos
 ### Credenciales
 Una vez levantado el MySQL Cluster, debemos configurar el usuario y password que usaremos para conectarnos desde nuestra Web App. Para entrar a la base de datos, ejecutar desde `/usr/local/mysql/`:
 ```sh
@@ -161,4 +182,61 @@ $ bin/mysql -h 127.0.0.1 -P 3306 -u root -p
 y tipear la password 'mysql'.
 
 ### Cargar schema
-Ahora cargaremos el schema de la base de datos que usaremos en nuestra aplicación. Para eso, 
+Ahora cargaremos el schema de la base de datos que usaremos en nuestra aplicación. Para eso, descargar el schema de https://raw.githubusercontent.com/gsnaider/7574-sistemas-distribuidos-i/master/tp-final/deploy-files/contabilidapp_schema.sql:
+```sh
+$ wget https://raw.githubusercontent.com/gsnaider/7574-sistemas-distribuidos-i/master/tp-final/deploy-files/contabilidapp_schema.sql
+```
+Luego, desde `/usr/local/mysql/` ejecutar:
+```sh
+$ bin/mysql -h 127.0.0.1 -P 3306 -u root -p < contabilidapp_schema.sql
+```
+y tipear la password 'mysql'. Luego de esto, se debería haber cargado el schema de la base de datos. Para verificarlo, entrar a la base de datos y ejecutar lo siguiente:
+```sh
+$ bin/mysql -h 127.0.0.1 -P 3306 -u root -p
+mysql> SHOW DATABASES;
+mysql> USE contabilidapp;
+mysql> SHOW TABLES;
+```
+Deberiamos ver la database `contabilidapp`, y las siguientes tablas:
+```sql
++--------------------------+
+| Tables_in_contabilidapp  |
++--------------------------+
+| CLIENTS                  |
+| INPUT_FILES              |
+| INPUT_FILES_TRANSACTIONS |
+| TRANSACTIONS             |
+| UPLOAD_PERIODS           |
++--------------------------+
+```
+
+## Configuración del Web Server
+Para configurar el servidor web, simplemente descargamos los archivos `.war` del servidor frontend (`contabilidapp.war`) y backend (`contabilidapp-backend.war`), y los movemos al directorio `webapps` de Tomcat:
+```sh
+$ wget https://github.com/gsnaider/7574-sistemas-distribuidos-i/raw/master/tp-final/deploy-files/contabilidapp.war
+$ wget https://github.com/gsnaider/7574-sistemas-distribuidos-i/raw/master/tp-final/deploy-files/contabilidapp-backend.war
+$ sudo mv contabilidapp.war /opt/tomcat/apache-tomcat-9.0.10/webapps/
+$ sudo mv contabilidapp-backend.war /opt/tomcat/apache-tomcat-9.0.10/webapps/
+```
+Alternativamente, si queremos generar los `.war` desde el código fuente, podemos descargar el código del servidor frontend desde https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/contabilidapp, y el del backend desde https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/contabilidapp-backend. Luego, en cada uno de estos directorios, ejecutar:
+```sh
+$ mvn package
+```
+y copiar los `.war` generados en el directorio `target` a `/opt/tomcat/apache-tomcat-9.0.10/webapps/`.
+
+En este caso, como corremos el servidor en una única máquina, podemos usar los `.war` descargados del repositorio. Sin embargo, si quisieramos distribuir los servidores en dos máquinas, deberíamos cambiar los parámetros de las conexiones en `contabilidapp/src/main/webapp/WEB-INF/web.xml` (para la conexión con el servidor backend), y en `contabilidapp-backend/src/main/resources/META-INF/persistence.xml` (para la conexión con la DB), y compilar el código con Maven.
+
+# Deploy
+Para deployar la aplicación, desde el directorio `/opt/tomcat/apache-tomcat-9.0.10` ejecutar:
+```sh
+$ bin/startup.sh
+```
+Esto levanta tanto el servidor frontend como el backend (ya que en este ejemplo ambos corren en la misma máquina bajo el mismo tomcat).
+Para frenar el servidor, ejecutar:
+```sh
+$ bin/shutdown.sh
+```
+Para monitorear los logs, ejecutar:
+```sh
+$ tail 'f logs/catalina.out
+```
