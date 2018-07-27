@@ -129,12 +129,15 @@ public class ModelImpl implements Model {
     }
 
     private String generateErrorFile(List<ControlErrorRecord> errors) {
+        if (errors.isEmpty()) {
+            return "";
+        }
         StringBuilder errorsTable = new StringBuilder();
         Formatter lineFormatter = new Formatter(errorsTable);
 
         // Add header.
         lineFormatter.format(
-                "%s      %s    %s\n",
+                "%s,%s,%s\n",
                 "Cliente",
                 "Monto de periodo",
                 "Monto de control");
@@ -149,7 +152,7 @@ public class ModelImpl implements Model {
             String formattedControlAmount = controlAmount == null ? NO_AMOUNT : df.format(controlAmount);
 
             lineFormatter.format(
-                    "%s    %s          %s\n",
+                    "%s,%s,%s\n",
                     errorRecord.getClientCode(),
                     formattedTransactionAmount,
                     formattedControlAmount);
@@ -182,7 +185,8 @@ public class ModelImpl implements Model {
             controlRecord.setTransactionsAmount(transactionAmount);
             if (!controlRecord.amountsMatch()) {
                 errors.add(new ControlErrorRecord(clientCode, transactionAmount, controlAmount));
-            } else if (transactionAmount != null) {
+            }
+            if (transactionAmount != null) {
                 transactionClients.remove(clientCode);
             }
         }
