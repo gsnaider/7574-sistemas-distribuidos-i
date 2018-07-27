@@ -93,4 +93,28 @@ Ahora elegimos un nombre para nuestro cluster (por ejemplo: 'contabilidapp-clust
 
 <img src="./doc/mysql-cluster-3.png" alt="MySQL Cluster 3">
 
+En esta pantalla podemos especificar los hosts que utilizaremos para nuestro cluster. Como en este ejemplo lo estamos corriendo de forma local, solo especificamos un host: 127.0.0.1, pero podrían agregarse más hosts separados por coma. Podemos especificar el tipo de aplicación y la carga de escritura (en este caso dejamos las opciones por default). En la sección de **SSH property** especificamos el usuario y password que se utilizará para la conexión al host (en este caso usamos el usuario y password de la máquina local). Finalmente, podemos elegir abrir los puertos de Firewall para la  aplicación. Luego de todo esto, hacemos click en **Save&Next**.
 
+<img src="./doc/mysql-cluster-4.png" alt="MySQL Cluster 4">
+
+En la siguiente pantalla podemos visualizar los hosts que se utilizarán para el cluster. Si quisieramos, podemos agregar o quitar hosts, o editar la configuración de cada uno. Hacemos click en **Save&Next**.
+
+<img src="./doc/mysql-cluster-5.png" alt="MySQL Cluster 5">
+
+En esta pantalla podemos visualizar los nodos que se crearán en cada host. Si queremos podemos agregar o quitar nodos en cada host. Nuevamente, dejamos la configuración por defecto, que en particular utiliza un management node, y dos multithreaded data nodes. Para más información sobre los distintos nodos de MySQL Cluster, ver: https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-basics.html. Hacemos click en **Save&Next**.
+
+<img src="./doc/mysql-cluster-6.png" alt="MySQL Cluster 6">
+
+En esta pantalla vemos cómo quedarían las distintas capas correspondientes a los distintos tipos de nodos en cada host. Si hacemos click en **Show advanced configuration options**, y nos paramos sobre algún Layer o nodo, podemos editar algunos parámetros de configuración, como por ejemplo la cantidad de memoria a asignar a cada nodo. Dejamos las configuraciones por default, y hacemos click en **Save&Next**.
+
+<img src="./doc/mysql-cluster-7.png" alt="MySQL Cluster 7">
+
+En esta última pantalla, podemos deployar e iniciar nuestro cluster. Hacemos click en **Deploy cluster**, y deberíamos obtener el siguiente mensaje:
+
+<img src="./doc/mysql-cluster-8.png" alt="MySQL Cluster 8">
+
+Luego, hacemos click en **Start cluster**, y deberíamos obtener el siguiente mensaje:
+
+<img src="./doc/mysql-cluster-9.png" alt="MySQL Cluster 9">
+
+Una vez hecho esto, ya tenemos corriendo un MySQL Cluster en nuestra máquina.
