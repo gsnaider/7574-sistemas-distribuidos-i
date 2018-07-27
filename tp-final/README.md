@@ -277,7 +277,7 @@ $ bin/shutdown.sh
 ```
 Para monitorear los logs, ejecutar:
 ```sh
-$ tail 'f logs/catalina.out
+$ tail -f logs/catalina.out
 ```
 Una vez levantada la aplicación, en un browser ir a http://localhost:8080/contabilidapp y verificar que la app levantó correctamente.
 
@@ -286,41 +286,56 @@ Una vez levantada la aplicación, en un browser ir a http://localhost:8080/conta
 # Manual de usuario
 A continuación se explica como utilizar la app ContabilidApp.
 
+
 <img src="./doc/contabilidapp-1.png" alt="ContabilidApp 1">
+
 
 En la primer pantalla vemos las diferentes acciones que podemos realizar en la aplicación. Comenzamos haciendo click en **Abrir periodo de carga**.
 
+
 <img src="./doc/contabilidapp-2.png" alt="ContabilidApp 2">
+
 
 En esta pantalla, podemos comenzar un nuevo periodo de carga, lo cual nos permitirá cargar archivos de transacciones para ese periodo, y luego cerrarlo. Al hacer click en **Abrir periodo** deberíamos ver una pantalla como esta:
 
+
 <img src="./doc/contabilidapp-3.png" alt="ContabilidApp 3">
+
 
 El ID generado nos permitirá elegir este periodo para la carga de archivos y demás operaciones.
 
 Si volvemos al menu principal, y elegimos **Cargar archivos**, pasamos a una pantalla como esta:
 
+
 <img src="./doc/contabilidapp-4.png" alt="ContabilidApp 4">
+
 
 Aquí podemos elegir el periodo previamente abierto, y cargar uno o varios archivos de transacciones. En https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/demo-files hay algunos archivos de transacciones que pueden usarse para pruebas. Una vez cargados los archivos, hacemos click en **Volver**.
 
 Ahora pasamos a la pantalla de **Cerrar periodo de carga**
 
+
 <img src="./doc/contabilidapp-5.png" alt="ContabilidApp 5">
+
 
 En esta pantalla, podemos cerrar un periodo para bloquear la carga de nuevos archivos en ese periodo. Luego de esto, podremos descargar las transacciones de dicho periodo, y realizar controles.
 
 En el menu principal ahora elegimos **Descargar transacciones conglomeradas**
 
+
 <img src="./doc/contabilidapp-6.png" alt="ContabilidApp 6">
+
 
 Aquí podemos elegir un periodo ya cerrado, y descargar un archivo de todas las transacciones de dicho periodo, conglomeradas por cliente.
 
 Finalmente, en el menu principal podemos ir a **Controlar periodo**
 
+
 <img src="./doc/contabilidapp-7.png" alt="ContabilidApp 7">
 
+
 En esta pantalla, podemos elegir un periodo cerrado, y subir un archivo de control. En https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/demo-files hay algunos archivos de control que pueden usarse para pruebas. Al hacer click en **Controlar**, se podrán descargar las transacciones desglosadas para ese control, y los errores (en caso de haberlos):
+
 
 <img src="./doc/contabilidapp-8.png" alt="ContabilidApp 8">
 
