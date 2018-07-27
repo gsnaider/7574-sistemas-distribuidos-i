@@ -118,7 +118,7 @@ $ pip install paramiko
 $ pip install pycrypto
 ```
 #### Instalación de MySQL Cluster
-(Las instrucciones oficiales pueden encontrarse en: https://downloads.mysql.com/tutorials/cluster/mysql_wp_cluster_quickstart.pdf y https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-install-auto-using.html)
+(Las instrucciones oficiales pueden encontrarse en: https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-install-auto-using.html)
 
 MySQL Cluster puede descargarse desde: https://dev.mysql.com/downloads/cluster/. Seleccionar la opción **Linux - Generic**, elegir la arquitectura del sistema, y hacer click en **Download**.
 
