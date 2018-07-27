@@ -302,7 +302,7 @@ Si volvemos al menu principal, y elegimos **Cargar archivos**, pasamos a una pan
 
 <img src="./doc/contabilidapp-4.png" alt="ContabilidApp 4">
 
-Aquí podemos elegir el periodo previamente abierto, y cargar uno o varios archivos de transacciones. Una vez cargados los archivos, hacemos click en **Volver**.
+Aquí podemos elegir el periodo previamente abierto, y cargar uno o varios archivos de transacciones. En https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/demo-files hay algunos archivos de transacciones que pueden usarse para pruebas. Una vez cargados los archivos, hacemos click en **Volver**.
 
 Ahora pasamos a la pantalla de **Cerrar periodo de carga**
 
@@ -320,7 +320,7 @@ Finalmente, en el menu principal podemos ir a **Controlar periodo**
 
 <img src="./doc/contabilidapp-7.png" alt="ContabilidApp 7">
 
-En esta pantalla, podemos elegir un periodo cerrado, y subir un archivo de control. Al hacer click en **Controlar**, se podrán descargar las transacciones desglosadas para ese control, y los errores (en caso de haberlos):
+En esta pantalla, podemos elegir un periodo cerrado, y subir un archivo de control. En https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/demo-files hay algunos archivos de control que pueden usarse para pruebas. Al hacer click en **Controlar**, se podrán descargar las transacciones desglosadas para ese control, y los errores (en caso de haberlos):
 
 <img src="./doc/contabilidapp-8.png" alt="ContabilidApp 8">
 
