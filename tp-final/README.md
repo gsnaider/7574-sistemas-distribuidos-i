@@ -34,9 +34,11 @@ A continuación se muestra un diagrama de la arquitectura completa del sistema.
 Las siguientes instrucciones describen como realizar la instalación del sistema sobre Linux. 
 
 <a name="pre-requisites"/>
+
 ## Pre-requisitos
 
 <a name="java-8"/>
+
 ### Java 8
 Para correr la aplicación, se debe tener instalado Java 8. Para instalarlo, simplemente ejecutar:
 ```sh
@@ -58,6 +60,7 @@ $ source /etc/environment
 ```
 
 <a name="apache-tomcat"/>
+
 ### Apache Tomcat
 Tanto el servidor frontend como el backend corren sobre Apache Tomcat. En este caso, utilizamos la version 9.0.10 de Tomcat, la cual puede ser descargada directamente del siguiente link: http://www.gtlib.gatech.edu/pub/apache/tomcat/tomcat-9/v9.0.10/bin/apache-tomcat-9.0.10.tar.gz, o desde: https://tomcat.apache.org/download-90.cgi.
 Una vez realizada la descarga, extraer el contenido, crear un directorio en `/opt/tomcat` y mover el directorio `apache-tomcat-9.0.10` a este nuevo directorio:
@@ -68,6 +71,7 @@ $ sudo mv apache-tomcat-9.0.10 /opt/tomcat/
 ```
 
 <a name="maven"/>
+
 ### Maven (opcional)
 Maven es requerido solo para poder compilar la aplicación desde el código fuente. En caso de que no se quiera hacer esto, se pueden directamente descargar los `.war` de los dos servidores ya compilados (más detalles sobre esto en la sección **Configuración del Web Server**). Estos `.war` están configurados para correr en una máquina local. Si se quiere distribuir el sistema en varias máquinas, se deberán cambiar las direcciones de los servidores y la DB en los parámetros de configuración de la app, y compilar nuevamente. 
 
@@ -87,6 +91,7 @@ $ mvn --version
 ```
 
 <a name="mysql-cluster"/>
+
 ### MySQL Cluster
 #### Pre-requisitos de MySQL Cluster
 Para poder instalar MySQL Cluster, previamente se deben instalar algunas dependencias. Para empezar, ejecutar:
@@ -189,6 +194,7 @@ id=233 (not connected, accepting connect from 127.0.0.1)
 ```
 
 <a name="db-config"/>
+
 ## Configuración de la base de datos
 ### Credenciales
 Una vez levantado el MySQL Cluster, debemos configurar el usuario y password que usaremos para conectarnos desde nuestra Web App. Para entrar a la base de datos, ejecutar desde `/usr/local/mysql/`:
@@ -238,6 +244,7 @@ Deberiamos ver la database `contabilidapp`, y las siguientes tablas:
 ```
 
 <a name="web-config"/>
+
 ## Configuración del Web Server
 Para configurar el servidor web, simplemente descargamos los archivos `.war` del servidor frontend (`contabilidapp.war`) y backend (`contabilidapp-backend.war`), y los movemos al directorio `webapps` de Tomcat:
 ```sh
@@ -255,6 +262,7 @@ y copiar los `.war` generados en el directorio `target` a `/opt/tomcat/apache-to
 En este caso, como corremos el servidor en una única máquina, podemos usar los `.war` descargados del repositorio. Sin embargo, si quisieramos distribuir los servidores en dos máquinas, deberíamos cambiar los parámetros de las conexiones en `contabilidapp/src/main/webapp/WEB-INF/web.xml` (para la conexión con el servidor backend), y en `contabilidapp-backend/src/main/resources/META-INF/persistence.xml` (para la conexión con la DB), y compilar el código con Maven.
 
 <a name="deploy"/>
+
 # Deploy
 Para deployar la aplicación, desde el directorio `/opt/tomcat/apache-tomcat-9.0.10` ejecutar:
 ```sh
@@ -272,6 +280,7 @@ $ tail 'f logs/catalina.out
 Una vez levantada la aplicación, en un browser ir a http://localhost:8080/contabilidapp y verificar que la app levantó correctamente.
 
 <a name="user-manual"/>
+
 # Manual de usuario
 A continuación se explica como utilizar la app ContabilidApp.
 
