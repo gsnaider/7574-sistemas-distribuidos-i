@@ -16,6 +16,7 @@ import java.util.List;
 
 /**
  * Class for initializing and providing access to all the DAO entities from the app.
+ * Also contains general database operations involving multiple entities.
  */
 public class DaoManager {
 
