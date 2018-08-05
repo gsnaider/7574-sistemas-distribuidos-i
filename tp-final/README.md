@@ -56,34 +56,48 @@ Periodo de carga de transacciones. Sobre un periodo de carga pueden cargarse uno
 Estas clases son los ManagedBeans de JSF para controlar la vista del frontend de la app. Cada uno controla una pantalla específica de la aplicación, y proveen las operaciones correspondientes para cada pantalla. Utilizan el ModelProxy como implementación del modelo para las operaciones de negocio.
 
 ### StartUploadPeriodView
+Controlador de la pantalla de inicio de periodo. Permite iniciar un periodo, y obtener el id del periodo iniciado.
 
 ### FileUploadView
+Controlador de la pantalla de carga de archivos. Permite obtener los periodos abiertos, y cargar un archivo para el periodo elegido.
 
 ### CloseUploadView
+Controlador de la pantalla de cierre de periodos. Permite obtener los periodos abiertos, y cerrar el periodo elegido.
 
 ### DownloadAggregatedView
+Controlador de la pantalla de descarga de transacciones conglomeradas. Permite obtener los periodos cerrados, y descargar las transacciones conglomeradas para el periodo elegido.
 
 ### ControlView
+Controlador de la pantalla de control. Permite obtener los periodos cerrados, subir un archivo de control, y realizar el control. Luego del control, permite descargar los archivos de transacciones desglosadas, y el archivo de errores del control.
 
 ## Modelo
+Estas clases contienen las operaciones de negocio de la aplicación, como por ejemplo abrir un periodo, cargar un archivo de transacciones, etc.
 
 ## Model
+Interfaz con todas las operaciones de negocio de la aplicación.
 
 ## ModelProxy
+Esta implementacion del modelo no realiza las operaciones de negocio, sino que redirige todas las operaciones al backend mediante Web Services REST.
 
 ### ModelImpl
+Implementación del modelo que realiza la lógica de negocio y redirige las operaciones de base de datos a los DAO.
 
 ## Backend Web Services
 
 ### WebService
+Clase del backend que utiliza JAX-RS para recibir requests HTTP realizados por el frontend. Su función es recibir dichos requests, y redirige las operaciones de negocio al ModelImpl.
 
 ## Database Access
+Clases de acceso a la base de datos.
 
 ### Dao
+Interfaz con operaciones básicas de la base de datos para una entidad genérica.
 
 ### AbstractDao
+Implementación genérica de la interfaz de Dao. Los DAOs específicos de cada entidad de negocio (como ClientDao, TransactionDao, etc.) extienden de esta clase para proveer las operaciones de base de datos sobre una entidad particular.
 
 ### DaoManager
+Clase para inicializar y proveer acceso a los DAOs.
 
 
 <a name="instalation"/>
