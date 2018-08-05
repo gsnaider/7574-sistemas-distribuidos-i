@@ -73,10 +73,10 @@ Controlador de la pantalla de control. Permite obtener los periodos cerrados, su
 ## Modelo
 Estas clases contienen las operaciones de negocio de la aplicación, como por ejemplo abrir un periodo, cargar un archivo de transacciones, etc.
 
-## Model
+### Model
 Interfaz con todas las operaciones de negocio de la aplicación.
 
-## ModelProxy
+### ModelProxy
 Esta implementacion del modelo no realiza las operaciones de negocio, sino que redirige todas las operaciones al backend mediante Web Services REST.
 
 ### ModelImpl
