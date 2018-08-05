@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * Entity that represents a transaction record from an {@link InputFile}.
+ *
+ * <p>A Transaction contains both the {@link Client} that made the transaction, and the amount from the transaction.
+ */
 @Entity
 @Table(name = "TRANSACTIONS")
 public class Transaction {

@@ -1,5 +1,8 @@
 package ar.uba.fi.contabilidapp.model;
 
+/**
+ * Generic exception from the ContabilidApp system.
+ */
 public class ContabilidappException extends Exception {
 
     public ContabilidappException(String s) {

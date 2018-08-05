@@ -12,6 +12,9 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 
+/**
+ * JSF Bean for controlling the start-upload-period.xhtml view.
+ */
 @ManagedBean
 @RequestScoped
 public class StartUploadPeriodView {

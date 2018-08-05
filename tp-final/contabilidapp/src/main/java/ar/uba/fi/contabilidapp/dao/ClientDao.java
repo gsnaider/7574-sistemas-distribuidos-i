@@ -5,7 +5,9 @@ import org.pmw.tinylog.Logger;
 
 import javax.persistence.*;
 
-
+/**
+ * Class containing specific DB operations for the {@link Client} entity.
+ */
 public final class ClientDao extends AbstractDao<Client> {
 
     ClientDao(EntityManagerFactory entityManagerFactory) {

@@ -18,6 +18,9 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import java.util.List;
 
+/**
+ * Class on which HTTP Requests to the backend server are received.
+ */
 @Path("/service")
 public class WebService {
 

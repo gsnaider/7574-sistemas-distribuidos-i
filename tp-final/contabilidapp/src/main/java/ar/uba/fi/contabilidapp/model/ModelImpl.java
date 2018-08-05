@@ -11,6 +11,9 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * {@link Model} implementation that uses business logic and DAO entities.
+ */
 public class ModelImpl implements Model {
 
     private static final int CLIENT_CODE_POSITION = 6;
@@ -282,7 +285,7 @@ public class ModelImpl implements Model {
      * Parses a line from an input file to a {@link Transaction}.
      *
      * @param inputLine The line to be parsed. Should have a valid transaction format. A valid format consists of a line
-     *                  that matches the following regex: "^.{23}\d{11}.{47}$".
+     *                  that matches the following regex: "^.{25}\d{9}.{47}$".
      * @return A new transaction with the amount and client information from the inputLine.
      * @throws IllegalArgumentException if inputLine does not have a valid transaction format.
      */

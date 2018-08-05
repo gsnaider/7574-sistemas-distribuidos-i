@@ -3,6 +3,11 @@ package ar.uba.fi.contabilidapp.entities;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * Class to store the data from a line from a control file.
+ * This class can also store the amount from the {@link UploadPeriod} for this user, and compare it with the amount from
+ * the control file.
+ */
 public class ControlRecord {
 
     private String clientCode;

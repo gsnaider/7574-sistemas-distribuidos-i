@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+/**
+ * Utility class to build a byte[] representing a zip file.
+ */
 public class ZipBuilder {
 
     private ZipOutputStream zos;

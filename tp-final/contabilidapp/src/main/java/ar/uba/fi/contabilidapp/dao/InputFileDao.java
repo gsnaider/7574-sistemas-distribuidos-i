@@ -8,6 +8,9 @@ import org.pmw.tinylog.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+/**
+ * Class containing specific DB operations for the {@link InputFile} entity.
+ */
 public final class InputFileDao extends AbstractDao<InputFile> {
 
     InputFileDao(EntityManagerFactory entityManagerFactory) {

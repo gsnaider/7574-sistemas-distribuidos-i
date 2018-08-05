@@ -15,6 +15,9 @@ import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JSF Bean for controlling the upload.xhtml view.
+ */
 @ManagedBean
 @RequestScoped
 public class FileUploadView {

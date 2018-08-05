@@ -7,6 +7,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+/**
+ * Servlet listener for reading configuration flags on startup and initializing the {@link ModelProvider}.
+ */
 @WebListener
 public class InitListener implements ServletContextListener {
 

@@ -3,6 +3,9 @@ package ar.uba.fi.contabilidapp.entities;
 import javax.persistence.*;
 import java.util.Objects;
 
+/**
+ * Entity that represents a client from a {@link Transaction}.
+ */
 @Entity
 @Table(name = "CLIENTS")
 @NamedQueries(value = {

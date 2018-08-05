@@ -14,6 +14,9 @@ import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JSF Bean for controlling the close-upload-period.xhtml view.
+ */
 @ManagedBean
 @RequestScoped
 public class CloseUploadView {

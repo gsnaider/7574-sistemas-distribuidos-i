@@ -11,6 +11,9 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.regex.Pattern;
 
+/**
+ * {@link Model} implementation that uses business logic and DAO entities.
+ */
 public class ModelImpl implements Model {
 
     private static final int CLIENT_CODE_POSITION = 6;

@@ -5,6 +5,9 @@ import org.pmw.tinylog.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+/**
+ * Generic implementation of the {@link Dao} interface.
+ */
 abstract class AbstractDao<T> implements Dao<T> {
 
     final EntityManagerFactory entityManagerFactory;

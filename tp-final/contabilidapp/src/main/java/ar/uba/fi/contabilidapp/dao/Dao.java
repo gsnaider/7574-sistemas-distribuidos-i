@@ -1,5 +1,8 @@
 package ar.uba.fi.contabilidapp.dao;
 
+/**
+ * DAO interface for common DB operations.
+ */
 public interface Dao<T> {
 
     T add(T t);

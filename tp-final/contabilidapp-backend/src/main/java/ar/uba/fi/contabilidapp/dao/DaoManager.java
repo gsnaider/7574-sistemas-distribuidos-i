@@ -13,6 +13,10 @@ import java.util.List;
 
 // TODO add index by en CLIENT CODE
 // TODO add error checking in all DB operations.
+
+/**
+ * Class for initializing and providing access to all the DAO entities from the app.
+ */
 public class DaoManager {
 
     private final EntityManagerFactory entityManagerFactory;

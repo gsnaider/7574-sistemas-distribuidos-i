@@ -12,6 +12,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+/**
+ * {@link Model} implementation that redirects each method invocation to the backend server via an HTTP Request.
+ */
 public class ModelProxy implements Model {
 
     private final String backendUrl;

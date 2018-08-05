@@ -21,6 +21,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * JSF Bean for controlling the control.xhtml view.
+ */
 @ManagedBean
 @SessionScoped
 public class ControlView {

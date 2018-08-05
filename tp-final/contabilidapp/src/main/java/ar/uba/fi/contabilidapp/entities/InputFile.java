@@ -5,6 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Entity representing an input file of {@link Transaction} records.
+ *
+ * <p>Each InputFile contains one or more {@link Transaction} records, and it belongs to a specific
+ * {@link UploadPeriod}.
+ *
+ * <p>The same {@link Client} shouldn't appear more than once in the {@link Transaction} records form an InputFile.
+ */
 @Entity
 @Table(name = "INPUT_FILES")
 public class InputFile {
@@ -24,7 +32,7 @@ public class InputFile {
     private List<Transaction> transactions;
 
     @Lob
-    @Column(name = "FILE_DATA", length=MAX_BYTES)
+    @Column(name = "FILE_DATA", length = MAX_BYTES)
     private byte[] fileData;
 
     public long getId() {

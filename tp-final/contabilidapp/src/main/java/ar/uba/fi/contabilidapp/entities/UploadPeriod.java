@@ -4,6 +4,12 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * An UploadPeriod represents a period for which {@link InputFile}s are uploaded.
+ *
+ * <p>When an UploadPeriod is open, input files can be uploaded for that period. After it's closed, no more input files
+ * can be uploaded for that period.
+ */
 @Entity
 @Table(name = "UPLOAD_PERIODS")
 @NamedQueries(value = {

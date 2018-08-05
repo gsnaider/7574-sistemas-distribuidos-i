@@ -1,14 +1,18 @@
 package ar.uba.fi.contabilidapp.dao;
 
-import ar.uba.fi.contabilidapp.entities.Client;
 import ar.uba.fi.contabilidapp.entities.UploadPeriod;
 import ar.uba.fi.contabilidapp.model.ContabilidappException;
 import org.pmw.tinylog.Logger;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class containing specific DB operations for the {@link UploadPeriod} entity.
+ */
 public final class UploadDao extends AbstractDao<UploadPeriod> {
 
     UploadDao(EntityManagerFactory entityManagerFactory) {

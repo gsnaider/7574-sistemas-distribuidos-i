@@ -16,6 +16,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JSF Bean for controlling the download-aggregated.xhtml view.
+ */
 @ManagedBean
 @RequestScoped
 public class DownloadAggregatedView {

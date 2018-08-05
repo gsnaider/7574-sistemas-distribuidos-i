@@ -1,5 +1,8 @@
 package ar.uba.fi.contabilidapp.entities;
 
+/**
+ * Class used to store the result files from a control.
+ */
 public class ControlResults {
 
     private String errorsFile;

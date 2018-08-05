@@ -3,6 +3,9 @@ package ar.uba.fi.contabilidapp.entities;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * Class used to store the data for each line on the errors file from a control.
+ */
 public class ControlErrorRecord {
 
     private String clientCode;

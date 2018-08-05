@@ -1,5 +1,10 @@
 package ar.uba.fi.contabilidapp.model;
 
+import ar.uba.fi.contabilidapp.entities.InputFile;
+
+/**
+ * Class for storing data from an {@link InputFile} upload request.
+ */
 public class PeriodFile {
 
     private long uploadPeriodId;
