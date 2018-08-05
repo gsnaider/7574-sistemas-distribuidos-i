@@ -3,6 +3,7 @@ ContabilidApp es una aplicación web que permite la carga de archivos de transac
 
 # Índice  
 - [Arquitectura](#architecture)
+- [Diagrama de clases](#classes)
 - [Instalación](#instalation)
     * [Pre-requisitos](#pre-requisites)
         + [Java 8](#java-8)
@@ -28,6 +29,16 @@ Por último, como base de datos se utiliza MySQL Cluster, una base de datos dist
 A continuación se muestra un diagrama de la arquitectura completa del sistema.
 
 <img src="./doc/contabilidapp-architecture.png" alt="Arquitectura">
+
+<a name="classes"/>
+
+# Diagrama de clases
+A continuación se muestra el diagrama de clases de la aplicación, y una descripción del mismo:
+
+<img src="./doc/uml-diagram.png" alt="Diagrama de clases">
+
+
+
 
 
 <a name="instalation"/>
