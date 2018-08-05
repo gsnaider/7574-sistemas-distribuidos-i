@@ -37,8 +37,20 @@ A continuación se muestra el diagrama de clases de la aplicación, y una descri
 
 <img src="./doc/uml-diagram.png" alt="Diagrama de clases">
 
+## Entidades de negocio
+Estas clases representan a las entidades de negocio de la aplicación, y contienen los Annotations de JPA para realizar el ORM (Object Relational Mapping) con la base de datos.
 
+### Client
+Es un cliente de una transacción. Consiste de un código de cliente, y puede pertenecer a una o varias transacciones.
 
+### Transaction
+Transacción proveniente de un archivo de carga. Consiste de un cliente y un monto.
+
+### InputFile
+Archivo de carga de transacciones. Puede tener una o varias transacciones, y pertenece a un único periodo de carga.
+
+### UploadPeriod
+Periodo de carga de transacciones. Sobre un periodo de carga pueden cargarse uno o mas archivos de transacciones.
 
 
 <a name="instalation"/>
