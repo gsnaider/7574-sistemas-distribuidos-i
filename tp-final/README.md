@@ -52,6 +52,39 @@ Archivo de carga de transacciones. Puede tener una o varias transacciones, y per
 ### UploadPeriod
 Periodo de carga de transacciones. Sobre un periodo de carga pueden cargarse uno o mas archivos de transacciones.
 
+## Controladores de vista
+Estas clases son los ManagedBeans de JSF para controlar la vista del frontend de la app. Cada uno controla una pantalla específica de la aplicación, y proveen las operaciones correspondientes para cada pantalla. Utilizan el ModelProxy como implementación del modelo para las operaciones de negocio.
+
+### StartUploadPeriodView
+
+### FileUploadView
+
+### CloseUploadView
+
+### DownloadAggregatedView
+
+### ControlView
+
+## Modelo
+
+## Model
+
+## ModelProxy
+
+### ModelImpl
+
+## Backend Web Services
+
+### WebService
+
+## Database Access
+
+### Dao
+
+### AbstractDao
+
+### DaoManager
+
 
 <a name="instalation"/>
 
