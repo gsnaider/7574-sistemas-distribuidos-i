@@ -18,7 +18,7 @@ ContabilidApp es una aplicación web que permite la carga de archivos de transac
 
 # Arquitectura
 La aplicación está desarrollada en Java EE, y utiliza Apache Tomcat como servidor web. La aplicación está distribuida en dos servidores: 
-1. Un servidor frontend que maneja la vista de la aplicación. Este servidor utiliza el Java Server Faces (JSF) y PrimeFaces como frameworks de frontend para Java EE.
+1. Un servidor frontend que maneja la vista de la aplicación. Este servidor utiliza Java Server Faces (JSF) y PrimeFaces como frameworks de frontend para Java EE.
 2. Un servidor backend que contiene la lógica de negocio y el modelo de datos. Este servidor utiliza Java Persistence API (JPA) y su implementación de Hibernate como frameworks para ORM (Object Relational Mapping).
 
 A su vez, el servidor backend tiene una API REST para las distintas operaciones de negocio, y el servidor frontend consume dicha API para conectarse con el servidor backend.
@@ -118,7 +118,7 @@ $ pip install paramiko
 $ pip install pycrypto
 ```
 #### Instalación de MySQL Cluster
-(Las instrucciones oficiales pueden encontrarse en: https://downloads.mysql.com/tutorials/cluster/mysql_wp_cluster_quickstart.pdf y https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-install-auto-using.html)
+(Las instrucciones oficiales pueden encontrarse en: https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster-install-auto-using.html)
 
 MySQL Cluster puede descargarse desde: https://dev.mysql.com/downloads/cluster/. Seleccionar la opción **Linux - Generic**, elegir la arquitectura del sistema, y hacer click en **Download**.
 
@@ -277,7 +277,7 @@ $ bin/shutdown.sh
 ```
 Para monitorear los logs, ejecutar:
 ```sh
-$ tail 'f logs/catalina.out
+$ tail -f logs/catalina.out
 ```
 Una vez levantada la aplicación, en un browser ir a http://localhost:8080/contabilidapp y verificar que la app levantó correctamente.
 
@@ -286,41 +286,56 @@ Una vez levantada la aplicación, en un browser ir a http://localhost:8080/conta
 # Manual de usuario
 A continuación se explica como utilizar la app ContabilidApp.
 
+
 <img src="./doc/contabilidapp-1.png" alt="ContabilidApp 1">
+
 
 En la primer pantalla vemos las diferentes acciones que podemos realizar en la aplicación. Comenzamos haciendo click en **Abrir periodo de carga**.
 
+
 <img src="./doc/contabilidapp-2.png" alt="ContabilidApp 2">
+
 
 En esta pantalla, podemos comenzar un nuevo periodo de carga, lo cual nos permitirá cargar archivos de transacciones para ese periodo, y luego cerrarlo. Al hacer click en **Abrir periodo** deberíamos ver una pantalla como esta:
 
+
 <img src="./doc/contabilidapp-3.png" alt="ContabilidApp 3">
+
 
 El ID generado nos permitirá elegir este periodo para la carga de archivos y demás operaciones.
 
 Si volvemos al menu principal, y elegimos **Cargar archivos**, pasamos a una pantalla como esta:
 
+
 <img src="./doc/contabilidapp-4.png" alt="ContabilidApp 4">
 
-Aquí podemos elegir el periodo previamente abierto, y cargar uno o varios archivos de transacciones. Una vez cargados los archivos, hacemos click en **Volver**.
+
+Aquí podemos elegir el periodo previamente abierto, y cargar uno o varios archivos de transacciones. En https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/demo-files hay algunos archivos de transacciones que pueden usarse para pruebas. Una vez cargados los archivos, hacemos click en **Volver**.
 
 Ahora pasamos a la pantalla de **Cerrar periodo de carga**
 
+
 <img src="./doc/contabilidapp-5.png" alt="ContabilidApp 5">
+
 
 En esta pantalla, podemos cerrar un periodo para bloquear la carga de nuevos archivos en ese periodo. Luego de esto, podremos descargar las transacciones de dicho periodo, y realizar controles.
 
 En el menu principal ahora elegimos **Descargar transacciones conglomeradas**
 
+
 <img src="./doc/contabilidapp-6.png" alt="ContabilidApp 6">
+
 
 Aquí podemos elegir un periodo ya cerrado, y descargar un archivo de todas las transacciones de dicho periodo, conglomeradas por cliente.
 
 Finalmente, en el menu principal podemos ir a **Controlar periodo**
 
+
 <img src="./doc/contabilidapp-7.png" alt="ContabilidApp 7">
 
-En esta pantalla, podemos elegir un periodo cerrado, y subir un archivo de control. Al hacer click en **Controlar**, se podrán descargar las transacciones desglosadas para ese control, y los errores (en caso de haberlos):
+
+En esta pantalla, podemos elegir un periodo cerrado, y subir un archivo de control. En https://github.com/gsnaider/7574-sistemas-distribuidos-i/tree/master/tp-final/demo-files hay algunos archivos de control que pueden usarse para pruebas. Al hacer click en **Controlar**, se podrán descargar las transacciones desglosadas para ese control, y los errores (en caso de haberlos):
+
 
 <img src="./doc/contabilidapp-8.png" alt="ContabilidApp 8">
 
